@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8"/>
+	<title>ICG-11 Animation</title>
+
+	<style>
+		html, body {
+			margin: 0;
+			background: black;
+			width: 100%;
+			height: 100%;
+		}
+
+		.center-items {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+
+			width: 100%;
+			height: 100%;
+		}
+
+		#rasteriser {
+			display: block;
+		}
+	</style>
+</head>
+
+<body>
+
+<div class="center-items">
+	<canvas id="rasteriser" width="1920" height="1080"></canvas>
+	<script src="utils.js"></script>
+	<script src="vector.js"></script>
+	<script src="raster-box.js"></script>
+	<script src="raster-sphere.js"></script>
+	<script src="raster-texture-box.js"></script>
+	<script src="matrix.js"></script>
+	<script src="nodes.js"></script>
+	<script src="visitor.js"></script>
+	<script src="shader.js"></script>
+	<script src="animator.js"></script>
+	<script src="animation-nodes.js"></script>
+	<script>
+		const canvas = document.getElementById("rasteriser");
+		window.onresize = function () {
+			let s = Math.min(window.innerWidth / 16, window.innerHeight / 9);
+			canvas.style.width = s * 16 + "px";
+			canvas.style.height = s * 9 + "px";
+		}
+		window.onresize();
+
+		let camera = {
+			eye: new Vector(0, 0, -10, 1),
+			center: new Vector(0, 0, -9, 1),
+			up: new Vector(0, -1, 0, 0),
+			fovy: 60,
+			aspect: canvas.width / canvas.height,
+			near: 0.1,
+			far: 100
+		};
+
+
+		const lightPos = new Vector(1.0, 1.0, 1.0);
+
+		// construct scene graph
+		const sphere = new SphereNode(new Vector(.5, -.8, 0, 1), 0.4, new Vector(.8, .4, .1, 1))
+		const lightSphere = new SphereNode(new Vector(-2.5, -2.5, 5.0, 1), 0.4, new Vector(0, 0, 0, 1))
+		const cube = new TextureBoxNode(
+			new Vector(-1, -1, -1, 1),
+			new Vector(1, 1, 1, 1),
+			'hci-logo.png'
+		);
+
+		//      sg
+		//     /  \
+		//  gn2:Tc gn4 - lightSphere
+		//   /   \
+		// gn1:Ts cube
+		//   |
+		// gn3:T-c
+		//   |
+		// sphere
+
+		// const sg = new GroupNode(Matrix.scaling(new Vector(0.2, 0.2, 0.2)));
+		const sg = new GroupNode(Matrix.identity())
+		const gn1 = new GroupNode(Matrix.translation(new Vector(1, 1, 0))); // Ts
+		const gn2 = new GroupNode(Matrix.translation(new Vector(-.3, -0.4, .1))); // Tc
+		const gn3 = new GroupNode(Matrix.translation(new Vector(.3, .4, -.1))); // -Tc
+
+		const gn4 = new GroupNode(Matrix.identity());
+		gn2.add(cube);
+		gn3.add(sphere);
+		gn4.add(lightSphere);
+
+		sg.add(gn2);
+		gn2.add(gn1);
+		gn1.add(gn3);
+
+		sg.add(gn4);
+
+		let animationNodes = [
+			new AnimationNode(gn2, new Rotor(new Vector(0, 0, 1), 30))
+		];
+
+		function simulate(deltaT) {
+			for (let animationNode of animationNodes) {
+				animationNode.simulate(deltaT);
+			}
+		}
+
+		// setup for rendering
+		const gl = canvas.getContext("webgl");
+		const setupVisitor = new RasterSetupVisitor(gl);
+		setupVisitor.setup(sg);
+
+		const phongShader = new Shader(gl,
+			"phong-vertex-perspective-shader.glsl",
+			"phong-fragment-shader.glsl"
+		);
+		const textureShader = new Shader(gl,
+			"texture-vertex-perspective-shader.glsl",
+			"texture-fragment-shader.glsl"
+		);
+		const visitor = new RasterVisitor(gl, phongShader, textureShader);
+
+		Promise.all(
+			[phongShader.load(), textureShader.load()]
+		).then(x =>
+			window.requestAnimationFrame(animate)
+		);
+
+		let lastTimestamp = performance.now();
+
+		function animate(timestamp) {
+			simulate(timestamp - lastTimestamp);
+			visitor.render(sg, camera);
+			lastTimestamp = timestamp;
+			window.requestAnimationFrame(animate);
+		}
+
+		window.addEventListener('keydown', function (event) {
+			switch (event.key) {
+				case "ArrowUp":
+					animationNodes[0].toggleActive();
+					break;
+			}
+		});
+	</script>
+</div>
+</body>
+
+</html>
