@@ -8,18 +8,19 @@
 	<style>
 		html, body {
 			margin: 0;
-			background: black;
 			width: 100%;
 			height: 100%;
 		}
 
-		.center-items {
+		.canvas-container {
+			width: 100%;
+			height: 100%;
+
+			background: black;
+
 			display: flex;
 			justify-content: center;
 			align-items: center;
-
-			width: 100%;
-			height: 100%;
 		}
 
 		#rasteriser {
@@ -30,7 +31,7 @@
 
 <body>
 
-<div class="center-items">
+<div class="canvas-container">
 	<canvas id="rasteriser" width="1920" height="1080"></canvas>
 	<script src="utils.js"></script>
 	<script src="vector.js"></script>
@@ -44,26 +45,31 @@
 	<script src="animator.js"></script>
 	<script src="animation-nodes.js"></script>
 	<script>
+		// set up canvas
+		const aspectW = 16;
+		const aspectH = 9;
+		const aspectResolution = 120;
+
 		const canvas = document.getElementById("rasteriser");
+		canvas.setAttribute("width", aspectW * aspectResolution);
+		canvas.setAttribute("height", aspectH * aspectResolution);
 		window.onresize = function () {
-			let s = Math.min(window.innerWidth / 16, window.innerHeight / 9);
-			canvas.style.width = s * 16 + "px";
-			canvas.style.height = s * 9 + "px";
+			let s = Math.min(window.innerWidth / aspectW, window.innerHeight / aspectH);
+			canvas.style.width = s * aspectW + "px";
+			canvas.style.height = s * aspectH + "px";
 		}
 		window.onresize();
 
+		// camera
 		let camera = {
 			eye: new Vector(0, 0, -10, 1),
 			center: new Vector(0, 0, -9, 1),
 			up: new Vector(0, -1, 0, 0),
 			fovy: 60,
-			aspect: canvas.width / canvas.height,
+			aspect: aspectW / aspectH,
 			near: 0.1,
 			far: 100
 		};
-
-
-		const lightPos = new Vector(1.0, 1.0, 1.0);
 
 		// construct scene graph
 		const sphere = new SphereNode(new Vector(.5, -.8, 0, 1), 0.4, new Vector(.8, .4, .1, 1))
@@ -101,6 +107,7 @@
 
 		sg.add(gn4);
 
+		// add animation nodes
 		let animationNodes = [
 			new AnimationNode(gn2, new Rotor(new Vector(0, 0, 1), 30))
 		];
@@ -126,6 +133,7 @@
 		);
 		const visitor = new RasterVisitor(gl, phongShader, textureShader);
 
+		// do animation as soon as shader are loaded
 		Promise.all(
 			[phongShader.load(), textureShader.load()]
 		).then(x =>
@@ -133,7 +141,6 @@
 		);
 
 		let lastTimestamp = performance.now();
-
 		function animate(timestamp) {
 			simulate(timestamp - lastTimestamp);
 			visitor.render(sg, camera);
@@ -141,13 +148,43 @@
 			window.requestAnimationFrame(animate);
 		}
 
+		// user input event listener
 		window.addEventListener('keydown', function (event) {
 			switch (event.key) {
 				case "ArrowUp":
 					animationNodes[0].toggleActive();
 					break;
+				case "f":
+					event.preventDefault();
+					toggleFullScreenMode();
+					break;
 			}
 		});
+
+		let fullscreenActivated = false;
+
+		function toggleFullScreenMode() {
+			if (fullscreenActivated) {
+				if (document.mozCancelFullScreen) document.mozCancelFullScreen();
+				else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+				else if (document.msExitFullscreen) document.msExitFullscreen();
+				else if (document.exitFullscreen) document.exitFullscreen();
+				else console.error("Couldn't exit fullscreen mode!")
+				fullscreenActivated = false;
+			} else {
+				let p = canvas.parentNode;
+				if (p.mozRequestFullScreen) p.mozRequestFullScreen();
+				else if (p.webkitRequestFullScreen) p.webkitRequestFullScreen();
+				else if (p.msRequestFullscreen) p.msRequestFullscreen();
+				else if (p.requestFullscreen) p.requestFullscreen();
+				else {
+					console.error("Fullscreen mode not available")
+					return;
+				}
+				fullscreenActivated = true;
+			}
+		}
+
 	</script>
 </div>
 </body>
