@@ -5,6 +5,7 @@
 // user input event listener
 let hitCmd = false;
 let lastKey;
+
 window.addEventListener('keydown', function (event) {
 	if (hitCmd) return;
 	switch (event.key) {
@@ -30,16 +31,35 @@ window.addEventListener('keydown', function (event) {
 			break;
 		// secondary driver (2D)
 		case "i":
-			setDriver("setForward", true);
+			set2DDriver("setForward", true);
 			break;
 		case "j":
-			setDriver("setLeftward", true);
+			set2DDriver("setLeftward", true);
 			break;
 		case "k":
-			setDriver("setBackward", true);
+			set2DDriver("setBackward", true);
 			break;
 		case "l":
-			setDriver("setRightward", true)
+			set2DDriver("setRightward", true)
+			break;
+		// primary driver (3D)
+		case "w":
+			set3DDriver("setForward", true);
+			break;
+		case "a":
+			set3DDriver("setLeftward", true);
+			break;
+		case "s":
+			set3DDriver("setBackward", true);
+			break;
+		case "d":
+			set3DDriver("setRightward", true)
+			break;
+		case " ":
+			set3DDriver("setUpward", true);
+			break;
+		case "Shift":
+			set3DDriver("setDownward", true)
 			break;
 	}
 
@@ -60,24 +80,53 @@ window.addEventListener('keyup', function (event) {
 	switch (event.key) {
 		// secondary driver (2D)
 		case "i":
-			setDriver("setForward", false);
+			set2DDriver("setForward", false);
 			break;
 		case "j":
-			setDriver("setLeftward", false);
+			set2DDriver("setLeftward", false);
 			break;
 		case "k":
-			setDriver("setBackward", false);
+			set2DDriver("setBackward", false);
 			break;
 		case "l":
-			setDriver("setRightward", false)
+			set2DDriver("setRightward", false)
+			break;
+		// primary driver (3D)
+		case "w":
+			set3DDriver("setForward", false);
+			break;
+		case "a":
+			set3DDriver("setLeftward", false);
+			break;
+		case "s":
+			set3DDriver("setBackward", false);
+			break;
+		case "d":
+			set3DDriver("setRightward", false)
+			break;
+		case " ":
+			set3DDriver("setUpward", false);
+			break;
+		case "Shift":
+			set3DDriver("setDownward", false)
 			break;
 	}
 });
 
-function setDriver(foo, set) {
+function set2DDriver(foo, set) {
 	for (let animationNode of animationNodes) {
 		let animator = animationNode.animator;
 		if (animator instanceof Driver2D) {
+			animator[foo](set);
+			break;
+		}
+	}
+}
+
+function set3DDriver(foo, set) {
+	for (let animationNode of animationNodes) {
+		let animator = animationNode.animator;
+		if (animator instanceof Driver3D) {
 			animator[foo](set);
 			break;
 		}

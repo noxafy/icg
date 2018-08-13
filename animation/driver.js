@@ -107,5 +107,20 @@ class Driver2D extends Driver {
 	}
 }
 
+class Driver3D extends Driver {
+	/**
+	 * Creates a new user controllable, continuous 3D driver animation
+	 * @param {number} speed - The constant speed of driving in 1/second in each direction
+	 */
+	constructor(speed = 1) {
+		super(speed);
+	}
+
+	drive(deltaT) {
+		let positionChange = new Vector(this.xAxis * this.speed * deltaT, this.yAxis * this.speed * deltaT, this.zAxis * this.speed * deltaT);
+		return Matrix.translation(positionChange);
+	}
+}
+
 // Linear Driver
 // "slow starting" driver 1/x
