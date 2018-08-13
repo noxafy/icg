@@ -90,7 +90,7 @@ class Driver2D extends Driver {
 	}
 
 	drive(deltaT) {
-		let positionChange = new Vector(this.xAxis * this.speed * deltaT, 0, this.zAxis * this.speed * deltaT);
+		let positionChange = new Vector(this.xAxis, 0, this.zAxis).normalised().mul(this.speed * deltaT);
 		return Matrix.translation(positionChange);
 	}
 
@@ -117,7 +117,7 @@ class Driver3D extends Driver {
 	}
 
 	drive(deltaT) {
-		let positionChange = new Vector(this.xAxis * this.speed * deltaT, this.yAxis * this.speed * deltaT, this.zAxis * this.speed * deltaT);
+		let positionChange = new Vector(this.xAxis, this.yAxis, this.zAxis).normalised().mul(this.speed * deltaT);
 		return Matrix.translation(positionChange);
 	}
 }
