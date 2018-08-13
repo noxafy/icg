@@ -15,10 +15,12 @@ class AnimationNode {
 	}
 
 	/**
-	 * Toggles the active state of the animation node
+	 * Toggles the active state of the animation node.
+	 * Except it's a Driver. It's always on to remain user freedom.
 	 */
 	toggleActive() {
-		this.active = !this.active;
+		if (this.animator instanceof Driver) this.active = true
+		else this.active = !this.active;
 	}
 
 	/**
