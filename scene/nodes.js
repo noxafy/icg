@@ -124,3 +124,40 @@ class TextureBoxNode extends Node {
 		visitor.visitTextureBoxNode(this);
 	}
 }
+
+/**
+ * Class representing the camera in the Scenegraph
+ * @extends Node
+ */
+class CameraNode extends Node {
+	/**
+	 * Creates a camera
+	 * @param {Vector} eye
+	 * @param {Vector} center
+	 * @param {Vector} up
+	 * @param {number} near
+	 * @param {number} far
+	 * @param {number} fovy
+	 */
+	constructor(eye = new Vector(0, 0, -10, 1),
+				center = new Vector(0, 0, -9, 1),
+				up = new Vector(0, -1, 0, 0),
+				near = 0.1, far = 100, fovy = 60) {
+		super();
+		this.eye = eye;
+		this.center = center;
+		this.up = up;
+		this.fovy = fovy;
+		this.near = near;
+		this.far = far;
+		this.aspect = window.aspect;
+	}
+
+	/**
+	 * Accepts a visitor according to the visitor pattern
+	 * @param  {Visitor} visitor - The visitor
+	 */
+	accept(visitor) {
+		visitor.visitCamera(this);
+	}
+}

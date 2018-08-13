@@ -54,6 +54,7 @@
 		const aspectH = 9;
 		const aspectResolution = 120;
 
+		window.aspect = aspectW / aspectH;
 		const canvas = document.getElementById("rasteriser");
 		canvas.setAttribute("width", aspectW * aspectResolution);
 		canvas.setAttribute("height", aspectH * aspectResolution);
@@ -64,16 +65,12 @@
 		}
 		window.onresize();
 
-		// camera
-		let camera = {
-			eye: new Vector(0, 0, -10, 1),
-			center: new Vector(0, 0, -9, 1),
-			up: new Vector(0, -1, 0, 0),
-			fovy: 60,
-			aspect: aspectW / aspectH,
-			near: 0.1,
-			far: 100
-		};
+		let camera = new CameraNode(
+			new Vector(0, 0, -10, 1), // eye
+			new Vector(0, 0, -9, 1), // center
+			new Vector(0, -1, 0, 0), // up
+			0.1, 100, 60 // near, far, fovy
+		)
 
 		// construct scene graph
 		const sphere = new SphereNode(new Vector(.5, -.8, 0, 1), 0.4, new Vector(.8, .4, .1, 1))
@@ -100,21 +97,25 @@
 		const gn2 = new GroupNode(Matrix.translation(new Vector(-.3, -0.4, .1))); // Tc
 		const gn3 = new GroupNode(Matrix.translation(new Vector(.3, .4, -.1))); // -Tc
 		const gn4 = new GroupNode(Matrix.identity());
+		const gn5 = new GroupNode(Matrix.identity());
+
 		gn2.add(cube);
 		gn3.add(sphere);
 		gn4.add(lightSphere);
+		gn5.add(camera);
 
 		sg.add(gn2);
 		gn2.add(gn1);
 		gn1.add(gn3);
 
 		sg.add(gn4);
+		sg.add(gn5);
 
 		// add animation nodes
 		window.animationNodes = [
 			new AnimationNode(gn2, new Rotor(new Vector(0, 0, 1), 30)),
-			// new AnimationNode(gn4, new PhysicsJumper(new Vector(0, 5, 0), 1)),
-			new AnimationNode(gn4, new Driver2D())
+			new AnimationNode(gn4, new PhysicsJumper(new Vector(0, -1, 0), 1)),
+			new AnimationNode(gn5, new Driver2D())
 		];
 
 		function simulate(deltaT) {
@@ -148,7 +149,7 @@
 		let lastTimestamp = performance.now();
 		function animate(timestamp) {
 			simulate(timestamp - lastTimestamp);
-			visitor.render(sg, camera);
+			visitor.render(sg);
 			lastTimestamp = timestamp;
 			window.requestAnimationFrame(animate);
 		}

@@ -35,7 +35,17 @@ class Visitor {
 	visitTextureBoxNode(node) {
 		throw Error("Unsupported operation");
 	}
+
+	/**
+	 * Visits a camera node. Updates the lookat and perspective matrices.
+	 * @param  {CameraNode} node - The node to visit
+	 */
+	visitCamera(node) {
+		throw Error("Unsupported operation");
+	}
 }
+
+window.debugLookAt = false;
 
 /**
  * Class representing a Visitor that uses Rasterisation to render a Scenegraph
@@ -56,11 +66,9 @@ class RasterVisitor extends Visitor {
 	 * @param  {Node} rootNode                 - The root node of the Scenegraph
 	 * @param  {Array.<Vector>} lightPositions - The light light positions
 	 */
-	render(rootNode, camera, lightPositions) {
+	render(rootNode, lightPositions) {
 		// clear
 		this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
-
-		this.setupCamera(camera);
 
 		// traverse and render
 		rootNode.accept(this);
@@ -75,7 +83,25 @@ class RasterVisitor extends Visitor {
 			this.lookat = Matrix.lookat(
 				camera.eye,
 				camera.center,
-				camera.up);
+				camera.up
+			);
+			if (window.debugLookAt) {
+				console.log("Old lookat");
+				console.log(this.lookat.data);
+			}
+			if (this.modelMatrices.length > 0) {
+				if (window.debugLookAt) {
+					console.log("modelMatrices.last");
+					console.log(this.modelMatrices[this.modelMatrices.length - 1].data);
+					console.log(this.modelMatrices[this.modelMatrices.length - 1].invert().data);
+				}
+				this.lookat = this.lookat.mul(this.modelMatrices[this.modelMatrices.length - 1].invert());
+			}
+			if (window.debugLookAt) {
+				console.log("New lookat");
+				console.log(this.lookat.data);
+				window.debugLookAt = false;
+			}
 
 			this.perspective = Matrix.perspective(
 				camera.fovy,
@@ -145,9 +171,16 @@ class RasterVisitor extends Visitor {
 		if (P && this.perspective) {
 			P.set(this.perspective);
 		}
-		this.textureshader.getUniformMatrix("V").set(this.lookat);
+		let V = this.textureshader.getUniformMatrix("V");
+		if (V && this.lookat) {
+			V.set(this.lookat);
+		}
 
 		node.rastertexturebox.render(this.textureshader);
+	}
+
+	visitCamera(node) {
+		this.setupCamera(node);
 	}
 }
 
@@ -185,5 +218,9 @@ class RasterSetupVisitor extends Visitor {
 
 	visitTextureBoxNode(node) {
 		node.rastertexturebox = new RasterTextureBox(this.gl, node.minPoint, node.maxPoint, node.texture);
+	}
+
+	visitCamera(node) {
+		// nothing to do
 	}
 }
