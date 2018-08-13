@@ -33,17 +33,20 @@
 
 <div class="canvas-container">
 	<canvas id="rasteriser" width="1920" height="1080"></canvas>
-	<script src="utils.js"></script>
-	<script src="vector.js"></script>
-	<script src="raster-box.js"></script>
-	<script src="raster-sphere.js"></script>
-	<script src="raster-texture-box.js"></script>
-	<script src="matrix.js"></script>
-	<script src="nodes.js"></script>
-	<script src="visitor.js"></script>
-	<script src="shader.js"></script>
-	<script src="animator.js"></script>
-	<script src="animation-nodes.js"></script>
+	<script src="animation/animation-nodes.js"></script>
+	<script src="animation/animator.js"></script>
+	<script src="animation/driver.js"></script>
+	<script src="animation/jumper.js"></script>
+	<script src="animation/rotor.js"></script>
+	<script src="maths/matrix.js"></script>
+	<script src="maths/utils.js"></script>
+	<script src="maths/vector.js"></script>
+	<script src="shader/raster-box.js"></script>
+	<script src="shader/raster-sphere.js"></script>
+	<script src="shader/raster-texture-box.js"></script>
+	<script src="scene/nodes.js"></script>
+	<script src="scene/visitor.js"></script>
+	<script src="shader/shader.js"></script>
 	<script src="interaction.js"></script>
 	<script>
 		// set up canvas
@@ -78,7 +81,7 @@
 		const cube = new TextureBoxNode(
 			new Vector(-1, -1, -1, 1),
 			new Vector(1, 1, 1, 1),
-			'hci-logo.png'
+			'resources/hci-logo.png'
 		);
 
 		//      sg
@@ -96,7 +99,6 @@
 		const gn1 = new GroupNode(Matrix.translation(new Vector(1, 1, 0))); // Ts
 		const gn2 = new GroupNode(Matrix.translation(new Vector(-.3, -0.4, .1))); // Tc
 		const gn3 = new GroupNode(Matrix.translation(new Vector(.3, .4, -.1))); // -Tc
-
 		const gn4 = new GroupNode(Matrix.identity());
 		gn2.add(cube);
 		gn3.add(sphere);
@@ -127,12 +129,12 @@
 		setupVisitor.setup(sg);
 
 		const phongShader = new Shader(gl,
-			"phong-vertex-perspective-shader.glsl",
-			"phong-fragment-shader.glsl"
+			"shader/phong-vertex-perspective-shader.glsl",
+			"shader/phong-fragment-shader.glsl"
 		);
 		const textureShader = new Shader(gl,
-			"texture-vertex-perspective-shader.glsl",
-			"texture-fragment-shader.glsl"
+			"shader/texture-vertex-perspective-shader.glsl",
+			"shader/texture-fragment-shader.glsl"
 		);
 		const visitor = new RasterVisitor(gl, phongShader, textureShader);
 

@@ -54,7 +54,6 @@ class RasterVisitor extends Visitor {
 	/**
 	 * Renders the Scenegraph
 	 * @param  {Node} rootNode                 - The root node of the Scenegraph
-	 * @param  {Object} camera                 - The camera used
 	 * @param  {Array.<Vector>} lightPositions - The light light positions
 	 */
 	render(rootNode, camera, lightPositions) {
@@ -84,7 +83,6 @@ class RasterVisitor extends Visitor {
 				camera.near,
 				camera.far
 			);
-
 		}
 	}
 
