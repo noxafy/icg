@@ -80,7 +80,7 @@ class PhysicsJumper extends Jumper {
 
 		this.timePerJump = Math.sqrt(2 * this.g * Math.abs(axis.y)) / this.g;
 		this.halfJumpsPerMillisecond = 2 / this.timePerJump;
-		if (axis.y < 0) {
+		if (axis.y > 0) {
 			this.jumpDirection = -1; // with y-coord
 		} else {
 			this.timePassed = this.timePerJump / 2;
