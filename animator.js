@@ -34,6 +34,64 @@ class Rotor extends Animator {
 	}
 }
 
+class Driver2D extends Animator {
+	/**
+	 * Creates a new user controllable driver animation
+	 * @param {number} speed - Speed of driving in 1/second
+	 */
+	constructor(speed = 1) {
+		super();
+		this.speed = speed / 1000;
+		this.xAxis = 0; // -1 = left, 1 = right
+		this.zAxis = 0; // -1 = backward, 1 = forward
+	}
+
+	calc(deltaT, mat) {
+		let positionChange = new Vector(this.xAxis * this.speed * deltaT, 0, this.zAxis * this.speed * deltaT);
+		const trans = Matrix.translation(positionChange);
+		return mat.mul(trans);
+	}
+
+	setForward(set) {
+		this.setZ(set);
+	}
+
+	setBackward(set) {
+		this.setZ(!set);
+	}
+
+	setZ(set) {
+		if (set) {
+			this.zAxis++;
+		} else {
+			this.zAxis--;
+		}
+		if (this.zAxis < -1) this.zAxis = -1;
+		if (this.zAxis > 1) this.zAxis = 1;
+	}
+
+	setRightward(set) {
+		this.setX(set);
+	}
+
+	setLeftward(set) {
+		this.setX(!set);
+	}
+
+	setX(set) {
+		if (set) {
+			this.xAxis++;
+		} else {
+			this.xAxis--;
+		}
+		if (this.xAxis < -1) this.xAxis = -1;
+		if (this.xAxis > 1) this.xAxis = 1;
+	}
+}
+
+// Linear Driver
+// "slow starting" driver 1/x
+
 class Jumper extends Animator {
 	/**
 	 * Creates a new jumper animation
