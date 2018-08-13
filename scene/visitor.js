@@ -95,7 +95,7 @@ class RasterVisitor extends Visitor {
 					console.log(this.modelMatrices[this.modelMatrices.length - 1].data);
 					console.log(this.modelMatrices[this.modelMatrices.length - 1].invert().data);
 				}
-				this.lookat = this.lookat.mul(this.modelMatrices[this.modelMatrices.length - 1].invert());
+				this.lookat = this.modelMatrices[this.modelMatrices.length - 1].invert().mul(this.lookat);
 			}
 			if (window.debugLookAt) {
 				console.log("New lookat");

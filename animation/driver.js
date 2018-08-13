@@ -12,7 +12,7 @@ class Driver extends Animator {
 		this.speed = speed / 1000;
 		this.xAxis = 0; // -1 = left, 1 = right
 		this.yAxis = 0; // -1 = down, 1 = up
-		this.zAxis = 0; // -1 = backward, 1 = forward
+		this.zAxis = 0; // -1 = forward, 1 = backward
 	}
 
 	calc(deltaT, mat) {
@@ -35,11 +35,11 @@ class Driver extends Animator {
 	}
 
 	setForward(set) {
-		this.setZ(set);
+		this.setZ(!set);
 	}
 
 	setBackward(set) {
-		this.setZ(!set);
+		this.setZ(set);
 	}
 
 	setZ(set) {
