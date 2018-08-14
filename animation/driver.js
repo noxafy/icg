@@ -11,8 +11,14 @@ class Driver extends Animator {
 		super();
 		this.speed = speed / 1000;
 		this.xAxis = 0; // -1 = left, 1 = right
+		this.leftward = false;
+		this.rightward = false;
 		this.yAxis = 0; // -1 = down, 1 = up
+		this.downward = false;
+		this.upward = false;
 		this.zAxis = 0; // -1 = forward, 1 = backward
+		this.forward = false;
+		this.backward = false;
 	}
 
 	calc(deltaT, mat) {
@@ -35,48 +41,49 @@ class Driver extends Animator {
 	}
 
 	setForward(set) {
-		this.setZ(!set);
+		this.set(set, "forward", false, "zAxis", "backward")
 	}
 
 	setBackward(set) {
-		this.setZ(set);
-	}
-
-	setZ(set) {
-		if (set) this.zAxis++; else this.zAxis--;
-
-		if (this.zAxis < -1) this.zAxis = -1;
-		if (this.zAxis > 1) this.zAxis = 1;
+		this.set(set, "backward", true, "zAxis", "forward");
 	}
 
 	setRightward(set) {
-		this.setX(set);
+		this.set(set, "rightward", true, "xAxis", "leftward");
 	}
 
 	setLeftward(set) {
-		this.setX(!set);
-	}
-
-	setX(set) {
-		if (set) this.xAxis++; else this.xAxis--;
-
-		if (this.xAxis < -1) this.xAxis = -1;
-		if (this.xAxis > 1) this.xAxis = 1;
+		this.set(set, "leftward", false, "xAxis", "rightward")
 	}
 
 	setUpward(set) {
-		this.setY(set);
+		this.set(set, "upward", true, "yAxis", "downward")
 	}
 
 	setDownward(set) {
-		this.setY(!set);
+		this.set(set, "downward", false, "yAxis", "upward")
 	}
 
-	setY(set) {
-		if (set) this.yAxis++; else this.yAxis--;
-
-		if (this.yAxis < -1) this.yAxis = -1;
-		if (this.yAxis > 1) this.yAxis = 1;
+	set(set, This, isPositiveDirection, axis, opposite) {
+		if (set) {
+			if (this[opposite]) {
+				this[opposite] = false;
+				this[axis] = 0;
+			}
+			else {
+				this[This] = true;
+				this[axis] = isPositiveDirection ? 1 : -1;
+			}
+		} else {
+			if (this[opposite]) {
+				this[opposite] = true;
+				this[axis] = isPositiveDirection ? -1 : 1;
+			}
+			else {
+				this[This] = false;
+				this[axis] = 0;
+			}
+		}
 	}
 }
 

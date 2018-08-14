@@ -66,8 +66,8 @@
 		window.onresize();
 
 		let camera = new CameraNode(
-			new Vector(0, 0, -10, 1), // eye
-			new Vector(0, 0, -9, 1), // center
+			new Vector(0, 0, 10, 1), // eye
+			new Vector(0, 0, 9, 1), // center
 			new Vector(0, 1, 0, 0), // up
 			0.1, 100, 60 // near, far, fovy
 		)
@@ -115,7 +115,8 @@
 		window.animationNodes = [
 			new AnimationNode(gn2, new Rotor(new Vector(0, 0, 1), 30)),
 			new AnimationNode(gn4, new PhysicsJumper(new Vector(0, -1, 0), 1)),
-			new AnimationNode(gn5, new Driver3D())
+			new AnimationNode(gn5, new Driver2D()),
+			new AnimationNode(gn4, new Driver3D())
 		];
 
 		function simulate(deltaT) {

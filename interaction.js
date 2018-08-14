@@ -3,10 +3,10 @@
  * Created: 13.08.18
  */
 // user input event listener
-let hitCmd = false;
+let hitCmd = false; // user wants to make a browser short cut
 let lastKey;
 
-window.addEventListener('keydown', function (event) {
+window.addEventListener('keydown', function (event){
 	if (hitCmd) return;
 	switch (event.key) {
 		case "Meta":
@@ -14,12 +14,11 @@ window.addEventListener('keydown', function (event) {
 			return;
 	}
 
-	if (/^[a-z ]$/.test(event.key)) {
-		event.preventDefault();
-	}
+	event.preventDefault();
 	if (event.key === lastKey) return;
 	lastKey = event.key;
 	// console.log("keydown: [" + event.key + "]")
+	// console.log(event);
 	switch (event.key) {
 		case "ArrowUp":
 			for (let animationNode of animationNodes) {
@@ -55,14 +54,13 @@ window.addEventListener('keydown', function (event) {
 		case "d":
 			set3DDriver("setRightward", true)
 			break;
-		case " ":
+		case "q":
 			set3DDriver("setUpward", true);
 			break;
-		case "Shift":
+		case "e":
 			set3DDriver("setDownward", true)
 			break;
 	}
-
 });
 
 window.addEventListener('keyup', function (event) {
@@ -72,11 +70,10 @@ window.addEventListener('keyup', function (event) {
 	}
 	if (hitCmd) return;
 
-	if (/^[a-z ]$/.test(event.key)) {
-		event.preventDefault();
-	}
+	event.preventDefault();
 	lastKey = undefined;
 	// console.log("keyup: [" + event.key + "]")
+	// console.log(event);
 	switch (event.key) {
 		// secondary driver (2D)
 		case "i":
@@ -104,10 +101,10 @@ window.addEventListener('keyup', function (event) {
 		case "d":
 			set3DDriver("setRightward", false)
 			break;
-		case " ":
+		case "q":
 			set3DDriver("setUpward", false);
 			break;
-		case "Shift":
+		case "e":
 			set3DDriver("setDownward", false)
 			break;
 	}
