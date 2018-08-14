@@ -193,7 +193,7 @@ class Matrix {
 				}
 			}
 			return res;
-		} else { // other is vector
+		} else if (other instanceof Vector) { // other is vector
 			let res = [0, 0, 0, 0];
 			for (let row = 0; row < 4; row++) {
 				for (let row_or_col = 0; row_or_col < 4; row_or_col++) {
@@ -201,6 +201,9 @@ class Matrix {
 				}
 			}
 			return new Vector(res[0], res[1], res[2], res[3]);
+		} else {
+			console.error("Unsupported data type:")
+			console.error(other);
 		}
 	}
 
