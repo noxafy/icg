@@ -74,7 +74,7 @@
 
 		// construct scene graph
 		const sphere = new SphereNode(new Vector(.5, -.8, 0, 1), 0.4, new Vector(.8, .4, .1, 1))
-		const lightSphere = new SphereNode(new Vector(-5.5, -2.5, 5.0, 1), 0.4, new Vector(0, 0, 0, 1))
+		const lightSphere = new SphereNode(new Vector(0, 0, 0, 1), 0.4, new Vector(0, 0, 0, 1))
 		const cube = new TextureBoxNode(
 			new Vector(-1, -1, -1, 1),
 			new Vector(1, 1, 1, 1),
@@ -83,40 +83,42 @@
 
 		//      sg
 		//     /  \
-		//  gn2:Tc gn4 - lightSphere
+		//  gn1    gn5:Tl - lightSphere
 		//   /   \
-		// gn1:Ts cube
-		//   |
-		// gn3:T-c
+		// gn2:Ts gn3:Tc
+		//   |      \
+		// gn4:T-c cube
 		//   |
 		// sphere
 
-		// const sg = new GroupNode(Matrix.scaling(new Vector(0.2, 0.2, 0.2)));
 		const sg = new GroupNode(Matrix.identity())
-		const gn1 = new GroupNode(Matrix.translation(new Vector(1, 1, 0))); // Ts
-		const gn2 = new GroupNode(Matrix.translation(new Vector(-.3, -0.4, .1))); // Tc
-		const gn3 = new GroupNode(Matrix.translation(new Vector(.3, .4, -.1))); // -Tc
-		const gn4 = new GroupNode(Matrix.identity());
-		const gn5 = new GroupNode(Matrix.identity());
+		const gn1 = new GroupNode(Matrix.identity());
+		const gn3 = new GroupNode(Matrix.translation(new Vector(-.3, -0.4, .1))); // Tc
+		const gn2 = new GroupNode(Matrix.translation(new Vector(1, 1, 0))); // Ts
+		const gn4 = new GroupNode(Matrix.translation(new Vector(.3, .4, -.1))); // -Tc
+		const gn5 = new GroupNode(Matrix.translation(new Vector(-3.5, -2.5, -5.0, 1))); // Tl
+		const gn6 = new GroupNode(Matrix.identity());
 
-		gn2.add(cube);
-		gn3.add(sphere);
-		gn4.add(lightSphere);
-		gn5.add(camera);
+		sg.add(gn1);
+		gn1.add(gn2);
+		gn2.add(gn4);
+		gn4.add(sphere);
 
-		sg.add(gn2);
-		gn2.add(gn1);
 		gn1.add(gn3);
+		gn3.add(cube);
 
-		sg.add(gn4);
 		sg.add(gn5);
+		gn5.add(lightSphere);
+
+		sg.add(gn6);
+		gn6.add(camera);
 
 		// add animation nodes
 		window.animationNodes = [
-			new AnimationNode(gn2, new Rotor(new Vector(0, 0, 1), 30)),
-			new AnimationNode(gn4, new PhysicsJumper(new Vector(0, -1, 0), 1)),
+			new AnimationNode(gn3, new Rotor(new Vector(0, 0, 1), 30)),
+			new AnimationNode(gn5, new PhysicsJumper(new Vector(0, 3, 0), 1)),
 			new AnimationNode(gn5, new Driver2D()),
-			new AnimationNode(gn4, new Driver3D())
+			new AnimationNode(gn6, new FreeFlight(3)),
 		];
 
 		function simulate(deltaT) {

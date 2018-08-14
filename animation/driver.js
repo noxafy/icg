@@ -108,10 +108,6 @@ class Driver2D extends Driver {
 	setDownward(set) {
 		throw Error("Unsupported operation.")
 	}
-
-	setY(set) {
-		throw Error("Unsupported operation.")
-	}
 }
 
 class Driver3D extends Driver {
@@ -124,8 +120,38 @@ class Driver3D extends Driver {
 	}
 
 	drive(deltaT) {
-		let positionChange = new Vector(this.xAxis, this.yAxis, this.zAxis).normalised().mul(this.speed * deltaT);
+		let direction = new Vector(this.xAxis, this.yAxis, this.zAxis).normalised();
+		let positionChange = direction.mul(this.speed * deltaT);
 		return Matrix.translation(positionChange);
+	}
+}
+
+class FreeFlight extends Driver3D {
+	/**
+	 * Creates a new user controllable, continuous free flight 3D driver animation, using rotation for left right orientation
+	 * @param {number} speed - The constant speed of driving in 1/second in each direction
+	 * @param {number} angleSpeed - The constant speed of rotating on x axis in angle/second
+	 */
+	constructor(speed = 1, angleSpeed = 60) {
+		super(speed);
+		this.angleSpeed = Utils.degToRad(angleSpeed) / 1000;
+		this.defaultyAxis = new Vector(0, 1, 0); // rotate around y axis
+	}
+
+	drive(deltaT) {
+		let rot, trans;
+		if (this.xAxis !== 0) {
+			rot = Matrix.rotation(this.defaultyAxis, -this.xAxis * this.angleSpeed * deltaT)
+		}
+		if (this.yAxis !== 0 || this.zAxis !== 0) {
+			let direction = new Vector(0, this.yAxis, this.zAxis).normalised();
+			let positionChange = direction.mul(this.speed * deltaT);
+			trans = Matrix.translation(positionChange);
+		} else {
+			trans = Matrix.identity();
+		}
+		if (rot) return trans.mul(rot);
+		else return trans;
 	}
 }
 
