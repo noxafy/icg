@@ -20,7 +20,7 @@ window.addEventListener('keydown', function (event){
 	// console.log("keydown: [" + event.key + "]")
 	// console.log(event);
 	switch (event.key) {
-		case "ArrowUp":
+		case "p":
 			for (let animationNode of animationNodes) {
 				animationNode.toggleActive();
 			}
@@ -54,10 +54,10 @@ window.addEventListener('keydown', function (event){
 		case "d":
 			set3DDriver("setRightward", true)
 			break;
-		case "q":
+		case "e":
 			set3DDriver("setUpward", true);
 			break;
-		case "e":
+		case "q":
 			set3DDriver("setDownward", true)
 			break;
 	}
@@ -101,10 +101,10 @@ window.addEventListener('keyup', function (event) {
 		case "d":
 			set3DDriver("setRightward", false)
 			break;
-		case "q":
+		case "e":
 			set3DDriver("setUpward", false);
 			break;
-		case "e":
+		case "q":
 			set3DDriver("setDownward", false)
 			break;
 	}
