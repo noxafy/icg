@@ -15,11 +15,12 @@ window.addEventListener('keydown', function (event){
 	}
 
 	event.preventDefault();
-	if (event.key === lastKey) return;
+	if (event.key === lastKey || event.repeat) return;
 	lastKey = event.key;
 	// console.log("keydown: [" + event.key + "]")
 	// console.log(event);
-	switch (event.key) {
+	let key = event.key.toLowerCase();
+	switch (key) {
 		case "p":
 			for (let animationNode of animationNodes) {
 				animationNode.toggleActive();
@@ -28,39 +29,9 @@ window.addEventListener('keydown', function (event){
 		case "f":
 			toggleFullScreenMode();
 			break;
-		// secondary driver (2D)
-		case "i":
-			set2DDriver("setForward", true);
-			break;
-		case "j":
-			set2DDriver("setLeftward", true);
-			break;
-		case "k":
-			set2DDriver("setBackward", true);
-			break;
-		case "l":
-			set2DDriver("setRightward", true)
-			break;
-		// primary driver (3D)
-		case "w":
-			set3DDriver("setForward", true);
-			break;
-		case "a":
-			set3DDriver("setLeftward", true);
-			break;
-		case "s":
-			set3DDriver("setBackward", true);
-			break;
-		case "d":
-			set3DDriver("setRightward", true)
-			break;
-		case "e":
-			set3DDriver("setUpward", true);
-			break;
-		case "q":
-			set3DDriver("setDownward", true)
-			break;
 	}
+
+	driverSwitch(key, true);
 });
 
 window.addEventListener('keyup', function (event) {
@@ -74,58 +45,105 @@ window.addEventListener('keyup', function (event) {
 	lastKey = undefined;
 	// console.log("keyup: [" + event.key + "]")
 	// console.log(event);
-	switch (event.key) {
-		// secondary driver (2D)
-		case "i":
-			set2DDriver("setForward", false);
-			break;
-		case "j":
-			set2DDriver("setLeftward", false);
-			break;
-		case "k":
-			set2DDriver("setBackward", false);
-			break;
-		case "l":
-			set2DDriver("setRightward", false)
-			break;
-		// primary driver (3D)
-		case "w":
-			set3DDriver("setForward", false);
-			break;
-		case "a":
-			set3DDriver("setLeftward", false);
-			break;
-		case "s":
-			set3DDriver("setBackward", false);
-			break;
-		case "d":
-			set3DDriver("setRightward", false)
-			break;
-		case "e":
-			set3DDriver("setUpward", false);
-			break;
-		case "q":
-			set3DDriver("setDownward", false)
-			break;
-	}
+	driverSwitch(event.key.toLowerCase(), false);
 });
 
-function set2DDriver(foo, set) {
-	for (let animationNode of animationNodes) {
-		let animator = animationNode.animator;
-		if (animator instanceof Driver2D) {
-			animator[foo](set);
+let w_downtime, s_downtime;
+
+function driverSwitch(key, set) {
+	switch (key) {
+		// 2D driver
+		case "i":
+			set2DDriver("moveForward", set);
 			break;
-		}
+		case "j":
+			set2DDriver("moveLeftward", set);
+			break;
+		case "k":
+			set2DDriver("moveBackward", set);
+			break;
+		case "l":
+			set2DDriver("moveRightward", set)
+			break;
+		// 3D driver and free flight driver
+		case "w":
+			if (set) {
+				let now = Date.now();
+				if (w_downtime && now - w_downtime <= 200) {
+					doubleDriverSpeed(true);
+				} else {
+					w_downtime = now;
+				}
+			} else {
+				doubleDriverSpeed(false);
+			}
+			set3DDriver("moveForward", set);
+			setFreeFlight("moveForward", set);
+			break;
+		case "a":
+			set3DDriver("moveLeftward", set);
+			setFreeFlight("moveLeftward", set);
+			break;
+		case "s":
+			set3DDriver("moveBackward", set);
+			setFreeFlight("moveBackward", set);
+			break;
+		case "d":
+			set3DDriver("moveRightward", set);
+			setFreeFlight("moveRightward", set);
+			break;
+		case "shift":
+			set3DDriver("moveDownward", set);
+			setFreeFlight("moveDownward", set);
+			break;
+		case " ":
+			set3DDriver("moveUpward", set);
+			setFreeFlight("moveUpward", set);
+			break;
+		case "arrowleft":
+			setFreeFlight("rotateLeftward", set);
+			break;
+		case "arrowright":
+			setFreeFlight("rotateRightward", set);
+			break;
+		case "arrowup":
+			setFreeFlight("rotateUpward", set);
+			break;
+		case "arrowdown":
+			setFreeFlight("rotateDownward", set);
+			break;
 	}
 }
 
+function set2DDriver(foo, set) {
+	forEachAnimatorSet(foo, set, animator => {
+		return animator instanceof Driver2D;
+	})
+}
+
 function set3DDriver(foo, set) {
+	forEachAnimatorSet(foo, set, animator => {
+		return animator instanceof Driver3D;
+	})
+}
+
+function setFreeFlight(foo, set) {
+	forEachAnimatorSet(foo, set, animator => {
+		return animator instanceof FreeFlight;
+	});
+}
+
+function doubleDriverSpeed(set) {
+	forEachAnimatorSet("doubleSpeed", set, animator => {
+		return animator instanceof Driver3D || animator instanceof FreeFlight;
+	})
+}
+
+function forEachAnimatorSet(foo, set, filter) {
 	for (let animationNode of animationNodes) {
 		let animator = animationNode.animator;
-		if (animator instanceof Driver3D) {
+		if (filter(animator)) {
 			animator[foo](set);
-			break;
 		}
 	}
 }
