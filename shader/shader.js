@@ -93,7 +93,7 @@ class Shader {
 	}
 
 	/**
-	 * Returns an object that can be used to set a vector on the GPU
+	 * Returns an object that can be used to set a 3D vector on the GPU
 	 * @param  {string} name - The name of the uniform to set
 	 * @return {UniformVec3}   The resulting object
 	 */
@@ -104,7 +104,18 @@ class Shader {
 	}
 
 	/**
-	 * Returns an object that can be used to set an int on the GPU
+	 * Returns an object that can be used to set an array of 3D vectors on the GPU
+	 * @param  {string} name - The name of the uniform to set
+	 * @return {UniformVec3Array}   The resulting object
+	 */
+	getUniformVec3Array(name) {
+		return new UniformVec3Array(this.gl,
+			this.gl.getUniformLocation(this.shaderProgram, name)
+		);
+	}
+
+	/**
+	 * Returns an object that can be used to set an float on the GPU
 	 * @param  {string} name - The name of the uniform to set
 	 * @return {UniformInt}    The resulting object
 	 */
@@ -166,6 +177,31 @@ class UniformVec3 {
 		this.gl.uniform3f(
 			this.position, vec.x, vec.y, vec.z
 		);
+	}
+}
+
+/**
+ * Handler class to set uniform vectors
+ * in the shader program
+ */
+class UniformVec3Array {
+	constructor(gl, position) {
+		this.gl = gl;
+		this.position = position;
+	}
+
+	/**
+	 * Sends the given vector to the GPU as 3dimensional vector
+	 * @param {Array<Vector>} vecs - The vector to send
+	 */
+	set(vecs) {
+		let arr = new Float32Array(vecs.length * 3);
+		vecs.forEach((vec, idx) => {
+			arr[idx] = vec.data[0];
+			arr[idx + 1] = vec.data[1];
+			arr[idx + 2] = vec.data[2];
+		})
+		this.gl.uniform3fv(this.position, arr);
 	}
 }
 

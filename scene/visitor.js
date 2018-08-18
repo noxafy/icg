@@ -73,6 +73,8 @@ class RasterVisitor extends Visitor {
 		this.drawTraverser = new DrawTraverser(context, this);
 
 		this.modelMatrices = [];
+		this.lightPositions = [];
+		this.lightColors = [];
 	}
 
 	/**
@@ -119,7 +121,7 @@ class Traverser extends Visitor {
 	}
 
 	/**
-	 * Setup uniforms, i.e. projection, view and model matrix and light positions and colors.
+	 * Setup uniforms needed for drawing, i.e. projection, view and model matrix and light positions and colors.
 	 * @param {Shader} shader
 	 * @return {Matrix} Last element of this.modelMatrices to be used for normal calculation etc.
 	 */
@@ -230,7 +232,9 @@ class LightTraverser extends Traverser {
 	}
 
 	visitLightNode(node) {
-		// TODO
+		let mat = this.modelMatrices[this.modelMatrices.length - 1];
+		this.visitor.lightPositions.push(mat.mul(node.position));
+		this.visitor.lightColors.push(node.color);
 	}
 }
 

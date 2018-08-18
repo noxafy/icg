@@ -60,7 +60,8 @@
 		)
 
 		const sphere = new SphereNode(new Vector(.5, -.8, 0, 1), 0.4, new Vector(.8, .4, .1, 1))
-		const lightSphere = new SphereNode(new Vector(0, 0, 0, 1), 0.4, new Vector(0, 0, 0, 1))
+		const jumpingSphere = new SphereNode(new Vector(0, 0, 0, 1), 0.4, new Vector(0, 0, 0, 1))
+		const light = new LightNode(new Vector(3, 3, 3, 1), new Vector(1, 1, 1))
 		const cube = new TextureBoxNode(
 			new Vector(-1, -1, -1, 1),
 			new Vector(1, 1, 1, 1),
@@ -69,7 +70,7 @@
 
 		//      sg
 		//     /  \
-		//  gn1:Tc gn5:Tl - lightSphere
+		//  gn1:Tc gn5:Tl - jumpingSphere
 		//   /   \
 		// gn2:Ts gn3
 		//   |      \
@@ -84,6 +85,7 @@
 		const gn4 = new GroupNode(Matrix.translation(new Vector(.3, .4, -.1))); // -Tc
 		const gn5 = new GroupNode(Matrix.translation(new Vector(-3.5, -2.5, -5.0, 1))); // Tl
 		const gn6 = new GroupNode(Matrix.identity());
+		const gn7 = new GroupNode(Matrix.identity());
 
 		sg.add(gn1);
 		gn1.add(gn2);
@@ -94,10 +96,13 @@
 		gn3.add(cube);
 
 		sg.add(gn5);
-		gn5.add(lightSphere);
+		gn5.add(jumpingSphere);
 
 		sg.add(gn6);
 		gn6.add(camera);
+
+		sg.add(gn7);
+		gn7.add(light);
 
 		// add animation nodes
 		window.animationNodes = [
