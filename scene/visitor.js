@@ -64,9 +64,14 @@ class RasterVisitor extends Visitor {
 	 */
 	constructor(context, phongShader, textureShader) {
 		super(context);
-		this.modelMatrices = [];
 		this.phongShader = phongShader;
-		this.textureshader = textureShader;
+		this.textureShader = textureShader;
+
+		this.cameraTraverser = new CameraTraverser(context, this);
+		this.lightTraverser = new LightTraverser(context, this);
+		this.drawTraverser = new DrawTraverser(context, this);
+
+		this.modelMatrices = [];
 	}
 
 	/**
@@ -78,46 +83,24 @@ class RasterVisitor extends Visitor {
 		// clear
 		this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
 
-		// traverse and render
-		rootNode.accept(this);
+		// camera traversal
+		this.cameraTraverser.traverse(rootNode);
+
+		// light traversal
+		this.lightTraverser.traverse(rootNode);
+
+		// draw traversal
+		this.drawTraverser.traverse(rootNode);
 	}
+}
 
+class Traverser extends Visitor {
 	/**
-	 * Helper function to setup camera matrices
-	 * @param  {CameraNode} camera - The camera used
+	 * Creates a new RasterVisitor
 	 */
-	setupCamera(camera) {
-		if (camera) {
-			this.lookat = Matrix.lookat(
-				camera.eye,
-				camera.center,
-				camera.up
-			);
-			if (window.debugLookAt) {
-				console.log("Old lookat");
-				console.log(this.lookat.data);
-			}
-			if (this.modelMatrices.length > 0) {
-				if (window.debugLookAt) {
-					console.log("modelMatrices.last");
-					console.log(this.modelMatrices[this.modelMatrices.length - 1].data);
-					console.log(this.modelMatrices[this.modelMatrices.length - 1].invert().data);
-				}
-				this.lookat = this.modelMatrices[this.modelMatrices.length - 1].invert().mul(this.lookat);
-			}
-			if (window.debugLookAt) {
-				console.log("New lookat");
-				console.log(this.lookat.data);
-				window.debugLookAt = false;
-			}
-
-			this.perspective = Matrix.perspective(
-				camera.fovy,
-				camera.aspect,
-				camera.near,
-				camera.far
-			);
-		}
+	constructor(context) {
+		super(context);
+		this.modelMatrices = [];
 	}
 
 	visitGroupNode(node) {
@@ -133,65 +116,183 @@ class RasterVisitor extends Visitor {
 		this.modelMatrices.pop();
 	}
 
+	/**
+	 * Start traversing here
+	 * @param {Node} node
+	 */
+	traverse(node) {
+		node.accept(this);
+	}
+}
+
+class CameraTraverser extends Traverser {
+
+	/**
+	 * Creates a new camera traverser
+	 */
+	constructor(context, visitor) {
+		super(context);
+		this.visitor = visitor;
+	}
+
 	visitSphereNode(node) {
-		this.phongShader.use();
-		let mat = this.modelMatrices[this.modelMatrices.length - 1];
-		this.phongShader.getUniformMatrix("M").set(mat);
-
-		let V = this.phongShader.getUniformMatrix("V");
-		let N = this.phongShader.getUniformMatrix("N");
-		if (this.lookat) {
-			if (V) V.set(this.lookat);
-			// set the normal matrix
-			if (N) N.set(this.lookat.mul(mat).invert().transpose())
-		}
-		let P = this.phongShader.getUniformMatrix("P");
-		if (P && this.perspective) {
-			P.set(this.perspective);
-		}
-
-		node.rastersphere.render(this.phongShader);
+		// do nothing
 	}
 
 	visitAABoxNode(node) {
-		this.phongShader.use();
-		let mat = this.modelMatrices[this.modelMatrices.length - 1];
-		this.phongShader.getUniformMatrix("M").set(mat);
-		let V = this.phongShader.getUniformMatrix("V");
-		if (V && this.lookat) {
-			V.set(this.lookat);
-		}
-		let P = this.phongShader.getUniformMatrix("P");
-		if (P && this.perspective) {
-			P.set(this.perspective);
-		}
-
-		node.rasterbox.render(this.phongShader);
+		// do nothing
 	}
 
 	visitTextureBoxNode(node) {
-		this.textureshader.use();
-
-		let mat = this.modelMatrices[this.modelMatrices.length - 1];
-		this.textureshader.getUniformMatrix("M").set(mat);
-		let P = this.textureshader.getUniformMatrix("P");
-		if (P && this.perspective) {
-			P.set(this.perspective);
-		}
-		let V = this.textureshader.getUniformMatrix("V");
-		if (V && this.lookat) {
-			V.set(this.lookat);
-		}
-
-		node.rastertexturebox.render(this.textureshader);
+		// do nothing
 	}
 
 	visitCameraNode(node) {
-		this.setupCamera(node);
+		this.visitor.lookat = Matrix.lookat(
+			node.eye,
+			node.center,
+			node.up
+		);
+		if (window.debugLookAt) {
+			console.log("Old lookat");
+			console.log(this.visitor.lookat.data);
+		}
+		if (this.modelMatrices.length > 0) {
+			if (window.debugLookAt) {
+				console.log("modelMatrices.last");
+				console.log(this.modelMatrices[this.modelMatrices.length - 1].data);
+				console.log(this.modelMatrices[this.modelMatrices.length - 1].invert().data);
+			}
+			this.visitor.lookat = this.modelMatrices[this.modelMatrices.length - 1].invert().mul(this.visitor.lookat);
+		}
+		if (window.debugLookAt) {
+			console.log("New lookat");
+			console.log(this.visitor.lookat.data);
+			window.debugLookAt = false;
+		}
+
+		this.visitor.perspective = Matrix.perspective(
+			camera.fovy,
+			camera.aspect,
+			camera.near,
+			camera.far
+		);
 	}
 
 	visitLightNode(node) {
-		// nothing to do
+		// do nothing
+	}
+}
+
+class LightTraverser extends Traverser {
+
+	/**
+	 * Creates a new camera traverser
+	 */
+	constructor(context, visitor) {
+		super(context);
+		this.visitor = visitor;
+	}
+
+	visitSphereNode(node) {
+		// do nothing
+	}
+
+	visitAABoxNode(node) {
+		// do nothing
+	}
+
+	visitTextureBoxNode(node) {
+		// do nothing
+	}
+
+	visitCameraNode(node) {
+		// do nothing
+	}
+
+	visitLightNode(node) {
+		// TODO
+	}
+}
+
+class DrawTraverser extends Traverser {
+
+	/**
+	 * Creates a new camera traverser
+	 */
+	constructor(context, visitor) {
+		super(context);
+		this.visitor = visitor;
+	}
+
+	visitSphereNode(node) {
+		let phongShader = this.visitor.phongShader;
+		phongShader.use();
+
+		let mat = this.modelMatrices[this.modelMatrices.length - 1];
+		phongShader.getUniformMatrix("M").set(mat);
+
+		let V = phongShader.getUniformMatrix("V");
+		let N = phongShader.getUniformMatrix("N");
+		if (this.visitor.lookat) {
+			if (V) V.set(this.visitor.lookat);
+			// set the normal matrix
+			if (N) N.set(this.visitor.lookat.mul(mat).invert().transpose())
+		}
+
+		let P = phongShader.getUniformMatrix("P");
+		if (P && this.visitor.perspective) {
+			P.set(this.visitor.perspective);
+		}
+
+		node.rastersphere.render(phongShader);
+	}
+
+	visitAABoxNode(node) {
+		let phongShader = this.visitor.phongShader;
+		phongShader.use();
+
+		let mat = this.modelMatrices[this.modelMatrices.length - 1];
+		phongShader.getUniformMatrix("M").set(mat);
+
+		let V = phongShader.getUniformMatrix("V");
+		if (V && this.visitor.lookat) {
+			V.set(this.visitor.lookat);
+		}
+
+		let P = phongShader.getUniformMatrix("P");
+		if (P && this.visitor.perspective) {
+			P.set(this.visitor.perspective);
+		}
+
+		node.rasterbox.render(phongShader);
+	}
+
+	visitTextureBoxNode(node) {
+		let textureShader = this.visitor.textureShader;
+		textureShader.use();
+
+		let mat = this.modelMatrices[this.modelMatrices.length - 1];
+		textureShader.getUniformMatrix("M").set(mat);
+		let V = textureShader.getUniformMatrix("V");
+		if (V && this.visitor.lookat) {
+			V.set(this.visitor.lookat);
+		}
+
+		let P = textureShader.getUniformMatrix("P");
+		if (P && this.visitor.perspective) {
+			P.set(this.visitor.perspective);
+		}
+
+		node.rastertexturebox.render(textureShader);
+	}
+
+	visitCameraNode(node) {
+		// do nothing
+	}
+
+	visitLightNode(node) {
+		// do nothing
 	}
 }
 

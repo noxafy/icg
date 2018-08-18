@@ -7,6 +7,7 @@ class Node {
 	 * @param  {Visitor} visitor - The visitor
 	 */
 	accept(visitor) {
+		throw Error("Unsupported operation");
 	}
 }
 
