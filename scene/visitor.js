@@ -76,7 +76,7 @@ class RasterVisitor extends Visitor {
 
 	/**
 	 * Helper function to setup camera matrices
-	 * @param  {Object} camera - The camera used
+	 * @param  {CameraNode} camera - The camera used
 	 */
 	setupCamera(camera) {
 		if (camera) {
@@ -126,24 +126,23 @@ class RasterVisitor extends Visitor {
 	}
 
 	visitSphereNode(node) {
-		const shader = this.phongShader;
-		shader.use();
+		this.phongShader.use();
 		let mat = this.modelMatrices[this.modelMatrices.length - 1];
-		shader.getUniformMatrix("M").set(mat);
+		this.phongShader.getUniformMatrix("M").set(mat);
 
-		let V = shader.getUniformMatrix("V");
-		let N = shader.getUniformMatrix("N");
+		let V = this.phongShader.getUniformMatrix("V");
+		let N = this.phongShader.getUniformMatrix("N");
 		if (this.lookat) {
 			if (V) V.set(this.lookat);
 			// set the normal matrix
 			if (N) N.set(this.lookat.mul(mat).invert().transpose())
 		}
-		let P = shader.getUniformMatrix("P");
+		let P = this.phongShader.getUniformMatrix("P");
 		if (P && this.perspective) {
 			P.set(this.perspective);
 		}
 
-		node.rastersphere.render(shader);
+		node.rastersphere.render(this.phongShader);
 	}
 
 	visitAABoxNode(node) {
@@ -209,15 +208,15 @@ class RasterSetupVisitor extends Visitor {
 	}
 
 	visitSphereNode(node) {
-		node.rastersphere = new RasterSphere(this.gl, node.center, node.radius, node.color);
+		node.setRastersphere(this.gl);
 	}
 
 	visitAABoxNode(node) {
-		node.rasterbox = new RasterBox(this.gl, node.minPoint, node.maxPoint);
+		node.setRasterbox(this.gl);
 	}
 
 	visitTextureBoxNode(node) {
-		node.rastertexturebox = new RasterTextureBox(this.gl, node.minPoint, node.maxPoint, node.texture);
+		node.setRasterTextureBox(this.gl);
 	}
 
 	visitCamera(node) {

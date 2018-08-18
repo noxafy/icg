@@ -79,8 +79,7 @@ class RasterBox {
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.vertexBuffer);
         const positionLocation = shader.getAttributeLocation("a_position");
         this.gl.enableVertexAttribArray(positionLocation);
-        this.gl.vertexAttribPointer(positionLocation,
-            3, this.gl.FLOAT, false, 0, 0);
+		this.gl.vertexAttribPointer(positionLocation, 3, this.gl.FLOAT, false, 0, 0);
 
 		this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.colorBuffer);
 		const colorLocation = shader.getAttributeLocation("a_color");

@@ -69,6 +69,10 @@ class SphereNode extends Node {
 	accept(visitor) {
 		visitor.visitSphereNode(this);
 	}
+
+	setRastersphere(gl) {
+		this.rastersphere = new RasterSphere(gl, this.center, this.radius, this.color)
+	}
 }
 
 /**
@@ -96,6 +100,10 @@ class AABoxNode extends Node {
 	accept(visitor) {
 		visitor.visitAABoxNode(this);
 	}
+
+	setRasterbox(gl) {
+		this.rasterbox = new RasterBox(gl, this.minPoint, this.maxPoint);
+	}
 }
 
 /**
@@ -122,6 +130,10 @@ class TextureBoxNode extends Node {
 	 */
 	accept(visitor) {
 		visitor.visitTextureBoxNode(this);
+	}
+
+	setRasterTextureBox(gl) {
+		this.rastertexturebox = new RasterTextureBox(gl, this.minPoint, this.maxPoint, this.texture);
 	}
 }
 

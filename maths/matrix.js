@@ -327,7 +327,7 @@ class Matrix {
 		/* calculate determinant */
 		det = src[0] * dst[0] + src[1] * dst[1] + src[2] * dst[2] + src[3] * dst[3];
 
-		if (det == 0.0) {
+		if (det === 0.0) {
 			throw new Error("singular matrix is not invertible");
 		}
 
