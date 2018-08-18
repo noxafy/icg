@@ -53,14 +53,15 @@ class Visitor {
 	}
 }
 
-window.debugLookAt = false;
-
 /**
  * Class representing a Visitor that uses Rasterisation to render a Scenegraph
  */
 class RasterVisitor extends Visitor {
 	/**
 	 * Creates a new RasterVisitor
+	 * @param {WebGLRenderingContext} context
+	 * @param {Shader} phongShader
+	 * @param {Shader} textureShader
 	 */
 	constructor(context, phongShader, textureShader) {
 		super(context);
@@ -98,8 +99,9 @@ class Traverser extends Visitor {
 	/**
 	 * Creates a new RasterVisitor
 	 */
-	constructor(context) {
+	constructor(context, visitor) {
 		super(context);
+		this.visitor = visitor;
 		this.modelMatrices = [];
 	}
 
@@ -117,6 +119,22 @@ class Traverser extends Visitor {
 	}
 
 	/**
+	 * Setup uniforms, i.e. projection, view and model matrix and light positions and colors.
+	 * @param {Shader} shader
+	 * @return {Matrix} Last element of this.modelMatrices to be used for normal calculation etc.
+	 */
+	setupUniforms(shader) {
+		let P = shader.getUniformMatrix("P");
+		if (this.visitor.perspective && P) P.set(this.visitor.perspective);
+		let V = shader.getUniformMatrix("V");
+		if (this.visitor.lookat && V) V.set(this.visitor.lookat);
+		let mat = this.modelMatrices[this.modelMatrices.length - 1];
+		let M = shader.getUniformMatrix("M");
+		if (mat && M) M.set(mat);
+		return mat;
+	}
+
+	/**
 	 * Start traversing here
 	 * @param {Node} node
 	 */
@@ -125,14 +143,16 @@ class Traverser extends Visitor {
 	}
 }
 
+// you can set this in console to get one debug log of current lookat matrix
+window.debugLookAt = false;
+
 class CameraTraverser extends Traverser {
 
 	/**
 	 * Creates a new camera traverser
 	 */
 	constructor(context, visitor) {
-		super(context);
-		this.visitor = visitor;
+		super(context, visitor);
 	}
 
 	visitSphereNode(node) {
@@ -190,8 +210,7 @@ class LightTraverser extends Traverser {
 	 * Creates a new camera traverser
 	 */
 	constructor(context, visitor) {
-		super(context);
-		this.visitor = visitor;
+		super(context, visitor);
 	}
 
 	visitSphereNode(node) {
@@ -221,29 +240,21 @@ class DrawTraverser extends Traverser {
 	 * Creates a new camera traverser
 	 */
 	constructor(context, visitor) {
-		super(context);
-		this.visitor = visitor;
+		super(context, visitor);
 	}
 
 	visitSphereNode(node) {
 		let phongShader = this.visitor.phongShader;
 		phongShader.use();
 
-		let mat = this.modelMatrices[this.modelMatrices.length - 1];
-		phongShader.getUniformMatrix("M").set(mat);
+		let mat = this.setupUniforms(phongShader);
 
-		let V = phongShader.getUniformMatrix("V");
+		// set the normal matrix
 		let N = phongShader.getUniformMatrix("N");
-		if (this.visitor.lookat) {
-			if (V) V.set(this.visitor.lookat);
-			// set the normal matrix
-			if (N) N.set(this.visitor.lookat.mul(mat).invert().transpose())
+		if (this.visitor.lookat && N) {
+			N.set(this.visitor.lookat.mul(mat).invert().transpose())
 		}
 
-		let P = phongShader.getUniformMatrix("P");
-		if (P && this.visitor.perspective) {
-			P.set(this.visitor.perspective);
-		}
 
 		node.rastersphere.render(phongShader);
 	}
@@ -252,18 +263,7 @@ class DrawTraverser extends Traverser {
 		let phongShader = this.visitor.phongShader;
 		phongShader.use();
 
-		let mat = this.modelMatrices[this.modelMatrices.length - 1];
-		phongShader.getUniformMatrix("M").set(mat);
-
-		let V = phongShader.getUniformMatrix("V");
-		if (V && this.visitor.lookat) {
-			V.set(this.visitor.lookat);
-		}
-
-		let P = phongShader.getUniformMatrix("P");
-		if (P && this.visitor.perspective) {
-			P.set(this.visitor.perspective);
-		}
+		let mat = this.setupUniforms(phongShader);
 
 		node.rasterbox.render(phongShader);
 	}
@@ -272,17 +272,7 @@ class DrawTraverser extends Traverser {
 		let textureShader = this.visitor.textureShader;
 		textureShader.use();
 
-		let mat = this.modelMatrices[this.modelMatrices.length - 1];
-		textureShader.getUniformMatrix("M").set(mat);
-		let V = textureShader.getUniformMatrix("V");
-		if (V && this.visitor.lookat) {
-			V.set(this.visitor.lookat);
-		}
-
-		let P = textureShader.getUniformMatrix("P");
-		if (P && this.visitor.perspective) {
-			P.set(this.visitor.perspective);
-		}
+		let mat = this.setupUniforms(textureShader);
 
 		node.rastertexturebox.render(textureShader);
 	}
