@@ -40,7 +40,15 @@ class Visitor {
 	 * Visits a camera node. Updates the lookat and perspective matrices.
 	 * @param  {CameraNode} node - The node to visit
 	 */
-	visitCamera(node) {
+	visitCameraNode(node) {
+		throw Error("Unsupported operation");
+	}
+
+	/**
+	 * Visits a light node. //TODO
+	 * @param  {LightNode} node - The node to visit
+	 */
+	visitLightNode(node) {
 		throw Error("Unsupported operation");
 	}
 }
@@ -178,8 +186,12 @@ class RasterVisitor extends Visitor {
 		node.rastertexturebox.render(this.textureshader);
 	}
 
-	visitCamera(node) {
+	visitCameraNode(node) {
 		this.setupCamera(node);
+	}
+
+	visitLightNode(node) {
+		// nothing to do
 	}
 }
 
@@ -219,7 +231,11 @@ class RasterSetupVisitor extends Visitor {
 		node.setRasterTextureBox(this.gl);
 	}
 
-	visitCamera(node) {
+	visitCameraNode(node) {
+		// nothing to do
+	}
+
+	visitLightNode(node) {
 		// nothing to do
 	}
 }

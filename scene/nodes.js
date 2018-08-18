@@ -170,6 +170,30 @@ class CameraNode extends Node {
 	 * @param  {Visitor} visitor - The visitor
 	 */
 	accept(visitor) {
-		visitor.visitCamera(this);
+		visitor.visitCameraNode(this);
+	}
+}
+
+/**
+ * Class representing a light
+ */
+class LightNode extends Node {
+	/**
+	 * Creates a new light with position and light color
+	 * @param  {Vector} position - The position of the light
+	 * @param  {Vector} color  - The color of the light
+	 */
+	constructor(position, color) {
+		super();
+		this.position = position;
+		this.color = color;
+	}
+
+	/**
+	 * Accepts a visitor according to the visitor pattern
+	 * @param  {Visitor} visitor - The visitor
+	 */
+	accept(visitor) {
+		visitor.visitLightNode(this);
 	}
 }

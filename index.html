@@ -83,17 +83,17 @@
 
 		//      sg
 		//     /  \
-		//  gn1    gn5:Tl - lightSphere
+		//  gn1:Tc gn5:Tl - lightSphere
 		//   /   \
-		// gn2:Ts gn3:Tc
+		// gn2:Ts gn3
 		//   |      \
 		// gn4:T-c cube
 		//   |
 		// sphere
 
 		const sg = new GroupNode(Matrix.identity())
-		const gn1 = new GroupNode(Matrix.identity());
-		const gn3 = new GroupNode(Matrix.translation(new Vector(-.3, -0.4, .1))); // Tc
+		const gn1 = new GroupNode(Matrix.translation(new Vector(-.3, -0.4, .1))); // Tc
+		const gn3 = new GroupNode(Matrix.identity());
 		const gn2 = new GroupNode(Matrix.translation(new Vector(1, 1, 0))); // Ts
 		const gn4 = new GroupNode(Matrix.translation(new Vector(.3, .4, -.1))); // -Tc
 		const gn5 = new GroupNode(Matrix.translation(new Vector(-3.5, -2.5, -5.0, 1))); // Tl
@@ -115,7 +115,7 @@
 
 		// add animation nodes
 		window.animationNodes = [
-			new AnimationNode(gn3, new Rotor(new Vector(0, 0, 1), 30)),
+			new AnimationNode(gn1, new Rotor(new Vector(0, 0, 1), 30)),
 			new AnimationNode(gn5, new PhysicsJumper(new Vector(0, 3, 0), 1)),
 			new AnimationNode(gn5, new Driver2D()),
 			new AnimationNode(gn6, new FreeFlight(3)),
