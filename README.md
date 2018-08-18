@@ -1,6 +1,6 @@
 ###Key bindings
 #### Free Flight
-**w**&emsp;Move forward (Press again fast to double speed)<br>
+**w**&emsp;Move forward (Press two times quickly for doubled speed)<br>
 **a**&emsp;Move left<br>
 **s**&emsp;Move backward<br>
 **d**&emsp;Move right<Br>
@@ -12,7 +12,7 @@
 **ArrowRight**&emsp;Rotate right
 
 #### 3D Driver
-**w**&emsp;Move forward (Press again fast to double speed)<br>
+**w**&emsp;Move forward (Press to times quickly for doubled speed)<br>
 **a**&emsp;Move left<br>
 **s**&emsp;Move backward<br>
 **d**&emsp;Move right<Br>
@@ -26,5 +26,5 @@
 **l**&emsp;Move right
 
 #### Misc
-**p**&emsp;Pause all animations, except Driver<br>
+**p**&emsp;Pause all animations, except Drivers<br>
 **f**&emsp;Toggle fullscreen mode
