@@ -28,3 +28,4 @@
 #### Misc
 **p**&emsp;Pause all animations, except Drivers<br>
 **f**&emsp;Toggle fullscreen mode
+**v**&emsp;Toggle specs view

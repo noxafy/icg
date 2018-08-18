@@ -10,8 +10,11 @@
 
 <body>
 
-<div class="canvas-container">
+<div id="canvas-container">
 	<canvas id="rasteriser" width="1920" height="1080"></canvas>
+	<div class="disabled" id="specs-view">fps:
+		<fps id="fps"></fps>
+	</div>
 	<script src="animation/animation-nodes.js"></script>
 	<script src="animation/animator.js"></script>
 	<script src="animation/driver.js"></script>
@@ -27,23 +30,28 @@
 	<script src="scene/visitor.js"></script>
 	<script src="shader/shader.js"></script>
 	<script src="interaction.js"></script>
+	<script src="preferences.js"></script>
+	<script src="specsView.js"></script>
 	<script>
 		// set up canvas
 		const aspectW = 16;
 		const aspectH = 9;
 		const aspectResolution = 120;
 
+		// init canvas
 		window.aspect = aspectW / aspectH;
 		const canvas = document.getElementById("rasteriser");
 		canvas.setAttribute("width", aspectW * aspectResolution);
 		canvas.setAttribute("height", aspectH * aspectResolution);
+		const container = document.getElementById("canvas-container");
 		window.onresize = function () {
 			let s = Math.min(window.innerWidth / aspectW, window.innerHeight / aspectH);
-			canvas.style.width = s * aspectW + "px";
-			canvas.style.height = s * aspectH + "px";
+			container.style.width = s * aspectW + "px";
+			container.style.height = s * aspectH + "px";
 		}
 		window.onresize();
 
+		// construct scene graph
 		let camera = new CameraNode(
 			new Vector(0, 0, 10, 1), // eye
 			new Vector(0, 0, 9, 1), // center
@@ -51,7 +59,6 @@
 			0.1, 100, 60 // near, far, fovy
 		)
 
-		// construct scene graph
 		const sphere = new SphereNode(new Vector(.5, -.8, 0, 1), 0.4, new Vector(.8, .4, .1, 1))
 		const lightSphere = new SphereNode(new Vector(0, 0, 0, 1), 0.4, new Vector(0, 0, 0, 1))
 		const cube = new TextureBoxNode(
@@ -130,7 +137,9 @@
 
 		let lastTimestamp = performance.now();
 		function animate(timestamp) {
-			simulate(timestamp - lastTimestamp);
+			let deltaT = timestamp - lastTimestamp;
+			if (Preferences.showSpecs) SpecsView.FPS.add(deltaT);
+			simulate(deltaT);
 			visitor.render(sg);
 			lastTimestamp = timestamp;
 			window.requestAnimationFrame(animate);
