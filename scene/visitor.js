@@ -71,10 +71,6 @@ class RasterVisitor extends Visitor {
 		this.cameraTraverser = new CameraTraverser(context, this);
 		this.lightTraverser = new LightTraverser(context, this);
 		this.drawTraverser = new DrawTraverser(context, this);
-
-		this.modelMatrices = [];
-		this.lightPositions = [];
-		this.lightColors = [];
 	}
 
 	/**
@@ -90,6 +86,8 @@ class RasterVisitor extends Visitor {
 		this.cameraTraverser.traverse(rootNode);
 
 		// light traversal
+		this.lightPositions = [];
+		this.lightColors = [];
 		this.lightTraverser.traverse(rootNode);
 
 		// draw traversal
@@ -133,6 +131,8 @@ class Traverser extends Visitor {
 		let mat = this.modelMatrices[this.modelMatrices.length - 1];
 		let M = shader.getUniformMatrix("M");
 		if (mat && M) M.set(mat);
+		shader.getUniformVec3Array("f_lightPoses").set(this.visitor.lightPositions);
+		shader.getUniformVec3Array("f_lightColors").set(this.visitor.lightColors);
 		return mat;
 	}
 
@@ -258,7 +258,6 @@ class DrawTraverser extends Traverser {
 		if (this.visitor.lookat && N) {
 			N.set(this.visitor.lookat.mul(mat).invert().transpose())
 		}
-
 
 		node.rastersphere.render(phongShader);
 	}

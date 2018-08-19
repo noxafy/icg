@@ -3,10 +3,12 @@ precision mediump float;
 varying vec3 fragColor;
 varying vec4 fragPos;
 
-varying vec3 v_normal;
+varying vec3 normal;
 
-varying vec3 lightPos;
-varying vec3 lightColor;
+varying vec3 lightPoses[3];
+varying vec3 lightColors[3];
+varying vec3 viewer;
+
 const float shininess = 32.0;
 
 const float kA = 1.0;
@@ -15,7 +17,7 @@ const float kS = 0.3;
 
 void main( void ) {
   // Phong lighting calculation
-  vec3 n = normalize(v_normal);
+  vec3 n = normalize(normal);
 
   // ambient
   vec3 ambient = fragColor * kA;
@@ -27,7 +29,7 @@ void main( void ) {
   float dot_s;
 
   vec3 vertPos = vec3(fragPos);
-  vec3 l = normalize(lightPos - vertPos); // direction vector from the point on the surface toward the light source
+  vec3 l = normalize(lightPoses[0] - vertPos); // direction vector from the point on the surface toward the light source
 
   float dot1 = dot(n, l);
   if (dot1 > 0.0) {
@@ -38,8 +40,8 @@ void main( void ) {
   	if (dot2 > 0.0) dot_s = kS * pow(dot2, shininess);
   }
 
-  vec3 diffuse = lightColor * dot_d;
-  vec3 specular = lightColor * dot_s;
+  vec3 diffuse = lightColors[0] * dot_d;
+  vec3 specular = lightColors[0] * dot_s;
 
   gl_FragColor = vec4(ambient + diffuse + specular, 1.0 );
 }

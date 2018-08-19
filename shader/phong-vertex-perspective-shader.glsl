@@ -4,15 +4,18 @@ attribute vec3 a_color;
 varying vec3 fragColor;
 
 attribute vec3 a_normal;
-varying vec3 v_normal;
+varying vec3 normal;
 
 // Pass the vertex position in view space
 // to the fragment shader
 attribute vec3 a_position;
 varying vec4 fragPos;
 
-varying vec3 lightPos;
-varying vec3 lightColor;
+uniform vec3 f_lightPoses[3];
+uniform vec3 f_lightColors[3];
+varying vec3 lightPoses[3];
+varying vec3 lightColors[3];
+varying vec3 viewer;
 
 uniform mat4 M;
 uniform mat4 V;
@@ -25,8 +28,13 @@ void main() {
   // Pass the color and transformed vertex position through
   fragColor = a_color;
   fragPos = gl_Position;
-  lightPos = vec3(P * vec4(-5.0,5.0,-10.0, 1.0));
-  lightColor = vec3(1,1,1);
+  lightPoses[0] = vec3(P * vec4(f_lightPoses[0], 1.0));
+  lightPoses[1] = vec3(P * vec4(f_lightPoses[1], 1.0));
+  lightPoses[2] = vec3(P * vec4(f_lightPoses[2], 1.0));
+  lightColors[0] = f_lightColors[0];
+  lightColors[1] = f_lightColors[1];
+  lightColors[2] = f_lightColors[2];
+  viewer = vec3(P * V * vec4(0, 0, 0, 1));
 
-  v_normal = (N * vec4(a_normal, 0)).xyz;
+  normal = (N * vec4(a_normal, 0)).xyz;
 }
