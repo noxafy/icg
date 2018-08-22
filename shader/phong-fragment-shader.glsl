@@ -7,7 +7,6 @@ varying vec3 normal;
 
 varying vec3 lightPoses[3];
 varying vec3 lightColors[3];
-varying vec3 viewer;
 
 const float shininess = 32.0;
 

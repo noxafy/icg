@@ -62,6 +62,7 @@
 		const sphere = new SphereNode(new Vector(.5, -.8, 0, 1), 0.4, new Vector(.8, .4, .1, 1))
 		const jumpingSphere = new SphereNode(new Vector(0, 0, 0, 1), 0.4, new Vector(0, 0, 0, 1))
 		const light = new LightNode(new Vector(-5.0, 5.0, -10.0, 1), new Vector(1, 1, 1))
+		const lightSphere = new SphereNode(light.position, 0.2, new Vector(0, 0, 0))
 		const cube = new TextureBoxNode(
 			new Vector(-1, -1, -1, 1),
 			new Vector(1, 1, 1, 1),
@@ -103,13 +104,14 @@
 
 		sg.add(gn7);
 		gn7.add(light);
+		gn7.add(lightSphere)
 
 		// add animation nodes
 		window.animationNodes = [
 			new AnimationNode(gn1, new Rotor(new Vector(0, 0, 1), 30)),
 			new AnimationNode(gn5, new PhysicsJumper(new Vector(0, 3, 0), 1)),
-			new AnimationNode(gn5, new Driver2D()),
-			new AnimationNode(gn6, new FreeFlight(3)),
+			new AnimationNode(gn7, new Driver3D(3)),
+			new AnimationNode(gn6, new Driver2D(3)),
 		];
 
 		function simulate(deltaT) {

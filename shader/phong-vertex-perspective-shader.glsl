@@ -15,7 +15,6 @@ uniform vec3 f_lightPoses[3];
 uniform vec3 f_lightColors[3];
 varying vec3 lightPoses[3];
 varying vec3 lightColors[3];
-varying vec3 viewer;
 
 uniform mat4 M;
 uniform mat4 V;
@@ -34,7 +33,6 @@ void main() {
   lightColors[0] = f_lightColors[0];
   lightColors[1] = f_lightColors[1];
   lightColors[2] = f_lightColors[2];
-  viewer = vec3(P * V * vec4(0, 0, 0, 1));
 
   normal = (N * vec4(a_normal, 0)).xyz;
 }

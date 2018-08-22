@@ -124,18 +124,32 @@ class Traverser extends Visitor {
 	 * @return {Matrix} Last element of this.modelMatrices to be used for normal calculation etc.
 	 */
 	setupUniforms(shader) {
+		let mat = this.modelMatrices[this.modelMatrices.length - 1];
+
+		// projection
 		let P = shader.getUniformMatrix("P");
 		if (this.visitor.perspective && P) P.set(this.visitor.perspective);
+		// view
 		let V = shader.getUniformMatrix("V");
 		if (this.visitor.lookat && V) V.set(this.visitor.lookat);
-		let mat = this.modelMatrices[this.modelMatrices.length - 1];
+
+		// model
 		let M = shader.getUniformMatrix("M");
 		if (mat && M) M.set(mat);
+
+		// lights
 		shader.getUniformVec3Array("f_lightPoses").set(this.visitor.lightPositions);
 		shader.getUniformVec3Array("f_lightColors").set(this.visitor.lightColors);
+
 		return mat;
 	}
 
+	setNormalMatrix(shader, mat) {
+		let N = shader.getUniformMatrix("N");
+		if (this.visitor.lookat && N) {
+			N.set(this.visitor.lookat.mul(mat).invert().transpose())
+		}
+	}
 	/**
 	 * Start traversing here
 	 * @param {Node} node
@@ -233,7 +247,9 @@ class LightTraverser extends Traverser {
 
 	visitLightNode(node) {
 		let mat = this.modelMatrices[this.modelMatrices.length - 1];
-		this.visitor.lightPositions.push(mat.mul(node.position));
+		let pos = this.visitor.lookat.mul(mat).mul(node.position);
+		pos.z = 2 * this.visitor.lookat.getVal(2, 3) - pos.z;
+		this.visitor.lightPositions.push(pos);
 		this.visitor.lightColors.push(node.color);
 	}
 }
@@ -252,12 +268,7 @@ class DrawTraverser extends Traverser {
 		phongShader.use();
 
 		let mat = this.setupUniforms(phongShader);
-
-		// set the normal matrix
-		let N = phongShader.getUniformMatrix("N");
-		if (this.visitor.lookat && N) {
-			N.set(this.visitor.lookat.mul(mat).invert().transpose())
-		}
+		this.setNormalMatrix(phongShader, mat);
 
 		node.rastersphere.render(phongShader);
 	}

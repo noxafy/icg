@@ -95,8 +95,7 @@ class Matrix {
 			zAxis.x, zAxis.y, zAxis.z, 0,
 			0, 0, 0, 1
 		]);
-		const t = Matrix.translation(eye.mul(-1));
-		return r.mul(t);
+		return r.mul(Matrix.translation(eye.mul(-1)));
 	}
 
 	/**
