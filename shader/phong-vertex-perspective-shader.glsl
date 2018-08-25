@@ -11,10 +11,9 @@ varying vec3 normal;
 attribute vec3 a_position;
 varying vec4 fragPos;
 
-uniform vec3 f_lightPoses[3];
-uniform vec3 f_lightColors[3];
-varying vec3 lightPoses[3];
-varying vec3 lightColors[3];
+#define NR_LIGHTS 1
+uniform vec3 f_lightPoses[NR_LIGHTS];
+varying vec3 lightPoses[NR_LIGHTS];
 
 uniform mat4 M;
 uniform mat4 V;
@@ -27,12 +26,9 @@ void main() {
   // Pass the color and transformed vertex position through
   fragColor = a_color;
   fragPos = gl_Position;
-  lightPoses[0] = vec3(P * vec4(f_lightPoses[0], 1.0));
-  lightPoses[1] = vec3(P * vec4(f_lightPoses[1], 1.0));
-  lightPoses[2] = vec3(P * vec4(f_lightPoses[2], 1.0));
-  lightColors[0] = f_lightColors[0];
-  lightColors[1] = f_lightColors[1];
-  lightColors[2] = f_lightColors[2];
+  for (int i = 0; i < NR_LIGHTS; i++) {
+    lightPoses[i] = vec3(P * vec4(f_lightPoses[i], 1.0));
+  }
 
   normal = (N * vec4(a_normal, 0)).xyz;
 }

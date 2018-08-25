@@ -5,8 +5,23 @@ varying vec4 fragPos;
 
 varying vec3 normal;
 
-varying vec3 lightPoses[3];
-varying vec3 lightColors[3];
+#define NR_LIGHTS 1
+varying vec3 lightPoses[NR_LIGHTS];
+
+struct PointLight {
+  vec3 position;
+  vec3 color;
+  float intensity;
+
+  float constant;
+  float linear;
+  float quadratic;
+  float ambient;
+  float diffuse;
+  float specular;
+};
+
+uniform PointLight lights[NR_LIGHTS];
 
 const float shininess = 32.0;
 
@@ -14,12 +29,25 @@ const float kA = 1.0;
 const float kD = 0.4;
 const float kS = 0.3;
 
+vec3 getPhongColor(PointLight light, vec3 n, vec3 vertPos);
+
 void main( void ) {
   // Phong lighting calculation
   vec3 n = normalize(normal);
+  vec3 vertPos = vec3(fragPos);
 
+  vec3 res = vec3(0.0, 0.0, 0.0);
+  for(int i = 0; i < NR_LIGHTS; i++) {
+    PointLight light = lights[i];
+    light.position = lightPoses[i];
+    res += getPhongColor(light, n, vertPos);
+  }
+  gl_FragColor = vec4(res, 1.0);
+}
+
+vec3 getPhongColor(PointLight light, vec3 n, vec3 vertPos) {
   // ambient
-  vec3 ambient = fragColor * kA;
+  vec3 ambient = fragColor * kA * light.ambient;
 
   // diffuse
   float dot_d;
@@ -27,8 +55,7 @@ void main( void ) {
   // specular
   float dot_s;
 
-  vec3 vertPos = vec3(fragPos);
-  vec3 l = normalize(lightPoses[0] - vertPos); // direction vector from the point on the surface toward the light source
+  vec3 l = normalize(light.position - vertPos); // direction vector from the point on the surface toward the light source
 
   float dot1 = dot(n, l);
   if (dot1 > 0.0) {
@@ -39,8 +66,10 @@ void main( void ) {
   	if (dot2 > 0.0) dot_s = kS * pow(dot2, shininess);
   }
 
-  vec3 diffuse = lightColors[0] * dot_d;
-  vec3 specular = lightColors[0] * dot_s;
+  vec3 diffuse = light.color * dot_d * light.diffuse;
+  vec3 specular = light.color * dot_s * light.specular;
 
-  gl_FragColor = vec4(ambient + diffuse + specular, 1.0 );
+  float distance = length(light.position - vertPos);
+  float attenuation = light.constant + light.linear * distance + light.quadratic * (distance * distance);
+  return (ambient + diffuse + specular) * light.intensity / attenuation;
 }

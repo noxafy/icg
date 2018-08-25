@@ -87,7 +87,7 @@ class RasterVisitor extends Visitor {
 
 		// light traversal
 		this.lightPositions = [];
-		this.lightColors = [];
+		this.lights = [];
 		this.lightTraverser.traverse(rootNode);
 
 		// draw traversal
@@ -138,8 +138,23 @@ class Traverser extends Visitor {
 		if (mat && M) M.set(mat);
 
 		// lights
-		shader.getUniformVec3Array("f_lightPoses").set(this.visitor.lightPositions);
-		shader.getUniformVec3Array("f_lightColors").set(this.visitor.lightColors);
+		for (let i = 0; i < this.visitor.lightPositions.length; i++) {
+			shader.getUniformVec3Array("f_lightPoses").set(this.visitor.lightPositions);
+			let lightName = "lights[" + i + "]";
+			let light = this.visitor.lights[i];
+			shader.getUniformVec3(lightName + ".color").set(light.color);
+			setLightFloat(lightName, light, "intensity");
+			setLightFloat(lightName, light, "constant");
+			setLightFloat(lightName, light, "linear");
+			setLightFloat(lightName, light, "quadratic");
+			setLightFloat(lightName, light, "ambient");
+			setLightFloat(lightName, light, "diffuse");
+			setLightFloat(lightName, light, "specular");
+		}
+
+		function setLightFloat(lightname, light, prop) {
+			shader.getUniformFloat(lightname + "." + prop).set(light[prop]);
+		}
 
 		return mat;
 	}
@@ -250,7 +265,7 @@ class LightTraverser extends Traverser {
 		let pos = this.visitor.lookat.mul(mat).mul(node.position);
 		pos.z = 2 * this.visitor.lookat.getVal(2, 3) - pos.z;
 		this.visitor.lightPositions.push(pos);
-		this.visitor.lightColors.push(node.color);
+		this.visitor.lights.push(node);
 	}
 }
 
