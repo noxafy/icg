@@ -38,9 +38,6 @@ class Driver extends Animator {
 		if (!positionChangeMatrix) return mat;
 
 		return mat.mul(positionChangeMatrix);
-		// let res = mat.mul(positionChangeMatrix);
-		// console.log("x: %f, y: %f, z: %f", res.data[12], res.data[13], res.data[14]);
-		// return res;
 	}
 
 	/**
@@ -175,7 +172,7 @@ class FreeFlight extends Driver {
 	constructor(speed = 1, angleSpeed = 60) {
 		super(speed);
 		this.angleSpeed = Utils.degToRad(angleSpeed) / 1000;
-		this.rotationXAxis = new Vector(0, 1, 0); // humans rotate around y axis when turning left/right
+		this.up = new Vector(0, 1, 0); // humans rotate around y axis normally when turning left/right
 		this.rotationYAxis = new Vector(1, 0, 0);
 	}
 
@@ -185,10 +182,47 @@ class FreeFlight extends Driver {
 
 		let rot, trans;
 		if (this.rotateXAxis !== 0) {
-			rot = Matrix.rotation(this.rotationXAxis, this.rotateXAxis * this.angleSpeed * deltaT)
+			let rot_x, rot_y, rot_z;
+			let angle = this.rotateXAxis * this.angleSpeed * deltaT;
+
+			if (this.up.x !== 0) {
+				rot_x = Matrix.rotation(new Vector(1, 0, 0), angle * this.up.x);
+			}
+			if (this.up.y !== 0) {
+				rot_x = Matrix.rotation(new Vector(0, 1, 0), angle * this.up.y);
+			}
+			if (this.up.z !== 0) {
+				rot_z = Matrix.rotation(new Vector(0, 0, 1), angle * this.up.z);
+			}
+
+			if (rot_x) {
+				if (rot_z) {
+					rot = rot_x.mul(rot_z);
+					if (rot_y) {
+						rot = rot.mul(rot_y);
+					}
+				} else {
+					if (rot_y) {
+						rot = rot_x.mul(rot_y);
+					} else {
+						rot = rot_x;
+					}
+				}
+			} else if (rot_z) {
+				if (rot_y) {
+					rot = rot_z.mul(rot_y);
+				} else {
+					rot = rot_z;
+				}
+			} else if (rot_y) {
+				rot = rot_y
+			} else {
+				rot = Matrix.identity();
+			}
 		}
 		if (this.rotateYAxis !== 0) {
 			let rot2 = Matrix.rotation(this.rotationYAxis, this.rotateYAxis * this.angleSpeed * deltaT)
+			this.up = rot2.invert().mul(this.up);
 			if (rot) rot = rot.mul(rot2);
 			else rot = rot2;
 		}
