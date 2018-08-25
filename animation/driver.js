@@ -227,8 +227,11 @@ class FreeFlight extends Driver {
 			else rot = rot2;
 		}
 		if (this.moveXAxis !== 0 || this.moveYAxis !== 0 || this.moveZAxis !== 0) {
-			let direction = new Vector(this.moveXAxis, this.moveYAxis, this.moveZAxis).normalised();
-			let positionChange = direction.mul(this.speed * deltaT);
+			let direction = new Vector(this.moveXAxis, 0, this.moveZAxis);
+			if (this.moveYAxis !== 0) {
+				direction = direction.add(this.up.mul(this.moveYAxis));
+			}
+			let positionChange = direction.normalised().mul(this.speed * deltaT);
 			trans = Matrix.translation(positionChange);
 		} else {
 			trans = Matrix.identity();
