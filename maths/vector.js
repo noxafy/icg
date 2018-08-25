@@ -235,4 +235,8 @@ class Vector {
             ((!this.w && !other.w) || Math.abs(this.w - other.w) <= Number.EPSILON)
         );
     }
+
+	toString() {
+		return "[" + this.x + "," + this.y + "," + this.z + "," + this.w + "]"
+	}
 }

@@ -224,6 +224,10 @@ class Matrix {
 	 * Debug print to console
 	 */
 	print() {
+		return this.toString();
+	}
+
+	toString() {
 		for (let row = 0; row < 4; row++) {
 			console.log("> " + this.getVal(row, 0) +
 				"\t" + this.getVal(row, 1) +

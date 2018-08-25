@@ -43,6 +43,17 @@ class GroupNode extends Node {
 	add(childNode) {
 		this.children.push(childNode);
 	}
+
+	toString() {
+		let sum = "";
+		for (let child of this.children) {
+			sum += child.toString() + ", "
+		}
+		if (sum) {
+			sum = sum.substr(0, sum.length - 2);
+		}
+		return "GroupNode: [" + sum + "]"
+	}
 }
 
 /**
@@ -73,6 +84,13 @@ class SphereNode extends Node {
 
 	setRastersphere(gl) {
 		this.rastersphere = new RasterSphere(gl, this.center, this.radius, this.color)
+	}
+
+	toString() {
+		return "Sphere: (" +
+			"center: " + this.center.toString() + "; " +
+			"radius: " + this.radius + "; " +
+			"color: " + this.color.toString() + ")";
 	}
 }
 
@@ -105,6 +123,12 @@ class AABoxNode extends Node {
 	setRasterbox(gl) {
 		this.rasterbox = new RasterBox(gl, this.minPoint, this.maxPoint);
 	}
+
+	toString() {
+		return "AABox: (" +
+			"minPoint: " + this.minPoint.toString() + "; " +
+			"maxpoint: " + this.maxPoint.toString() + ")";
+	}
 }
 
 /**
@@ -135,6 +159,13 @@ class TextureBoxNode extends Node {
 
 	setRasterTextureBox(gl) {
 		this.rastertexturebox = new RasterTextureBox(gl, this.minPoint, this.maxPoint, this.texture);
+	}
+
+	toString() {
+		return "TextureBox: " +
+			"(minPoint: " + this.minPoint.toString() + "; " +
+			"maxpoint: " + this.maxPoint.toString() + "; " +
+			"texture: " + this.texture + ")";
 	}
 }
 
@@ -173,6 +204,10 @@ class CameraNode extends Node {
 	accept(visitor) {
 		visitor.visitCameraNode(this);
 	}
+
+	toString() {
+		return "Camera";
+	}
 }
 
 /**
@@ -196,5 +231,11 @@ class LightNode extends Node {
 	 */
 	accept(visitor) {
 		visitor.visitLightNode(this);
+	}
+
+	toString() {
+		return "Light: (" +
+			"position: " + this.position.toString() + "; " +
+			"color: " + this.color.toString() + ")";
 	}
 }
