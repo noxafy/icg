@@ -90,15 +90,16 @@
 			0.1, 100, 60 // near, far, fovy
 		)
 
-		const sphere = new SphereNode(new Position(.5, -.8, 0), 0.4, Colors.GOLD, Materials.GOLD);
+		const sphere = new SphereNode(new Position(0, 0, 0), 0.4, Colors.GOLD, Materials.GOLD);
 		const jumpingSphere = new SphereNode(new Position(0, 0, 0), 0.4, Colors.BLACK, Materials.CHROME);
 		const light = new LightNode(new Position(-5.0, 2.0, -10.0), Colors.WHITE, 1.2, 0.8, 0.02, 0.001);
 		const lightSphere = new SphereNode(light.position, 0.2, Colors.BLACK, Materials.BLANK);
-		const cube = new TextureBoxNode(
+		const hci_cube = new TextureBoxNode(
 			new Position(-1, -1, -1),
 			new Position(1, 1, 1),
 			'resources/hci-logo.png'
 		);
+		const cube = new AABoxNode(new Position(-1, -1, -1), new Position(1, 1, 1), Colors.LIMEGREEN, Materials.EMERALD);
 
 		//      sg
 		//     /  \
@@ -106,7 +107,7 @@
 		//   /   \
 		// gn2:Ts gn3
 		//   |      \
-		// gn4:T-c cube
+		// gn4:T-c hci_cube
 		//   |
 		// sphere
 
@@ -116,16 +117,18 @@
 		const gn2 = new GroupNode(Matrix.translation(new Vector(1, 1, 0))); // Ts
 		const gn4 = new GroupNode(Matrix.translation(new Vector(.3, .4, -.1))); // -Tc
 		const gn5 = new GroupNode(Matrix.translation(new Vector(-3.5, -2.5, -5.0))); // Tl
-		const gn6 = new GroupNode(Matrix.identity());
+		const gn6 = new GroupNode(Matrix.translation(new Vector(-10, 3, 0)));
 		const gn7 = new GroupNode(Matrix.identity());
+		const gn8 = new GroupNode(Matrix.translation(new Vector(-5, -1, 0)));
 
 		sg.add(gn1);
-		gn1.add(gn2);
+		// gn1.add(gn2);
+		sg.add(gn2)
 		gn2.add(gn4);
 		gn4.add(sphere);
 
 		gn1.add(gn3);
-		gn3.add(cube);
+		gn3.add(hci_cube);
 
 		sg.add(gn5);
 		gn5.add(jumpingSphere);
@@ -137,19 +140,16 @@
 		gn7.add(light);
 		gn7.add(lightSphere)
 
+		sg.add(gn8);
+		gn8.add(cube);
+
 		// add animation nodes
 		window.animationNodes = [
 			new AnimationNode(gn1, new Rotor(new Vector(0, 0, 1), 30)),
 			new AnimationNode(gn5, new PhysicsJumper(new Vector(0, 3, 0), 1)),
 			new AnimationNode(gn7, new Driver2D(3)),
-			new AnimationNode(gn6, new FreeFlight(3)),
+			new AnimationNode(gn4, new FreeFlight(3)),
 		];
-
-		function simulate(deltaT) {
-			for (let animationNode of animationNodes) {
-				animationNode.simulate(deltaT);
-			}
-		}
 
 		// setup for rendering
 		const gl = canvas.getContext("webgl");
@@ -164,7 +164,6 @@
 			"shader/texture-vertex-perspective-shader.glsl",
 			"shader/texture-fragment-shader.glsl"
 		);
-		const visitor = new RasterVisitor(gl, phongShader, textureShader);
 
 		// do animation as soon as shader are loaded
 		Promise.all(
@@ -172,6 +171,8 @@
 		).then(x =>
 			window.requestAnimationFrame(animate)
 		);
+
+		const visitor = new RasterVisitor(gl, phongShader, textureShader);
 
 		let lastTimestamp = performance.now();
 		function animate(timestamp) {
@@ -181,6 +182,12 @@
 			visitor.render(sg);
 			lastTimestamp = timestamp;
 			window.requestAnimationFrame(animate);
+		}
+
+		function simulate(deltaT) {
+			for (let animationNode of animationNodes) {
+				animationNode.simulate(deltaT);
+			}
 		}
 	</script>
 </div>

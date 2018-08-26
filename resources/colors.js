@@ -1,5 +1,6 @@
 /**
  * Copied from https://github.com/corysimmons/colors.json/blob/master/colors.json
+ * (Overview: https://html-color-codes.info/color-names/)
  *
  * Converted with following function:
  <pre>var res = {};

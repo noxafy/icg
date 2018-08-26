@@ -125,7 +125,7 @@ class AABoxNode extends Node {
 	}
 
 	setRasterbox(gl) {
-		this.rasterbox = new RasterBox(gl, this.minPoint, this.maxPoint);
+		this.rasterbox = new RasterBox(gl, this.minPoint, this.maxPoint, this.color);
 	}
 
 	toString() {
