@@ -223,21 +223,20 @@ class LightNode extends Node {
 	 * @param  {Position} position - The position of the light
 	 * @param  {Vector} color  - The color of the light
 	 * @param  {number} intensity - The intensity of the light
-	 * @param  {number} ambient - The acceptance rate for ambient light
-	 * @param  {number} diffuse - The acceptance rate for diffuse light
-	 * @param  {number} specular - The acceptance rate for specular light
 	 * @param  {number} constant - the constant lighting from off this light
 	 * @param  {number} linear - the linear with distance decreasing factor
 	 * @param  {number} quadratic - the quadratic with distance decreasing factor
 	 */
-	constructor(position, color, intensity, ambient = 1.0, diffuse = 1.0, specular = 1.0, constant = 0.8, linear = 0.01, quadratic = 0.001) {
+	constructor(position, color, intensity = 1, constant = 0.8, linear = 0.01, quadratic = 0.001) {
 		super();
 		this.position = position;
 		this.color = color;
 		this.intensity = intensity;
-		this.ambient = ambient;
-		this.diffuse = diffuse;
-		this.specular = specular;
+
+		this.ambient = new Vector(1, 1, 1);
+		this.diffuse = new Vector(1, 1, 1);
+		this.specular = new Vector(1, 1, 1);
+
 		this.constant = constant;
 		this.linear = linear;
 		this.quadratic = quadratic;

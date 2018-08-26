@@ -150,9 +150,9 @@ class Traverser extends Visitor {
 			shader.getUniformFloat(lightName + ".constant").set(light.constant);
 			shader.getUniformFloat(lightName + ".linear").set(light.linear);
 			shader.getUniformFloat(lightName + ".quadratic").set(light.quadratic);
-			shader.getUniformFloat(lightName + ".ambient").set(light.ambient);
-			shader.getUniformFloat(lightName + ".diffuse").set(light.diffuse);
-			shader.getUniformFloat(lightName + ".specular").set(light.specular);
+			shader.getUniformVec3(lightName + ".ambient").set(light.ambient);
+			shader.getUniformVec3(lightName + ".diffuse").set(light.diffuse);
+			shader.getUniformVec3(lightName + ".specular").set(light.specular);
 		}
 	}
 
