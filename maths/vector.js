@@ -206,6 +206,14 @@ class Vector {
         return new Vector(x, y, z, 0);
     }
 
+	/**
+	 * Calculates the angle to the other vector.
+	 * @param {Vector} other
+	 */
+	angleTo(other) {
+		return Math.acos(this.dot(other) / (this.length * other.length));
+	}
+
     /**
      * Returns an array representation of the vector
      * @return {Array.<number>} An array representation.

@@ -84,8 +84,8 @@
 
 		// construct scene graph
 		let camera = new CameraNode(
-			new Vector(0, 0, 10, 1), // eye
-			new Vector(0, 0, 9, 1), // center
+			new Position(-4, 3, 10), // eye
+			new Vector(0, -0.5, -1), // direction
 			new Vector(0, 1, 0, 0), // up
 			0.1, 100, 60 // near, far, fovy
 		)
@@ -114,21 +114,18 @@
 		const sg = new GroupNode(Matrix.identity())
 		const gn1 = new GroupNode(Matrix.translation(new Vector(-.3, -0.4, .1))); // Tc
 		const gn3 = new GroupNode(Matrix.identity());
-		const gn2 = new GroupNode(Matrix.translation(new Vector(1, 1, 0))); // Ts
-		const gn4 = new GroupNode(Matrix.translation(new Vector(.3, .4, -.1))); // -Tc
+		const gn2 = new GroupNode(Matrix.translation(new Vector(-4, -1, -2))); // Ts
 		const gn5 = new GroupNode(Matrix.translation(new Vector(-3.5, -2.5, -5.0))); // Tl
-		const gn6 = new GroupNode(Matrix.translation(new Vector(-10, 3, 0)));
+		const gn6 = new GroupNode(Matrix.identity());
 		const gn7 = new GroupNode(Matrix.identity());
 		const gn8 = new GroupNode(Matrix.translation(new Vector(-5, -1, 0)));
 
 		sg.add(gn1);
-		// gn1.add(gn2);
-		sg.add(gn2)
-		gn2.add(gn4);
-		gn4.add(sphere);
 
 		gn1.add(gn3);
 		gn3.add(hci_cube);
+		gn1.add(gn2);
+		gn2.add(sphere);
 
 		sg.add(gn5);
 		gn5.add(jumpingSphere);
