@@ -108,7 +108,7 @@ class Traverser extends Visitor {
 		if (this.modelMatrices.length === 0) {
 			this.modelMatrices.push(node.matrix);
 		} else {
-			const top = this.modelMatrices[this.modelMatrices.length - 1];
+			const top = this.getM();
 			this.modelMatrices.push(top.mul(node.matrix));
 		}
 		for (let childNode of node.children) {
@@ -117,13 +117,16 @@ class Traverser extends Visitor {
 		this.modelMatrices.pop();
 	}
 
+	getM() {
+		return this.modelMatrices[this.modelMatrices.length - 1];
+	}
+
 	/**
 	 * Setup uniform matrices needed for drawing projection, view and model matrix
 	 * @param {Shader} shader
 	 * @return {Matrix} Last element of this.modelMatrices to be used for normal calculation etc.
 	 */
 	setupPVM(shader) {
-		let mat = this.modelMatrices[this.modelMatrices.length - 1];
 
 		// projection
 		let P = shader.getUniformMatrix("P");
@@ -133,22 +136,27 @@ class Traverser extends Visitor {
 		if (this.visitor.lookat && V) V.set(this.visitor.lookat);
 
 		// model
+		let mat = this.getM();
 		let M = shader.getUniformMatrix("M");
 		if (mat && M) M.set(mat);
 
 		return mat;
 	}
 
-	setupLightProperties(shader) {
+	setupLightProperties(shader, mat) {
 		for (let i = 0; i < this.visitor.lightPositions.length; i++) {
-			shader.getUniformVec3Array("f_lightPoses").set(this.visitor.lightPositions);
 			let lightName = "lights[" + i + "]";
 			let light = this.visitor.lights[i];
+
+			let position = this.visitor.lightPositions[i];
+			shader.getUniformVec3(lightName + ".position").set(this.visitor.perspective.mul(position));
 			shader.getUniformVec3(lightName + ".color").set(light.color);
+
 			shader.getUniformFloat(lightName + ".intensity").set(light.intensity);
 			shader.getUniformFloat(lightName + ".constant").set(light.constant);
 			shader.getUniformFloat(lightName + ".linear").set(light.linear);
 			shader.getUniformFloat(lightName + ".quadratic").set(light.quadratic);
+
 			shader.getUniformVec3(lightName + ".ambient").set(light.ambient);
 			shader.getUniformVec3(lightName + ".diffuse").set(light.diffuse);
 			shader.getUniformVec3(lightName + ".specular").set(light.specular);
@@ -212,21 +220,12 @@ class CameraTraverser extends Traverser {
 			node.center,
 			node.up
 		);
-		if (window.debugLookAt) {
-			console.log("Old lookat");
-			console.log(this.visitor.lookat.data);
-		}
 		if (this.modelMatrices.length > 0) {
-			if (window.debugLookAt) {
-				console.log("modelMatrices.last");
-				console.log(this.modelMatrices[this.modelMatrices.length - 1].data);
-				console.log(this.modelMatrices[this.modelMatrices.length - 1].invert().data);
-			}
-			this.visitor.lookat = this.modelMatrices[this.modelMatrices.length - 1].invert().mul(this.visitor.lookat);
+			this.visitor.lookat = this.getM().invert().mul(this.visitor.lookat);
 		}
 		if (window.debugLookAt) {
-			console.log("New lookat");
-			console.log(this.visitor.lookat.data);
+			console.log("lookat:");
+			console.log(this.visitor.lookat.toString());
 			window.debugLookAt = false;
 		}
 
@@ -269,9 +268,8 @@ class LightTraverser extends Traverser {
 	}
 
 	visitLightNode(node) {
-		let mat = this.modelMatrices[this.modelMatrices.length - 1];
+		let mat = this.getM();
 		let pos = this.visitor.lookat.mul(mat).mul(node.position);
-		pos.z = 2 * this.visitor.lookat.getVal(2, 3) - pos.z;
 		this.visitor.lightPositions.push(pos);
 		this.visitor.lights.push(node);
 	}
@@ -291,7 +289,7 @@ class DrawTraverser extends Traverser {
 		phongShader.use();
 
 		let mat = this.setupPVM(phongShader);
-		this.setupLightProperties(phongShader);
+		this.setupLightProperties(phongShader, mat);
 		this.setupMaterialProperties(phongShader, node.material);
 		this.setNormalMatrix(phongShader, mat);
 
@@ -303,8 +301,9 @@ class DrawTraverser extends Traverser {
 		phongShader.use();
 
 		let mat = this.setupPVM(phongShader);
-		this.setupLightProperties(phongShader);
+		this.setupLightProperties(phongShader, mat);
 		this.setupMaterialProperties(phongShader, node.material);
+		// this.setNormalMatrix(phongShader, mat);
 
 		node.rasterbox.render(phongShader);
 	}

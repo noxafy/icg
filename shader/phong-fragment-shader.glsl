@@ -5,9 +5,6 @@ varying vec4 fragPos;
 
 varying vec3 normal;
 
-#define NR_LIGHTS 1
-varying vec3 lightPoses[NR_LIGHTS];
-
 struct PointLight {
   vec3 position;
   vec3 color;
@@ -22,6 +19,7 @@ struct PointLight {
   float quadratic;
 };
 
+#define NR_LIGHTS 1
 uniform PointLight lights[NR_LIGHTS];
 
 uniform vec3 kA;
@@ -39,7 +37,6 @@ void main( void ) {
   vec3 res = vec3(0.0, 0.0, 0.0);
   for(int i = 0; i < NR_LIGHTS; i++) {
     PointLight light = lights[i];
-    light.position = lightPoses[i];
     res += getPhongColor(light, n, vertPos);
   }
   gl_FragColor = vec4(res, 1.0);
