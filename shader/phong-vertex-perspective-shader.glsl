@@ -11,9 +11,9 @@ varying vec3 normal;
 attribute vec3 a_position;
 varying vec4 fragPos;
 
-uniform mat4 M;
-uniform mat4 V;
-uniform mat4 P;
+uniform mat4 M; // model matrix
+uniform mat4 V; // view matrix
+uniform mat4 P; // projection matrix
 uniform mat4 N; // normal matrix
 
 void main() {
@@ -22,5 +22,5 @@ void main() {
   // Pass the color and transformed vertex position through
   fragColor = a_color;
   fragPos = gl_Position;
-  normal = (N * vec4(a_normal, 0)).xyz;
+  normal = (P * N * vec4(a_normal, 0)).xyz;
 }

@@ -60,7 +60,7 @@ vec3 getPhongColor(PointLight light, vec3 n, vec3 vertPos) {
   if (dot1 > 0.0) {
   	dot_d = dot1;
   	diffuse = light.color * light.diffuse * kD * dot_d;
-  	vec3 r = reflect(l, n); // direction that a perfectly reflected ray of light would take from this point on the surface
+  	vec3 r = reflect(-l, n); // direction that a perfectly reflected ray of light would take from this point on the surface
     vec3 v = normalize(-vertPos); // direction pointing towards the viewer
   	float dot2 = dot(r, v);
   	if (dot2 > 0.0) {

@@ -84,7 +84,7 @@
 
 		// construct scene graph
 		let camera = new CameraNode(
-			new Position(-4, 3, 10), // eye
+			new Position(-4, 5, 10), // eye
 			new Vector(0, -0.5, -1), // direction
 			new Vector(0, 1, 0, 0), // up
 			0.1, 100, 60 // near, far, fovy
@@ -145,7 +145,7 @@
 			new AnimationNode(gn1, new Rotor(new Vector(0, 0, 1), 30)),
 			new AnimationNode(gn5, new PhysicsJumper(new Vector(0, 3, 0), 1)),
 			new AnimationNode(gn7, new Driver2D(6)),
-			new AnimationNode(gn6, new FreeFlight(3, camera.up))
+			new AnimationNode(gn6, new FreeFlight(4, camera.up))
 		];
 
 		// setup for rendering

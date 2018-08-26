@@ -127,13 +127,11 @@ class Traverser extends Visitor {
 	 * @return {Matrix} Last element of this.modelMatrices to be used for normal calculation etc.
 	 */
 	setupPVM(shader) {
-
 		// projection
-		let P = shader.getUniformMatrix("P");
-		if (this.visitor.perspective && P) P.set(this.visitor.perspective);
+		shader.getUniformMatrix("P").set(this.visitor.perspective);
+
 		// view
-		let V = shader.getUniformMatrix("V");
-		if (this.visitor.lookat && V) V.set(this.visitor.lookat);
+		shader.getUniformMatrix("V").set(this.visitor.lookat);
 
 		// model
 		let mat = this.getM();
@@ -148,8 +146,7 @@ class Traverser extends Visitor {
 			let lightName = "lights[" + i + "]";
 			let light = this.visitor.lights[i];
 
-			let position = this.visitor.lightPositions[i];
-			shader.getUniformVec3(lightName + ".position").set(this.visitor.perspective.mul(position));
+			shader.getUniformVec3(lightName + ".position").set(this.visitor.lightPositions[i]);
 			shader.getUniformVec3(lightName + ".color").set(light.color);
 
 			shader.getUniformFloat(lightName + ".intensity").set(light.intensity);
@@ -176,10 +173,8 @@ class Traverser extends Visitor {
 	}
 
 	setNormalMatrix(shader, mat) {
-		let N = shader.getUniformMatrix("N");
-		if (this.visitor.lookat && N) {
-			N.set(this.visitor.lookat.mul(mat).invert().transpose())
-		}
+		// ((V * M)^T)^-1
+		shader.getUniformMatrix("N").set(this.visitor.lookat.mul(mat).transpose().invert());
 	}
 	/**
 	 * Start traversing here
@@ -190,7 +185,7 @@ class Traverser extends Visitor {
 	}
 }
 
-// you can set this in console to get one debug log of current lookat matrix
+// you can set this in console to get one debug log of the current lookat matrix
 window.debugLookAt = false;
 
 class CameraTraverser extends Traverser {
@@ -268,8 +263,9 @@ class LightTraverser extends Traverser {
 	}
 
 	visitLightNode(node) {
-		let mat = this.getM();
-		let pos = this.visitor.lookat.mul(mat).mul(node.position);
+		let pos = this.getM().mul(node.position);
+		// P * V * M (so we don't have to do that in vertex shader and can pass it directly to fragment shader)
+		pos = this.visitor.perspective.mul(this.visitor.lookat).mul(pos);
 		this.visitor.lightPositions.push(pos);
 		this.visitor.lights.push(node);
 	}
@@ -289,9 +285,9 @@ class DrawTraverser extends Traverser {
 		phongShader.use();
 
 		let mat = this.setupPVM(phongShader);
+		this.setNormalMatrix(phongShader, mat);
 		this.setupLightProperties(phongShader, mat);
 		this.setupMaterialProperties(phongShader, node.material);
-		this.setNormalMatrix(phongShader, mat);
 
 		node.rastersphere.render(phongShader);
 	}
@@ -301,9 +297,9 @@ class DrawTraverser extends Traverser {
 		phongShader.use();
 
 		let mat = this.setupPVM(phongShader);
+		this.setNormalMatrix(phongShader, mat);
 		this.setupLightProperties(phongShader, mat);
 		this.setupMaterialProperties(phongShader, node.material);
-		// this.setNormalMatrix(phongShader, mat);
 
 		node.rasterbox.render(phongShader);
 	}
