@@ -166,13 +166,18 @@ class Driver3D extends Driver {
 class FreeFlight extends Driver {
 	/**
 	 * Creates a new user controllable, continuous free flight 3D driver animation, using rotation for left right orientation
-	 * @param {number} speed - The constant speed of driving in 1/second in each direction
-	 * @param {number} angleSpeed - The constant speed of rotating on x axis in angle/second
+	 * @param {number} movingSpeed - The constant speed of driving in 1/second in each direction
+	 * @param {number} rotationSpeed - The constant speed of rotating on x axis in angle/second
+	 * @param {Vector} up - The up vector of the element at start
 	 */
-	constructor(speed = 1, angleSpeed = 60) {
-		super(speed);
-		this.angleSpeed = Utils.degToRad(angleSpeed) / 1000;
-		this.up = new Vector(0, 1, 0); // humans rotate around y axis normally when turning left/right
+	constructor(movingSpeed = 1, rotationSpeed = 60, up = new Vector(0, 1, 0)) { // humans rotate around y axis normally when turning left/right
+		super(movingSpeed);
+		if (rotationSpeed instanceof Vector) {
+			up = rotationSpeed;
+			rotationSpeed = 60;
+		}
+		this.rotationSpeed = Utils.degToRad(rotationSpeed) / 1000;
+		this.up = up;
 		this.rotationYAxis = new Vector(1, 0, 0);
 	}
 
@@ -183,7 +188,7 @@ class FreeFlight extends Driver {
 		let rot, trans;
 		if (this.rotateXAxis !== 0) {
 			let rot_x, rot_y, rot_z;
-			let angle = this.rotateXAxis * this.angleSpeed * deltaT;
+			let angle = this.rotateXAxis * this.rotationSpeed * deltaT;
 
 			if (this.up.x !== 0) {
 				rot_x = Matrix.rotation(new Vector(1, 0, 0), angle * this.up.x);
@@ -221,7 +226,7 @@ class FreeFlight extends Driver {
 			}
 		}
 		if (this.rotateYAxis !== 0) {
-			let rot2 = Matrix.rotation(this.rotationYAxis, this.rotateYAxis * this.angleSpeed * deltaT)
+			let rot2 = Matrix.rotation(this.rotationYAxis, this.rotateYAxis * this.rotationSpeed * deltaT)
 			this.up = rot2.invert().mul(this.up);
 			if (rot) rot = rot.mul(rot2);
 			else rot = rot2;
