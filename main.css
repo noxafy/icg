@@ -27,10 +27,37 @@ body {
 
 #specs-view {
 	position: relative;
-	top: -100%;
+	height: 0px;
+}
+
+#fps {
 	padding: 5px;
 }
 
+#fps_val {
+	display: inline;
+}
+
+#light_props_title {
+	font-weight: bold;
+}
+
+#light_props {
+	padding: 5px;
+}
+
+#light_props_slider {
+	display: grid;
+	max-width: 400px;
+	width: 25vw;
+	padding: 5px;
+}
+
+#light_props_slider > input {
+	width: 100%;
+	margin: 0;
+}
+
 .disabled {
-	display: none;
+	display: none !important;
 }

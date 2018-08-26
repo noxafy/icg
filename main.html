@@ -11,10 +11,38 @@
 <body>
 
 <div id="canvas-container">
-	<canvas id="rasteriser" width="1920" height="1080"></canvas>
-	<div class="disabled" id="specs-view">fps:
-		<fps id="fps"></fps>
+	<div class="disabled" id="specs-view">
+		<div id="fps">fps:<div id="fps_val"></div></div>
+		<div id="light_props">
+			<label for="lights" id="light_props_title">Light properties</label>
+			<select id="lights" onfocus="(function fetchLights(dropdown) {
+				dropdown.innerHTML = `<option value=default>Please choose a light...</option>`;
+				for(let i =0; i < visitor.lights.length; i++) {
+					let light = visitor.lights[i];
+					dropdown.innerHTML += `<option value=${i}>${light.toString()}</option>`
+				}
+			})(this)" oninput="(function(val) {
+				if(val === 'default') {
+					SpecsView.LightChanger.disable();
+				} else {
+					SpecsView.LightChanger.enable(visitor.lights[val]);
+				}
+			})(this.value)">
+				<option>Please choose a light...</option>
+			</select>
+			<div class="disabled" id="light_props_slider">
+				<label for="intensity" id="intensity_label">intensity</label>
+				<input id="intensity" type="range" min="0" max="5" step="0.01"/>
+				<label for="constant" id="constant_label">constant</label>
+				<input id="constant" type="range" min="0" max="1" step="0.01"/>
+				<label for="linear" id="linear_label">linear</label>
+				<input id="linear" type="range" min="0" max="1" step="0.01"/>
+				<label for="quadratic" id="quadratic_label">quadratic</label>
+				<input id="quadratic" type="range" min="0" max="1" step="0.01"/>
+			</div>
+		</div>
 	</div>
+	<canvas id="rasteriser" width="1920" height="1080"></canvas>
 	<script src="animation/animation-nodes.js"></script>
 	<script src="animation/animator.js"></script>
 	<script src="animation/driver.js"></script>
@@ -62,9 +90,9 @@
 			0.1, 100, 60 // near, far, fovy
 		)
 
-		const sphere = new SphereNode(new Position(.5, -.8, 0), 0.4, Colors.CHOCOLATE, Materials.BRONZE);
+		const sphere = new SphereNode(new Position(.5, -.8, 0), 0.4, Colors.GOLD, Materials.GOLD);
 		const jumpingSphere = new SphereNode(new Position(0, 0, 0), 0.4, Colors.BLACK, Materials.CHROME);
-		const light = new LightNode(new Position(-5.0, 5.0, -10.0), Colors.WHITE, 2);
+		const light = new LightNode(new Position(-5.0, 2.0, -10.0), Colors.WHITE, 1.2, 0.8, 0.02, 0.001);
 		const lightSphere = new SphereNode(light.position, 0.2, Colors.BLACK, Materials.BLANK);
 		const cube = new TextureBoxNode(
 			new Position(-1, -1, -1),

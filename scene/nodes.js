@@ -223,11 +223,11 @@ class LightNode extends Node {
 	 * @param  {Position} position - The position of the light
 	 * @param  {Vector} color  - The color of the light
 	 * @param  {number} intensity - The intensity of the light
-	 * @param  {number} constant - the constant lighting from off this light
+	 * @param  {number} constant - the constant lighting from this light
 	 * @param  {number} linear - the linear with distance decreasing factor
 	 * @param  {number} quadratic - the quadratic with distance decreasing factor
 	 */
-	constructor(position, color, intensity = 1, constant = 0.8, linear = 0.01, quadratic = 0.001) {
+	constructor(position, color, intensity, constant, linear, quadratic) {
 		super();
 		this.position = position;
 		this.color = color;
