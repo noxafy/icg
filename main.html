@@ -12,15 +12,17 @@
 
 <div id="canvas-container">
 	<div class="disabled" id="specs-view">
-		<div id="fps">fps:<div id="fps_val"></div></div>
+		<div id="fps">fps: <div id="fps_val"></div></div>
 		<div id="light_props">
-			<label for="lights" id="light_props_title">Light properties</label>
+			<label for="lights" id="light_props_title">Light properties </label>
 			<select id="lights" onfocus="(function fetchLights(dropdown) {
+				let val = dropdown.value;
 				dropdown.innerHTML = `<option value=default>Please choose a light...</option>`;
-				for(let i =0; i < visitor.lights.length; i++) {
+				for(let i = 0; i < visitor.lights.length; i++) {
 					let light = visitor.lights[i];
 					dropdown.innerHTML += `<option value=${i}>${light.toString()}</option>`
 				}
+				if(val) dropdown.value = val;
 			})(this)" oninput="(function(val) {
 				if(val === 'default') {
 					SpecsView.LightChanger.disable();
