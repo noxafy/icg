@@ -76,9 +76,8 @@ class RasterVisitor extends Visitor {
 	/**
 	 * Renders the Scenegraph
 	 * @param  {Node} rootNode                 - The root node of the Scenegraph
-	 * @param  {Array.<Vector>} lightPositions - The light light positions
 	 */
-	render(rootNode, lightPositions) {
+	render(rootNode) {
 		// clear
 		this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
 
