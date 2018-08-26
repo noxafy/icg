@@ -240,3 +240,9 @@ class Vector {
 		return "[" + this.x + "," + this.y + "," + this.z + "," + this.w + "]"
 	}
 }
+
+class Position extends Vector {
+	constructor(x, y, z) {
+		super(x, y, z, 1);
+	}
+}

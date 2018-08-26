@@ -63,7 +63,7 @@ class GroupNode extends Node {
 class SphereNode extends Node {
 	/**
 	 * Creates a new Sphere with center and radius
-	 * @param  {Vector} center - The center of the Sphere
+	 * @param  {Position} center - The center of the Sphere
 	 * @param  {number} radius - The radius of the Sphere
 	 * @param  {Vector} color  - The color of the Sphere
 	 * @param  {Material} material - The material of the sphere
@@ -103,8 +103,8 @@ class SphereNode extends Node {
 class AABoxNode extends Node {
 	/**
 	 * Creates an axis aligned box
-	 * @param  {Vector} minPoint - The minimum Point
-	 * @param  {Vector} maxPoint - The maximum Point
+	 * @param  {Position} minPoint - The minimum Point
+	 * @param  {Position} maxPoint - The maximum Point
 	 * @param  {Vector} color    - The color of the cube
 	 * @param  {Material} material - The material of the cube
 	 */
@@ -142,8 +142,8 @@ class AABoxNode extends Node {
 class TextureBoxNode extends Node {
 	/**
 	 * Creates an axis aligned box textured box
-	 * @param  {Vector} minPoint - The minimum Point
-	 * @param  {Vector} maxPoint - The maximum Point
+	 * @param  {Position} minPoint - The minimum Point
+	 * @param  {Position} maxPoint - The maximum Point
 	 * @param  {string} texture  - The image filename for the texture
 	 */
 	constructor(minPoint, maxPoint, texture) {
@@ -180,15 +180,15 @@ class TextureBoxNode extends Node {
 class CameraNode extends Node {
 	/**
 	 * Creates a camera
-	 * @param {Vector} eye
-	 * @param {Vector} center
+	 * @param {Position} eye
+	 * @param {Position} center
 	 * @param {Vector} up
 	 * @param {number} near
 	 * @param {number} far
 	 * @param {number} fovy
 	 */
-	constructor(eye = new Vector(0, 0, -10, 1),
-				center = new Vector(0, 0, -9, 1),
+	constructor(eye = new Position(0, 0, -10),
+				center = new Position(0, 0, -9),
 				up = new Vector(0, -1, 0, 0),
 				near = 0.1, far = 100, fovy = 60) {
 		super();
@@ -220,7 +220,7 @@ class CameraNode extends Node {
 class LightNode extends Node {
 	/**
 	 * Creates a new light with position and light color
-	 * @param  {Vector} position - The position of the light
+	 * @param  {Position} position - The position of the light
 	 * @param  {Vector} color  - The color of the light
 	 * @param  {number} intensity - The intensity of the light
 	 * @param  {number} ambient - The acceptance rate for ambient light
