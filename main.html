@@ -62,10 +62,10 @@
 			0.1, 100, 60 // near, far, fovy
 		)
 
-		const sphere = new SphereNode(new Position(.5, -.8, 0), 0.4, Colors.chocolate, Materials.bronze);
-		const jumpingSphere = new SphereNode(new Position(0, 0, 0), 0.4, Colors.black, Materials.chrome);
-		const light = new LightNode(new Position(-5.0, 2.0, -10.0), Colors.white, 2)
-		const lightSphere = new SphereNode(light.position, 0.2, Colors.black, Materials.blank)
+		const sphere = new SphereNode(new Position(.5, -.8, 0), 0.4, Colors.CHOCOLATE, Materials.BRONZE);
+		const jumpingSphere = new SphereNode(new Position(0, 0, 0), 0.4, Colors.BLACK, Materials.CHROME);
+		const light = new LightNode(new Position(-5.0, 5.0, -10.0), Colors.WHITE, 2);
+		const lightSphere = new SphereNode(light.position, 0.2, Colors.BLACK, Materials.BLANK);
 		const cube = new TextureBoxNode(
 			new Position(-1, -1, -1),
 			new Position(1, 1, 1),
