@@ -119,11 +119,11 @@ class Traverser extends Visitor {
 	}
 
 	/**
-	 * Setup uniforms needed for drawing, i.e. projection, view and model matrix and light positions and colors.
+	 * Setup uniform matrices needed for drawing projection, view and model matrix
 	 * @param {Shader} shader
 	 * @return {Matrix} Last element of this.modelMatrices to be used for normal calculation etc.
 	 */
-	setupUniforms(shader) {
+	setupPVM(shader) {
 		let mat = this.modelMatrices[this.modelMatrices.length - 1];
 
 		// projection
@@ -137,26 +137,35 @@ class Traverser extends Visitor {
 		let M = shader.getUniformMatrix("M");
 		if (mat && M) M.set(mat);
 
-		// lights
+		return mat;
+	}
+
+	setupLightProperties(shader) {
 		for (let i = 0; i < this.visitor.lightPositions.length; i++) {
 			shader.getUniformVec3Array("f_lightPoses").set(this.visitor.lightPositions);
 			let lightName = "lights[" + i + "]";
 			let light = this.visitor.lights[i];
 			shader.getUniformVec3(lightName + ".color").set(light.color);
-			setLightFloat(lightName, light, "intensity");
-			setLightFloat(lightName, light, "constant");
-			setLightFloat(lightName, light, "linear");
-			setLightFloat(lightName, light, "quadratic");
-			setLightFloat(lightName, light, "ambient");
-			setLightFloat(lightName, light, "diffuse");
-			setLightFloat(lightName, light, "specular");
+			shader.getUniformFloat(lightName + ".intensity").set(light.intensity);
+			shader.getUniformFloat(lightName + ".constant").set(light.constant);
+			shader.getUniformFloat(lightName + ".linear").set(light.linear);
+			shader.getUniformFloat(lightName + ".quadratic").set(light.quadratic);
+			shader.getUniformFloat(lightName + ".ambient").set(light.ambient);
+			shader.getUniformFloat(lightName + ".diffuse").set(light.diffuse);
+			shader.getUniformFloat(lightName + ".specular").set(light.specular);
 		}
+	}
 
-		function setLightFloat(lightname, light, prop) {
-			shader.getUniformFloat(lightname + "." + prop).set(light[prop]);
-		}
-
-		return mat;
+	/**
+	 *
+	 * @param {Shader} shader
+	 * @param {Material} material
+	 */
+	setupMaterialProperties(shader, material) {
+		shader.getUniformVec3("kA").set(material.ambient);
+		shader.getUniformVec3("kD").set(material.diffuse);
+		shader.getUniformVec3("kS").set(material.specular);
+		shader.getUniformFloat("shininess").set(material.shininess);
 	}
 
 	setNormalMatrix(shader, mat) {
@@ -282,7 +291,9 @@ class DrawTraverser extends Traverser {
 		let phongShader = this.visitor.phongShader;
 		phongShader.use();
 
-		let mat = this.setupUniforms(phongShader);
+		let mat = this.setupPVM(phongShader);
+		this.setupLightProperties(phongShader);
+		this.setupMaterialProperties(phongShader, node.material);
 		this.setNormalMatrix(phongShader, mat);
 
 		node.rastersphere.render(phongShader);
@@ -292,7 +303,9 @@ class DrawTraverser extends Traverser {
 		let phongShader = this.visitor.phongShader;
 		phongShader.use();
 
-		let mat = this.setupUniforms(phongShader);
+		let mat = this.setupPVM(phongShader);
+		this.setupLightProperties(phongShader);
+		this.setupMaterialProperties(phongShader, node.material);
 
 		node.rasterbox.render(phongShader);
 	}
@@ -301,7 +314,7 @@ class DrawTraverser extends Traverser {
 		let textureShader = this.visitor.textureShader;
 		textureShader.use();
 
-		let mat = this.setupUniforms(textureShader);
+		let mat = this.setupPVM(textureShader);
 
 		node.rastertexturebox.render(textureShader);
 	}

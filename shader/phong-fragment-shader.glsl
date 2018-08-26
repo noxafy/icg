@@ -23,11 +23,10 @@ struct PointLight {
 
 uniform PointLight lights[NR_LIGHTS];
 
-const float shininess = 32.0;
-
-const float kA = 1.0;
-const float kD = 0.4;
-const float kS = 0.3;
+uniform vec3 kA;
+uniform vec3 kD;
+uniform vec3 kS;
+uniform float shininess;
 
 vec3 getPhongColor(PointLight light, vec3 n, vec3 vertPos);
 
@@ -51,23 +50,26 @@ vec3 getPhongColor(PointLight light, vec3 n, vec3 vertPos) {
 
   // diffuse
   float dot_d;
+  vec3 diffuse;
 
   // specular
   float dot_s;
+  vec3 specular;
 
   vec3 l = normalize(light.position - vertPos); // direction vector from the point on the surface toward the light source
 
   float dot1 = dot(n, l);
   if (dot1 > 0.0) {
-  	dot_d = kD * dot1;
+  	dot_d = dot1;
+  	diffuse = light.color * kD * dot_d * light.diffuse;
   	vec3 r = reflect(l, n); // direction that a perfectly reflected ray of light would take from this point on the surface
     vec3 v = normalize(-vertPos); // direction pointing towards the viewer
   	float dot2 = dot(r, v);
-  	if (dot2 > 0.0) dot_s = kS * pow(dot2, shininess);
+  	if (dot2 > 0.0) {
+  	  dot_s = pow(dot2, shininess);
+  	  specular = light.color * kS * dot_s * light.specular;
+  	}
   }
-
-  vec3 diffuse = light.color * dot_d * light.diffuse;
-  vec3 specular = light.color * dot_s * light.specular;
 
   float distance = length(light.position - vertPos);
   float attenuation = light.constant + light.linear * distance + light.quadratic * (distance * distance);

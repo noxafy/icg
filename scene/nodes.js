@@ -65,13 +65,15 @@ class SphereNode extends Node {
 	 * Creates a new Sphere with center and radius
 	 * @param  {Vector} center - The center of the Sphere
 	 * @param  {number} radius - The radius of the Sphere
-	 * @param  {Vector} color  - The colour of the Sphere
+	 * @param  {Vector} color  - The color of the Sphere
+	 * @param  {Material} material - The material of the sphere
 	 */
-	constructor(center, radius, color) {
+	constructor(center, radius, color, material) {
 		super();
 		this.center = center;
 		this.radius = radius;
 		this.color = color;
+		this.material = material;
 	}
 
 	/**
@@ -103,13 +105,15 @@ class AABoxNode extends Node {
 	 * Creates an axis aligned box
 	 * @param  {Vector} minPoint - The minimum Point
 	 * @param  {Vector} maxPoint - The maximum Point
-	 * @param  {Vector} color    - The colour of the cube
+	 * @param  {Vector} color    - The color of the cube
+	 * @param  {Material} material - The material of the cube
 	 */
-	constructor(minPoint, maxPoint, color) {
+	constructor(minPoint, maxPoint, color, material) {
 		super();
 		this.minPoint = minPoint;
 		this.maxPoint = maxPoint;
 		this.color = color;
+		this.material = material;
 	}
 
 	/**

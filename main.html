@@ -28,7 +28,9 @@
 	<script src="shader/raster-texture-box.js"></script>
 	<script src="scene/nodes.js"></script>
 	<script src="scene/visitor.js"></script>
+	<script src="scene/material.js"></script>
 	<script src="shader/shader.js"></script>
+	<script src="resources/materials.js"></script>
 	<script src="interaction.js"></script>
 	<script src="preferences.js"></script>
 	<script src="specsView.js"></script>
@@ -59,10 +61,10 @@
 			0.1, 100, 60 // near, far, fovy
 		)
 
-		const sphere = new SphereNode(new Vector(.5, -.8, 0, 1), 0.4, new Vector(.8, .4, .1, 1))
-		const jumpingSphere = new SphereNode(new Vector(0, 0, 0, 1), 0.4, new Vector(0, 0, 0, 1))
+		const sphere = new SphereNode(new Vector(.5, -.8, 0, 1), 0.4, new Vector(.8, .4, .1, 1), Materials.bronze);
+		const jumpingSphere = new SphereNode(new Vector(0, 0, 0, 1), 0.4, new Vector(0, 0, 0, 1), Materials.chrome);
 		const light = new LightNode(new Vector(-5.0, 2.0, -10.0, 1), new Vector(1, 1, 1), 1)
-		const lightSphere = new SphereNode(light.position, 0.2, new Vector(0, 0, 0))
+		const lightSphere = new SphereNode(light.position, 0.2, new Vector(0, 0, 0), Materials.blank)
 		const cube = new TextureBoxNode(
 			new Vector(-1, -1, -1, 1),
 			new Vector(1, 1, 1, 1),
