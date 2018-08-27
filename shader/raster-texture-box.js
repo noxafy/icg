@@ -1,7 +1,7 @@
 /**
  * A class creating buffers for a textured box to render it with WebGL
  */
-class RasterTextureBox {
+class RasterTextureBox extends RasterShape {
 	/**
 	 * Creates all WebGL buffers for the textured box
 	 *     6 ------- 7
@@ -18,9 +18,11 @@ class RasterTextureBox {
 	 * @param {string} texture - The image filename for the texture
 	 */
 	constructor(gl, minPoint, maxPoint, texture) {
-		this.gl = gl;
+		super(gl);
+
 		const mi = minPoint;
 		const ma = maxPoint;
+
 		let vertices = [
 			// front
 			mi.x, mi.y, ma.z, ma.x, mi.y, ma.z, ma.x, ma.y, ma.z,
@@ -42,10 +44,7 @@ class RasterTextureBox {
 			ma.x, mi.y, ma.z, mi.x, mi.y, ma.z, mi.x, mi.y, mi.z
 		];
 
-		const vertexBuffer = gl.createBuffer();
-		gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
-		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
-		this.vertexBuffer = vertexBuffer;
+		this.makeVertexBuffer(vertices);
 		this.elements = vertices.length / 3;
 
 		let cubeTexture = gl.createTexture();
@@ -92,10 +91,8 @@ class RasterTextureBox {
 	 * @param {Shader} shader - The shader used to render
 	 */
 	render(shader) {
-		this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.vertexBuffer);
-		const positionLocation = shader.getAttributeLocation("a_position");
-		this.gl.enableVertexAttribArray(positionLocation);
-		this.gl.vertexAttribPointer(positionLocation, 3, this.gl.FLOAT, false, 0, 0);
+		// vertex buffer
+		const positionLocation = this.bindVertexBuffer(shader);
 
 		// Bind the texture coordinates in this.texCoords
 		// to their attribute in the shader
