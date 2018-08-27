@@ -186,12 +186,26 @@ class Vector {
 }
 
 class Position extends Vector {
+	/**
+	 * Create a position
+	 * @param x
+	 * @param y
+	 * @param z
+	 */
 	constructor(x, y, z) {
 		super(x, y, z, 1);
 	}
 }
 
 class Color extends Vector {
+	/**
+	 * Create a color. Alpha is 1 per default if not given.
+	 * @param r
+	 * @param g
+	 * @param b
+	 * @param name
+	 * @param a
+	 */
 	constructor(r, g, b, name, a = 1) {
 		super(r, g, b, a);
 		if (typeof name === "string") this.name = name;
