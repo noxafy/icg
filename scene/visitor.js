@@ -289,7 +289,7 @@ class DrawTraverser extends Traverser {
 		this.setupLightProperties(phongShader, mat);
 		this.setupMaterialProperties(phongShader, node.material);
 
-		node.rastersphere.render(phongShader);
+		node.raster.render(phongShader);
 	}
 
 	visitAABoxNode(node) {
@@ -301,7 +301,7 @@ class DrawTraverser extends Traverser {
 		this.setupLightProperties(phongShader, mat);
 		this.setupMaterialProperties(phongShader, node.material);
 
-		node.rasterbox.render(phongShader);
+		node.raster.render(phongShader);
 	}
 
 	visitTextureBoxNode(node) {
@@ -310,7 +310,7 @@ class DrawTraverser extends Traverser {
 
 		let mat = this.setupPVM(textureShader);
 
-		node.rastertexturebox.render(textureShader);
+		node.raster.render(textureShader);
 	}
 
 	visitCameraNode(node) {
@@ -347,15 +347,15 @@ class RasterSetupVisitor extends Visitor {
 	}
 
 	visitSphereNode(node) {
-		node.setRastersphere(this.gl);
+		node.setRasterRenderer(this.gl);
 	}
 
 	visitAABoxNode(node) {
-		node.setRasterbox(this.gl);
+		node.setRasterRenderer(this.gl);
 	}
 
 	visitTextureBoxNode(node) {
-		node.setRasterTextureBox(this.gl);
+		node.setRasterRenderer(this.gl);
 	}
 
 	visitCameraNode(node) {

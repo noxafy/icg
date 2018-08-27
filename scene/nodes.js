@@ -72,6 +72,18 @@ class LightableNode extends Node {
 	toString() {
 		return this.color.toString() + "; " + this.material.toString();
 	}
+
+	/**
+	 * Sets the raster renderer
+	 * @param {RasterShape} rasterShape
+	 */
+	setRasterShape(rasterShape) {
+		this.raster = rasterShape;
+	}
+
+	setRasterRenderer(gl) {
+		throw Error("Unsupported operation")
+	}
 }
 
 /**
@@ -100,8 +112,8 @@ class SphereNode extends LightableNode {
 		visitor.visitSphereNode(this);
 	}
 
-	setRastersphere(gl) {
-		this.rastersphere = new RasterSphere(gl, this.center, this.radius, this.color)
+	setRasterRenderer(gl) {
+		this.setRasterShape(new RasterSphere(gl, this.center, this.radius, this.color))
 	}
 
 	toString() {
@@ -138,8 +150,8 @@ class AABoxNode extends LightableNode {
 		visitor.visitAABoxNode(this);
 	}
 
-	setRasterbox(gl) {
-		this.rasterbox = new RasterBox(gl, this.minPoint, this.maxPoint, this.color);
+	setRasterRenderer(gl) {
+		this.setRasterShape(new RasterBox(gl, this.minPoint, this.maxPoint, this.color));
 	}
 
 	toString() {
@@ -176,8 +188,8 @@ class TextureBoxNode extends Node {
 		visitor.visitTextureBoxNode(this);
 	}
 
-	setRasterTextureBox(gl) {
-		this.rastertexturebox = new RasterTextureBox(gl, this.minPoint, this.maxPoint, this.texture);
+	setRasterRenderer(gl) {
+		this.raster = new RasterTextureBox(gl, this.minPoint, this.maxPoint, this.texture);
 	}
 
 	toString() {
