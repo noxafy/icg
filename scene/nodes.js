@@ -163,6 +163,50 @@ class AABoxNode extends LightableNode {
 }
 
 /**
+ * Class representing a (four-walled) pyramid in the Scenegraph
+ * @extends Node
+ */
+class PyramidNode extends LightableNode {
+	/**
+	 * Creates a pyramid
+	 * @param  {number} x_extent - The x extent of the pyramid
+	 * @param  {number} z_extent - The z extent of the pyramid
+	 * @param  {number} height - The y extent of the pyramid
+	 * @param  {Color} color - The color of the pyramid
+	 * @param  {Material} material - The material of the cube
+	 */
+	constructor(x_extent, z_extent, height, color, material) {
+		super(color, material);
+
+		const x = x_extent / 2;
+		const z = z_extent / 2;
+		this.minPoint = new Position(x, 0, -z);
+		this.maxPoint = new Position(-x, 0, z);
+		this.top = new Position(0, height, 0);
+	}
+
+	/**
+	 * Accepts a visitor according to the visitor pattern
+	 * @param  {Visitor} visitor - The visitor
+	 */
+	accept(visitor) {
+		visitor.visitPyramidNode(this);
+	}
+
+	setRasterRenderer(gl) {
+		this.setRasterShape(new RasterPyramid(gl, this.minPoint, this.maxPoint, this.top, this.color));
+	}
+
+	toString() {
+		return "Pyramid: (" +
+			super.toString() + "; " +
+			"min_point: " + this.minPoint.toString() + "; " +
+			"max_point: " + this.maxPoint.toString() + "; " +
+			"top: " + this.top.toString() + ")";
+	}
+}
+
+/**
  * Class representing a Textured Axis Aligned Box in the Scenegraph
  * @extends Node
  */

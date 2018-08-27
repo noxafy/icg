@@ -28,6 +28,14 @@ class Visitor {
 	}
 
 	/**
+	 * Visits a pyramid node
+	 * @param  {PyramidNode} node - The node to visit
+	 */
+	visitPyramidNode(node) {
+		throw Error("Unsupported operation");
+	}
+
+	/**
 	 * Visits a textured box node. Loads the texture
 	 * and creates a uv coordinate buffer
 	 * @param  {TextureBoxNode} node - The node to visit
@@ -205,6 +213,10 @@ class CameraTraverser extends Traverser {
 		// do nothing
 	}
 
+	visitPyramidNode(node) {
+		// do nothing
+	}
+
 	visitTextureBoxNode(node) {
 		// do nothing
 	}
@@ -254,6 +266,10 @@ class LightTraverser extends Traverser {
 		// do nothing
 	}
 
+	visitPyramidNode(node) {
+		// do nothing
+	}
+
 	visitTextureBoxNode(node) {
 		// do nothing
 	}
@@ -293,6 +309,18 @@ class DrawTraverser extends Traverser {
 	}
 
 	visitAABoxNode(node) {
+		let phongShader = this.visitor.phongShader;
+		phongShader.use();
+
+		let mat = this.setupPVM(phongShader);
+		this.setNormalMatrix(phongShader, mat);
+		this.setupLightProperties(phongShader, mat);
+		this.setupMaterialProperties(phongShader, node.material);
+
+		node.raster.render(phongShader);
+	}
+
+	visitPyramidNode(node) {
 		let phongShader = this.visitor.phongShader;
 		phongShader.use();
 
@@ -351,6 +379,10 @@ class RasterSetupVisitor extends Visitor {
 	}
 
 	visitAABoxNode(node) {
+		node.setRasterRenderer(this.gl);
+	}
+
+	visitPyramidNode(node) {
 		node.setRasterRenderer(this.gl);
 	}
 

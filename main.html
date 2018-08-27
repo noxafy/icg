@@ -104,6 +104,7 @@
 			'resources/hci-logo.png'
 		);
 		const cube = new AABoxNode(new Position(-1, -1, -1), new Position(1, 1, 1), Colors.LIMEGREEN, Materials.EMERALD);
+		const pyramid = new PyramidNode(2, 2, 2, Colors.ORANGERED, Materials.BRASS);
 
 		//      sg
 		//     /  \
@@ -123,6 +124,7 @@
 		const gn6 = new GroupNode(Matrix.identity());
 		const gn7 = new GroupNode(Matrix.identity());
 		const gn8 = new GroupNode(Matrix.translation(new Vector(-5, -1, 0)));
+		const gn9 = new GroupNode(Matrix.translation(new Vector(-9, -1, 0)));
 
 		sg.add(gn1);
 
@@ -143,6 +145,9 @@
 
 		sg.add(gn8);
 		gn8.add(cube);
+
+		sg.add(gn9);
+		gn9.add(pyramid);
 
 		// add animation nodes
 		window.animationNodes = [
