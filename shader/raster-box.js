@@ -13,9 +13,9 @@ class RasterBox {
 	 *   0 ------- 1
 	 *  looking in negative z axis direction
 	 * @param {WebGLRenderingContext} gl - The canvas' context
-	 * @param {Vector} minPoint - The minimal x,y,z of the box
-	 * @param {Vector} maxPoint - The maximal x,y,z of the box
-	 * @param {Vector} color - The color of the cube
+	 * @param {Position} minPoint - The minimal x,y,z of the box
+	 * @param {Position} maxPoint - The maximal x,y,z of the box
+	 * @param {Color} color - The color of the cube
 	 */
 	constructor(gl, minPoint, maxPoint, color) {
         this.gl = gl;
@@ -83,7 +83,6 @@ class RasterBox {
 
 			// ma.x, ma.y, mi.z  // r,t,n
 			1.0, 1.0, -1.0
-
 		]
 		const normalBuffer = this.gl.createBuffer();
 		this.gl.bindBuffer(this.gl.ARRAY_BUFFER, normalBuffer);
@@ -93,9 +92,9 @@ class RasterBox {
 		// color buffer
 		let colors = [];
 		for (let i = 0; i < vertices.length; i += 3) {
-			colors.push(color.x);
-			colors.push(color.y);
-			colors.push(color.z);
+			colors.push(color.r);
+			colors.push(color.g);
+			colors.push(color.b);
 		}
 		const colorBuffer = gl.createBuffer();
 		this.gl.bindBuffer(this.gl.ARRAY_BUFFER, colorBuffer);
@@ -136,3 +135,4 @@ class RasterBox {
 		this.gl.disableVertexAttribArray(colorLocation);
     }
 }
+

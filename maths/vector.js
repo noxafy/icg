@@ -30,22 +30,6 @@ class Vector {
     }
 
     /**
-     * Returns the first component of the vector
-     * @return {number} The first component of the vector
-     */
-    get r() {
-        return this.data[0];
-    }
-
-    /**
-     * Sets the first component of the vector to val
-     * @param  {number} val - The new value
-     */
-    set r(val) {
-        this.data[0] = val;
-    }
-
-    /**
      * Returns the y component of the vector
      * @return {number} The y component of the vector
      */
@@ -58,22 +42,6 @@ class Vector {
      * @param  {number} val - The new value
      */
     set y(val) {
-        this.data[1] = val;
-    }
-
-    /**
-     * Returns the second component of the vector
-     * @return {number} The second component of the vector
-     */
-    get g() {
-        return this.data[1];
-    }
-
-    /**
-     * Sets the second component of the vector to val
-     * @param  {number} val - The new value
-     */
-    set g(val) {
         this.data[1] = val;
     }
 
@@ -94,22 +62,6 @@ class Vector {
     }
 
     /**
-     * Returns the third component of the vector
-     * @return {number} The third component of the vector
-     */
-    get b() {
-        return this.data[2];
-    }
-
-    /**
-     * Sets the third component of the vector to val
-     * @param  {number} val - The new value
-     */
-    set b(val) {
-        this.data[2] = val;
-    }
-
-    /**
      * Returns the w component of the vector
      * @return {number} The w component of the vector
      */
@@ -122,22 +74,6 @@ class Vector {
      * @param  {number} val - The new value
      */
     set w(val) {
-        this.data[3] = val;
-    }
-
-    /**
-     * Returns the fourth component of the vector
-     * @return {number} The fourth component of the vector
-     */
-    get a() {
-        return this.data[3];
-    }
-
-    /**
-     * Sets the fourth component of the vector to val
-     * @param  {number} val - The new value
-     */
-    set a(val) {
         this.data[3] = val;
     }
 
@@ -252,5 +188,82 @@ class Vector {
 class Position extends Vector {
 	constructor(x, y, z) {
 		super(x, y, z, 1);
+	}
+}
+
+class Color extends Vector {
+	constructor(r, g, b, name, a = 1) {
+		super(r, g, b, a);
+		if (typeof name === "string") this.name = name;
+		else this.a = name;
+	}
+
+	/**
+	 * Returns the red component
+	 * @return {number} The red component of the color
+	 */
+	get r() {
+		return this.data[0];
+	}
+
+	/**
+	 * Sets the red component of the color to val
+	 * @param  {number} val - The new red value
+	 */
+	set r(val) {
+		this.data[0] = val;
+	}
+
+	/**
+	 * Returns the green component of the color
+	 * @return {number} The green component
+	 */
+	get g() {
+		return this.data[1];
+	}
+
+	/**
+	 * Sets the green component of the color to val
+	 * @param  {number} val - The new green value
+	 */
+	set g(val) {
+		this.data[1] = val;
+	}
+
+	/**
+	 * Returns the blue component of the color
+	 * @return {number} The blue component
+	 */
+	get b() {
+		return this.data[2];
+	}
+
+	/**
+	 * Sets the blue component of the color to val
+	 * @param  {number} val - The new blue value
+	 */
+	set b(val) {
+		this.data[2] = val;
+	}
+
+	/**
+	 * Returns the alpha component of the color
+	 * @return {number} The alpha component
+	 */
+	get a() {
+		return this.data[3];
+	}
+
+	/**
+	 * Sets the alpha component of the color to val
+	 * @param  {number} val - The new alpha value
+	 */
+	set a(val) {
+		this.data[3] = val;
+	}
+
+	toString() {
+		if (this.name) return "Color: " + this.name.toUpperCase();
+		else return "Color: " + super.toString();
 	}
 }

@@ -56,24 +56,40 @@ class GroupNode extends Node {
 	}
 }
 
+class LightableNode extends Node {
+
+	/**
+	 *
+	 * @param {Color} color - The color of the shape
+	 * @param {Material} material - The material of the shape
+	 */
+	constructor(color, material) {
+		super();
+		this.color = color;
+		this.material = material;
+	}
+
+	toString() {
+		return this.color.toString() + "; " + this.material.toString();
+	}
+}
+
 /**
  * Class representing a Sphere in the Scenegraph
  * @extends Node
  */
-class SphereNode extends Node {
+class SphereNode extends LightableNode {
 	/**
 	 * Creates a new Sphere with center and radius
 	 * @param  {Position} center - The center of the Sphere
 	 * @param  {number} radius - The radius of the Sphere
-	 * @param  {Vector} color  - The color of the Sphere
+	 * @param  {Color} color  - The color of the Sphere
 	 * @param  {Material} material - The material of the sphere
 	 */
 	constructor(center, radius, color, material) {
-		super();
+		super(color, material);
 		this.center = center;
 		this.radius = radius;
-		this.color = color;
-		this.material = material;
 	}
 
 	/**
@@ -90,9 +106,9 @@ class SphereNode extends Node {
 
 	toString() {
 		return "Sphere: (" +
+			super.toString() + "; " +
 			"center: " + this.center.toString() + "; " +
-			"radius: " + this.radius + "; " +
-			"color: " + this.color.toString() + ")";
+			"radius: " + this.radius + ")"
 	}
 }
 
@@ -100,20 +116,18 @@ class SphereNode extends Node {
  * Class representing an Axis Aligned Box in the Scenegraph
  * @extends Node
  */
-class AABoxNode extends Node {
+class AABoxNode extends LightableNode {
 	/**
 	 * Creates an axis aligned box
 	 * @param  {Position} minPoint - The minimum Point
 	 * @param  {Position} maxPoint - The maximum Point
-	 * @param  {Vector} color    - The color of the cube
+	 * @param  {Color} color    - The color of the cube
 	 * @param  {Material} material - The material of the cube
 	 */
 	constructor(minPoint, maxPoint, color, material) {
-		super();
+		super(color, material);
 		this.minPoint = minPoint;
 		this.maxPoint = maxPoint;
-		this.color = color;
-		this.material = material;
 	}
 
 	/**
@@ -130,6 +144,7 @@ class AABoxNode extends Node {
 
 	toString() {
 		return "AABox: (" +
+			super.toString() + "; " +
 			"minPoint: " + this.minPoint.toString() + "; " +
 			"maxpoint: " + this.maxPoint.toString() + ")";
 	}
