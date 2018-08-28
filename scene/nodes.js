@@ -69,8 +69,12 @@ class LightableNode extends Node {
 		this.material = material;
 	}
 
-	toString() {
-		return this.color.toString() + "; " + this.material.toString();
+	/**
+	 * Accepts a visitor according to the visitor pattern
+	 * @param  {Visitor} visitor - The visitor
+	 */
+	accept(visitor) {
+		visitor.visitLightableNode(this);
 	}
 
 	/**
@@ -83,6 +87,10 @@ class LightableNode extends Node {
 
 	setRasterRenderer(gl) {
 		throw Error("Unsupported operation")
+	}
+
+	toString() {
+		return this.color.toString() + "; " + this.material.toString();
 	}
 }
 
@@ -102,14 +110,6 @@ class SphereNode extends LightableNode {
 		super(color, material);
 		this.center = center;
 		this.radius = radius;
-	}
-
-	/**
-	 * Accepts a visitor according to the visitor pattern
-	 * @param  {Visitor} visitor - The visitor
-	 */
-	accept(visitor) {
-		visitor.visitSphereNode(this);
 	}
 
 	setRasterRenderer(gl) {
@@ -140,14 +140,6 @@ class AABoxNode extends LightableNode {
 		super(color, material);
 		this.minPoint = minPoint;
 		this.maxPoint = maxPoint;
-	}
-
-	/**
-	 * Accepts a visitor according to the visitor pattern
-	 * @param  {Visitor} visitor - The visitor
-	 */
-	accept(visitor) {
-		visitor.visitAABoxNode(this);
 	}
 
 	setRasterRenderer(gl) {
@@ -183,14 +175,6 @@ class PyramidNode extends LightableNode {
 		this.minPoint = new Position(x, 0, -z);
 		this.maxPoint = new Position(-x, 0, z);
 		this.top = new Position(0, height, 0);
-	}
-
-	/**
-	 * Accepts a visitor according to the visitor pattern
-	 * @param  {Visitor} visitor - The visitor
-	 */
-	accept(visitor) {
-		visitor.visitPyramidNode(this);
 	}
 
 	setRasterRenderer(gl) {

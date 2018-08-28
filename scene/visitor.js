@@ -12,26 +12,10 @@ class Visitor {
 	}
 
 	/**
-	 * Visits a sphere node
-	 * @param  {SphereNode} node - The node to visit
+	 * Visits a lightable node
+	 * @param  {LightableNode} node - The node to visit
 	 */
-	visitSphereNode(node) {
-		throw Error("Unsupported operation");
-	}
-
-	/**
-	 * Visits an axis aligned box node
-	 * @param  {AABoxNode} node - The node to visit
-	 */
-	visitAABoxNode(node) {
-		throw Error("Unsupported operation");
-	}
-
-	/**
-	 * Visits a pyramid node
-	 * @param  {PyramidNode} node - The node to visit
-	 */
-	visitPyramidNode(node) {
+	visitLightableNode(node) {
 		throw Error("Unsupported operation");
 	}
 
@@ -205,15 +189,7 @@ class CameraTraverser extends Traverser {
 		super(context, visitor);
 	}
 
-	visitSphereNode(node) {
-		// do nothing
-	}
-
-	visitAABoxNode(node) {
-		// do nothing
-	}
-
-	visitPyramidNode(node) {
+	visitLightableNode(node) {
 		// do nothing
 	}
 
@@ -258,15 +234,7 @@ class LightTraverser extends Traverser {
 		super(context, visitor);
 	}
 
-	visitSphereNode(node) {
-		// do nothing
-	}
-
-	visitAABoxNode(node) {
-		// do nothing
-	}
-
-	visitPyramidNode(node) {
+	visitLightableNode(node) {
 		// do nothing
 	}
 
@@ -296,31 +264,7 @@ class DrawTraverser extends Traverser {
 		super(context, visitor);
 	}
 
-	visitSphereNode(node) {
-		let phongShader = this.visitor.phongShader;
-		phongShader.use();
-
-		let mat = this.setupPVM(phongShader);
-		this.setNormalMatrix(phongShader, mat);
-		this.setupLightProperties(phongShader, mat);
-		this.setupMaterialProperties(phongShader, node.material);
-
-		node.raster.render(phongShader);
-	}
-
-	visitAABoxNode(node) {
-		let phongShader = this.visitor.phongShader;
-		phongShader.use();
-
-		let mat = this.setupPVM(phongShader);
-		this.setNormalMatrix(phongShader, mat);
-		this.setupLightProperties(phongShader, mat);
-		this.setupMaterialProperties(phongShader, node.material);
-
-		node.raster.render(phongShader);
-	}
-
-	visitPyramidNode(node) {
+	visitLightableNode(node) {
 		let phongShader = this.visitor.phongShader;
 		phongShader.use();
 
@@ -378,11 +322,7 @@ class RasterSetupVisitor extends Visitor {
 		node.setRasterRenderer(this.gl);
 	}
 
-	visitAABoxNode(node) {
-		node.setRasterRenderer(this.gl);
-	}
-
-	visitPyramidNode(node) {
+	visitLightableNode(node) {
 		node.setRasterRenderer(this.gl);
 	}
 
