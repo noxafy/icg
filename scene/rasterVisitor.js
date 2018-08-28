@@ -86,7 +86,7 @@ class RasterTraverser extends Visitor {
 		return mat;
 	}
 
-	setupLightProperties(shader, mat) {
+	setupLightProperties(shader) {
 		for (let i = 0; i < this.visitor.lightPositions.length; i++) {
 			let lightName = "lights[" + i + "]";
 			let light = this.visitor.lights[i];
@@ -224,7 +224,7 @@ class DrawTraverser extends RasterTraverser {
 
 		let mat = this.setupPVM(phongShader);
 		this.setNormalMatrix(phongShader, mat);
-		this.setupLightProperties(phongShader, mat);
+		this.setupLightProperties(phongShader);
 		this.setupMaterialProperties(phongShader, node.material);
 
 		node.raster.render(phongShader);
