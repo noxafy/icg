@@ -21,7 +21,7 @@ SpecsView = {
 	},
 	FPS: {
 		e: document.getElementById("fps_val"),
-		cnt: 20,
+		cnt: 40,
 		sum: 0,
 		i: 1,
 		add(deltaT) {
