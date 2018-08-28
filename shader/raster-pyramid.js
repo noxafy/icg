@@ -50,24 +50,4 @@ class RasterPyramid extends RasterShape {
 		this.makeNormalBuffer(normals);
 		this.makeColorBuffer(vertices.length, color);
 	}
-
-	/**
-	 * Renders the box
-	 * @param {Shader} shader - The shader used to render
-	 */
-	render(shader) {
-		const positionLocation = this.bindVertexBuffer(shader);
-		const colorLocation = this.bindColorBuffer(shader);
-		const normalLocation = this.bindNormalBuffer(shader);
-
-		this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer);
-
-		// draw
-		this.gl.drawElements(this.gl.TRIANGLES, this.elements, this.gl.UNSIGNED_SHORT, 0);
-
-		// disable attributes
-		this.gl.disableVertexAttribArray(positionLocation);
-		this.gl.disableVertexAttribArray(colorLocation);
-		this.gl.disableVertexAttribArray(normalLocation);
-	}
 }
