@@ -5,7 +5,7 @@ class RasterSphere extends RasterShape {
     /**
      * Creates all WebGL buffers for the sphere
      * @param {WebGLRenderingContext} gl - The canvas' context
-     * @param {Vector} center   - The center of the sphere
+     * @param {Position} center   - The center of the sphere
      * @param {number} radius   - The radius of the sphere
      * @param {Color} color    - The color of the sphere
      */
@@ -61,6 +61,6 @@ class RasterSphere extends RasterShape {
 		this.makeVertexBuffer(vertices);
 		this.makeIndexBuffer(indices);
 		this.makeNormalBuffer(normals);
-		this.makeColorBuffer(vertices.length, color);
+		this.makeColorBuffer(RasterSphere.generateColors(vertices.length, color));
 	}
 }

@@ -22,11 +22,15 @@ class RasterShape {
 		this.elements = indices.length;
 	}
 
-	makeColorBuffer(size, color) {
+	static generateColors(size, color) {
 		let colors = new Array(size);
 		for (let i = 0; i < size; i++) {
 			colors[i] = color.data[i % 3];
 		}
+		return colors;
+	}
+
+	makeColorBuffer(colors) {
 		const colorBuffer = this.gl.createBuffer();
 		this.gl.bindBuffer(this.gl.ARRAY_BUFFER, colorBuffer);
 		this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(colors), this.gl.STATIC_DRAW);

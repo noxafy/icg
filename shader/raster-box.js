@@ -54,7 +54,7 @@ class RasterBox extends RasterShape {
 		this.makeVertexBuffer(vertices);
 		this.makeIndexBuffer(indices);
 		this.makeNormalBuffer(normals);
-		this.makeColorBuffer(vertices.length, color);
+		this.makeColorBuffer(RasterShape.generateColors(vertices.length, color));
 	}
 }
 

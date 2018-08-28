@@ -165,7 +165,7 @@ class PyramidNode extends LightableNode {
 	 * @param  {number} z_extent - The z extent of the pyramid
 	 * @param  {number} height - The y extent of the pyramid
 	 * @param  {Color} color - The color of the pyramid
-	 * @param  {Material} material - The material of the cube
+	 * @param  {Material} material - The material of the pyramid
 	 */
 	constructor(x_extent, z_extent, height, color, material) {
 		super(color, material);
