@@ -191,6 +191,41 @@ class PyramidNode extends LightableNode {
 }
 
 /**
+ * Class representing a (n-walled) cone in the Scenegraph
+ * @extends Node
+ */
+class ConeNode extends LightableNode {
+
+	/**
+	 * Creates a cone
+	 * @param  {number} radius - The radius of the bottom of the cone
+	 * @param  {number} height - The y extent of the cone
+	 * @param  {Color} color - The color of the cone
+	 * @param  {Material} material - The material of the cone
+	 * @param  {number} ringsize - The number of vertices of the bottom
+	 */
+	constructor(radius, height, color, material, ringsize = 50) {
+		super(color, material);
+
+		if (ringsize < 3) throw Error("Ringsize should not be lower than 3, but was: " + ringsize);
+		this.ringsize = ringsize;
+		this.radius = radius;
+		this.top = new Position(0, height, 0);
+	}
+
+	setRasterRenderer(gl) {
+		this.setRasterShape(new RasterCone(gl, this.radius, this.top, this.ringsize, this.color));
+	}
+
+	toString() {
+		return "Cone: (" +
+			super.toString() + "; " +
+			"radius: " + this.radius + "; " +
+			"top: " + this.top.toString() + ")";
+	}
+}
+
+/**
  * Class representing a Textured Axis Aligned Box in the Scenegraph
  * @extends Node
  */
