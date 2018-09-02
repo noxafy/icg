@@ -70,7 +70,6 @@
 		const aspectResolution = 120;
 
 		// init canvas
-		window.aspect = aspectW / aspectH;
 		const canvas = document.getElementById("rasteriser");
 		canvas.setAttribute("width", aspectW * aspectResolution);
 		canvas.setAttribute("height", aspectH * aspectResolution);
@@ -87,6 +86,7 @@
 			new Position(-4, 5, 10), // eye
 			new Vector(0, -0.5, -1), // direction
 			new Vector(0, 1, 0, 0), // up
+			aspectW / aspectH,
 			0.1, 100, 60 // near, far, fovy
 		)
 

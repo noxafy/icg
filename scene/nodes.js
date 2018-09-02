@@ -104,20 +104,21 @@ class CameraNode extends Node {
 	 * @param {Position} eye
 	 * @param {Vector} direction
 	 * @param {Vector} up
+	 * @param {number} aspect
 	 * @param {number} near
 	 * @param {number} far
 	 * @param {number} fovy
 	 */
-	constructor(eye, direction, up, near = 0.1, far = 100, fovy = 60) {
+	constructor(eye, direction, up, aspect, near = 0.1, far = 100, fovy = 60) {
 		super();
 		this.eye = eye;
 		this.center = eye.add(direction);
 		let angleTo90 = direction.angleTo(up) - Math.PI / 2;
 		this.up = Matrix.rotation(new Vector(1, 0, 0), angleTo90).mul(up);
-		this.fovy = fovy;
+		this.aspect = aspect;
 		this.near = near;
 		this.far = far;
-		this.aspect = window.aspect;
+		this.fovy = fovy;
 	}
 
 	/**
