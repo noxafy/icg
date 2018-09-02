@@ -30,6 +30,45 @@ body {
 	height: 0px;
 }
 
+#menu-view {
+	position: relative;
+	height: 0px;
+	float: right;
+}
+
+#sg-export-btn {
+	margin: 5px;
+	padding: 3px;
+	background: none;
+	border: 1px solid black;
+	border-radius: 3px;
+	min-width: 100px;
+}
+
+.loading-button:after {
+	content: ' .';
+	animation: dots 1.5s steps(4, end) infinite;
+}
+
+@keyframes dots {
+	0% {
+		content: ' .';
+	}
+	25% {
+		content: ' . .';
+	}
+	50% {
+		content: ' . . .';
+	}
+	75% {
+		content: ' . . . .';
+	}
+}
+
+#sg-export-btn:hover {
+	background: #EEF;
+}
+
 #fps {
 	padding: 5px;
 }

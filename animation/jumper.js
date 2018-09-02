@@ -35,6 +35,11 @@ class Jumper extends Animator {
 	jump(timePassed) {
 		throw Error("Unsupported operation.")
 	}
+
+	toJsonObj(obj) {
+		obj.axis = this.axis.data;
+		return obj;
+	}
 }
 
 class LinearJumper extends Jumper {
@@ -49,6 +54,13 @@ class LinearJumper extends Jumper {
 
 	jump(timePassed) {
 		return Math.abs(timePassed / this.timePerJump * 2 - 1);
+	}
+
+	toJsonObj() {
+		return super.toJsonObj({
+			type: "LinearJumper",
+			jpm: 60000 / this.timePerJump
+		});
 	}
 }
 
@@ -65,6 +77,13 @@ class SinJumper extends Jumper {
 
 	jump(timePassed) {
 		return Math.sin(timePassed * this.periodsPerMilliSecond * Math.PI) / 2 + 0.5;
+	}
+
+	toJsonObj() {
+		return super.toJsonObj({
+			type: "SinJumper",
+			jpm: 60000 / this.timePerJump
+		});
 	}
 }
 
@@ -93,5 +112,12 @@ class PhysicsJumper extends Jumper {
 	jump(timePassed) {
 		if (this.g < .1E-16) return;
 		return this.jumpDirection * Math.pow(timePassed * this.halfJumpsPerMillisecond - 1, 2) + 1;
+	}
+
+	toJsonObj() {
+		return super.toJsonObj({
+			type: "PhysicsJumper",
+			g_scale: this.g / (9.81E-6 * Math.pow(this.axis.y / this.axis.length, 2))
+		});
 	}
 }

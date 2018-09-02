@@ -36,6 +36,11 @@ class Driver extends UserControllable {
 		else this.speed /= 2;
 		this.speedDoubled = set;
 	}
+
+	toJsonObj(obj) {
+		obj.speed = this.speed * 1000;
+		return obj;
+	}
 }
 
 class Driver2D extends Driver {
@@ -53,6 +58,12 @@ class Driver2D extends Driver {
 		let direction = new Vector(this.moveXAxis, 0, this.moveZAxis).normalised();
 		return Matrix.translation(direction.mul(this.speed * deltaT));
 	}
+
+	toJsonObj() {
+		return super.toJsonObj({
+			type: "Driver2D"
+		});
+	}
 }
 
 class Driver3D extends Driver {
@@ -69,6 +80,12 @@ class Driver3D extends Driver {
 
 		let direction = new Vector(this.moveXAxis, this.moveYAxis, this.moveZAxis).normalised();
 		return Matrix.translation(direction.mul(this.speed * deltaT));
+	}
+
+	toJsonObj() {
+		return super.toJsonObj({
+			type: "Driver3D"
+		});
 	}
 }
 
@@ -121,6 +138,14 @@ class FreeFlight extends Driver {
 			trans = Matrix.translation(direction.normalised().mul(this.speed * deltaT));
 		}
 		return trans.mul(rot);
+	}
+
+	toJsonObj() {
+		return super.toJsonObj({
+			type: "FreeFlight",
+			rotationSpeed: Utils.round(Utils.radToDeg(this.rotationSpeed * 1000)),
+			up: this.up.data
+		});
 	}
 }
 

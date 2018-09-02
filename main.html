@@ -37,6 +37,12 @@
 			<div id="light_props_sliders"></div>
 		</div>
 	</div>
+	<div class="disabled" id="menu-view">
+		<button id="sg-export-btn"
+				onclick="this.innerText='';this.className='loading-button';SceneGraphLoader.export(sg, animationNodes)">
+			Export Scenegraph
+		</button>
+	</div>
 	<canvas id="rasteriser" width="1920" height="1080"></canvas>
 	<script src="animation/animation-nodes.js"></script>
 	<script src="animation/animator.js"></script>
@@ -63,6 +69,8 @@
 	<script src="interaction.js"></script>
 	<script src="preferences.js"></script>
 	<script src="specsView.js"></script>
+	<script src="menuView.js"></script>
+	<script src="io/SceneGraphLoader.js"></script>
 	<script>
 		// set up canvas
 		const aspectW = 16;

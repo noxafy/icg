@@ -9,6 +9,7 @@ class Material {
 	 * @param {Vector} diffuse
 	 * @param {Vector} specular
 	 * @param {number} shininess
+	 * @param {string} name
 	 */
 	constructor(ambient, diffuse, specular, shininess, name) {
 		this.ambient = ambient;
@@ -25,5 +26,15 @@ class Material {
 			"diffuse: " + this.diffuse.toString() + "; " +
 			"specular: " + this.specular.toString() + "; " +
 			"shininess: " + this.shininess + ")";
+	}
+
+	toJsonObj() {
+		if (this.name) return this.name.toUpperCase();
+		else return {
+			ambient: this.ambient.data,
+			diffuse: this.diffuse.data,
+			specular: this.specular.data,
+			shininess: this.shininess
+		}
 	}
 }

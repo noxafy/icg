@@ -280,4 +280,9 @@ class Color extends Vector {
 		if (this.name) return "Color: " + this.name.toUpperCase();
 		else return "Color: " + super.toString();
 	}
+
+	toJsonObj() {
+		if (this.name) return this.name.toUpperCase();
+		else return this.data;
+	}
 }

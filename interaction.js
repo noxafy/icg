@@ -30,6 +30,9 @@ window.addEventListener('keydown', function (event){
 		case "v":
 			Preferences.toggleShowSpecs();
 			break;
+		case "m":
+			Preferences.toggleShowMenu();
+			break;
 	}
 
 	userControl(key, true);

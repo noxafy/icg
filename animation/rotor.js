@@ -44,6 +44,14 @@ class SimpleRotor extends Rotor {
 	rotate(angle) {
 		return Matrix.rotation(this.axis, angle);
 	}
+
+	toJsonObj() {
+		return {
+			type: "SimpleRotor",
+			axis: this.axis.data,
+			speed: Utils.round(Utils.radToDeg(this.anglePerMilliSecond * 1000))
+		};
+	}
 }
 
 class FreeRotor extends UserControllable {
@@ -76,6 +84,13 @@ class FreeRotor extends UserControllable {
 			rot = rot.mul(rot3);
 		}
 		return rot;
+	}
+
+	toJsonObj() {
+		return {
+			type: "FreeRotor",
+			speed: Utils.round(Utils.radToDeg(this.anglePerMilliSecond * 1000))
+		};
 	}
 }
 
@@ -124,5 +139,12 @@ class AxisAlignedRotor extends UserControllable {
 			if (d) rot = rot.mul(d);
 		}
 		return rot;
+	}
+
+	toJsonObj() {
+		return {
+			type: "AxisAlignedRotor",
+			speed: Utils.round(Utils.radToDeg(this.anglePerMilliSecond * 1000))
+		};
 	}
 }

@@ -345,4 +345,12 @@ class Matrix {
 		ret.data = dst;
 		return ret;
 	}
+
+	toArray() {
+		let elements = [];
+		for (let e in this.data) {
+			elements.push(this.data[e])
+		}
+		return elements;
+	}
 }
