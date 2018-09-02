@@ -170,8 +170,7 @@ class LightNode extends Node {
 	}
 
 	toString() {
-		return "Light: (" +
-			"position: " + this.position.toString() + "; " +
-			"color: " + this.color.toString() + ")";
+		return "Light: (" + this.color.toString() + "; " +
+			"Position: " + this.position.toString() + ")";
 	}
 }
