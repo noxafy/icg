@@ -17,8 +17,6 @@ window.addEventListener('keydown', function (event){
 	event.preventDefault();
 	if (event.key === lastKey || event.repeat) return;
 	lastKey = event.key;
-	// console.log("keydown: [" + event.key + "]")
-	// console.log(event);
 	let key = event.key.toLowerCase();
 	switch (key) {
 		case "p":
@@ -46,12 +44,10 @@ window.addEventListener('keyup', function (event) {
 
 	event.preventDefault();
 	lastKey = undefined;
-	// console.log("keyup: [" + event.key + "]")
-	// console.log(event);
 	driverSwitch(event.key.toLowerCase(), false);
 });
 
-let w_downtime, s_downtime;
+let w_downtime;
 
 function driverSwitch(key, set) {
 	switch (key) {
@@ -73,12 +69,12 @@ function driverSwitch(key, set) {
 			if (set) {
 				let now = Date.now();
 				if (w_downtime && now - w_downtime <= 200) {
-					doubleDriverSpeed(true);
+					double3DDriverSpeed(true);
 				} else {
 					w_downtime = now;
 				}
 			} else {
-				doubleDriverSpeed(false);
+				double3DDriverSpeed(false);
 			}
 			set3DDriver("moveForward", set);
 			setFreeFlight("moveForward", set);
@@ -136,7 +132,7 @@ function setFreeFlight(foo, set) {
 	});
 }
 
-function doubleDriverSpeed(set) {
+function double3DDriverSpeed(set) {
 	forEachAnimatorSet("doubleSpeed", set, animator => {
 		return animator instanceof Driver3D || animator instanceof FreeFlight;
 	})
@@ -159,7 +155,10 @@ function toggleFullScreenMode() {
 		else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
 		else if (document.msExitFullscreen) document.msExitFullscreen();
 		else if (document.exitFullscreen) document.exitFullscreen();
-		else console.error("Couldn't exit fullscreen mode!")
+		else {
+			console.error("Couldn't exit fullscreen mode!");
+			return;
+		}
 		fullscreenActivated = false;
 	} else {
 		let p = canvas.parentNode.parentNode;
