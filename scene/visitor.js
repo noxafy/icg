@@ -37,7 +37,7 @@ class Visitor {
 	}
 
 	/**
-	 * Visits a light node. //TODO
+	 * Visits a light node. Calculates and saves the light and its position.
 	 * @param  {LightNode} node - The node to visit
 	 */
 	visitLightNode(node) {
