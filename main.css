@@ -47,14 +47,14 @@ body {
 	padding: 5px;
 }
 
-#light_props_slider {
+#light_props_sliders {
 	display: grid;
 	max-width: 400px;
 	width: 25vw;
 	padding: 5px;
 }
 
-#light_props_slider > input {
+#light_props_sliders > input {
 	width: 100%;
 	margin: 0;
 }
