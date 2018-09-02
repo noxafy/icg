@@ -32,7 +32,7 @@ window.addEventListener('keydown', function (event){
 			break;
 	}
 
-	driverSwitch(key, true);
+	userControl(key, true);
 });
 
 window.addEventListener('keyup', function (event) {
@@ -44,12 +44,12 @@ window.addEventListener('keyup', function (event) {
 
 	event.preventDefault();
 	lastKey = undefined;
-	driverSwitch(event.key.toLowerCase(), false);
+	userControl(event.key.toLowerCase(), false);
 });
 
 let w_downtime;
 
-function driverSwitch(key, set) {
+function userControl(key, set) {
 	switch (key) {
 		// 2D driver
 		case "i":
@@ -111,6 +111,16 @@ function driverSwitch(key, set) {
 		case "arrowdown":
 			setFreeFlight("pitchDownward", set);
 			break;
+		// Free rotor
+		case "x":
+			setRotor("pitchUpward", set);
+			break;
+		case "y":
+			setRotor("yawRightward", set);
+			break;
+		case "z":
+			setRotor("rollRightward", set);
+			break;
 	}
 }
 
@@ -129,6 +139,12 @@ function set3DDriver(foo, set) {
 function setFreeFlight(foo, set) {
 	forEachAnimatorSet(foo, set, animator => {
 		return animator instanceof FreeFlight;
+	});
+}
+
+function setRotor(foo, set) {
+	forEachAnimatorSet(foo, set, animator => {
+		return animator instanceof FreeRotor || animator instanceof AxisAlignedRotor;
 	});
 }
 

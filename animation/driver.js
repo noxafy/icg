@@ -4,10 +4,10 @@
  */
 class Driver extends UserControllable {
 	/**
-	 * Creates a new user controllable driver animation
+	 * Creates a new abstract driver animation
 	 * @param {number} speed - Speed of driving in 1/second
 	 */
-	constructor(speed = 1) {
+	constructor(speed) {
 		super();
 		this.speed = speed / 1000;
 		this.speedDoubled = false;
@@ -50,8 +50,8 @@ class Driver2D extends Driver {
 	drive(deltaT) {
 		if (this.moveXAxis === 0 && this.moveZAxis === 0) return;
 
-		let positionChange = new Vector(this.moveXAxis, 0, this.moveZAxis).normalised().mul(this.speed * deltaT);
-		return Matrix.translation(positionChange);
+		let direction = new Vector(this.moveXAxis, 0, this.moveZAxis).normalised();
+		return Matrix.translation(direction.mul(this.speed * deltaT));
 	}
 }
 
@@ -68,8 +68,7 @@ class Driver3D extends Driver {
 		if (this.moveXAxis === 0 && this.moveYAxis === 0 && this.moveZAxis === 0) return;
 
 		let direction = new Vector(this.moveXAxis, this.moveYAxis, this.moveZAxis).normalised();
-		let positionChange = direction.mul(this.speed * deltaT);
-		return Matrix.translation(positionChange);
+		return Matrix.translation(direction.mul(this.speed * deltaT));
 	}
 }
 
@@ -86,11 +85,8 @@ class FreeFlight extends Driver {
 			up = rotationSpeed;
 			rotationSpeed = 60;
 		}
-		this.rotationSpeed = Utils.degToRad(rotationSpeed) / 1000;
 		this.up = up;
-		this.xAxis = new Vector(1, 0, 0);
-		this.yAxis = new Vector(0, 1, 0);
-		this.zAxis = new Vector(0, 0, 1);
+		this.rotationSpeed = Utils.degToRad(rotationSpeed) / 1000;
 	}
 
 	drive(deltaT) {
@@ -109,6 +105,7 @@ class FreeFlight extends Driver {
 			for (let d of [rot_y, rot_z]) {
 				if (d) rot = rot.mul(d);
 			}
+			// up vector does not change on yawing
 		}
 		if (this.pitch !== 0) {
 			let rot2 = Matrix.rotation(this.xAxis, this.pitch * this.rotationSpeed * deltaT)

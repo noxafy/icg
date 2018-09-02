@@ -16,6 +16,9 @@ class Animator {
 
 class UserControllable extends Animator {
 
+	/**
+	 * Creates a class receiving user control events
+	 */
 	constructor() {
 		super();
 
@@ -47,6 +50,11 @@ class UserControllable extends Animator {
 		this.roll = 0; // 1 = right, -1 = left
 		this.rollRight = false;
 		this.rollLeft = false;
+
+		// axis' for rotating
+		this.xAxis = new Vector(1, 0, 0);
+		this.yAxis = new Vector(0, 1, 0);
+		this.zAxis = new Vector(0, 0, 1);
 	}
 
 	moveRightward(set) {
