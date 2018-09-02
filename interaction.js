@@ -100,16 +100,16 @@ function driverSwitch(key, set) {
 			setFreeFlight("moveUpward", set);
 			break;
 		case "arrowleft":
-			setFreeFlight("rotateLeftward", set);
+			setFreeFlight("yawLeftward", set);
 			break;
 		case "arrowright":
-			setFreeFlight("rotateRightward", set);
+			setFreeFlight("yawRightward", set);
 			break;
 		case "arrowup":
-			setFreeFlight("rotateUpward", set);
+			setFreeFlight("pitchUpward", set);
 			break;
 		case "arrowdown":
-			setFreeFlight("rotateDownward", set);
+			setFreeFlight("pitchDownward", set);
 			break;
 	}
 }
