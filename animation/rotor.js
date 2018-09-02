@@ -99,52 +99,30 @@ class AxisAlignedRotor extends UserControllable {
 	}
 
 	rotate(angle) {
-		let cnt = 0;
-		if (this.yaw !== 0) cnt++;
-		if (this.pitch !== 0) cnt++;
-		if (this.roll !== 0) cnt++;
-		angle /= cnt;
 		let rot = Matrix.identity();
-		if (this.yaw !== 0) {
-			let rot1 = Matrix.identity();
-			let rot_x, rot_y, rot_z;
-			if (this.up.x !== 0) rot_x = Matrix.rotation(this.xAxis, this.yaw * angle * this.up.x);
-			if (this.up.y !== 0) rot_y = Matrix.rotation(this.yAxis, this.yaw * angle * this.up.y);
-			if (this.up.z !== 0) rot_z = Matrix.rotation(this.zAxis, this.yaw * angle * this.up.z);
 
-			for (let d of [rot_x, rot_y, rot_z]) {
-				if (d) rot = rot.mul(d);
-			}
-			rot = rot.mul(rot1);
-		}
-		if (this.pitch !== 0) {
-			let rot2 = Matrix.identity();
-			let rot_x, rot_y, rot_z;
-			if (this.right.x !== 0) rot_x = Matrix.rotation(this.xAxis, this.pitch * angle * this.right.x);
-			if (this.right.y !== 0) rot_y = Matrix.rotation(this.yAxis, this.pitch * angle * this.right.y);
-			if (this.right.z !== 0) rot_z = Matrix.rotation(this.zAxis, this.pitch * angle * this.right.z);
+		if (this.yaw !== 0) rot = rot.mul(this.getRotationMatrix(this.up, this.yaw * angle));
+		if (this.pitch !== 0) rot = rot.mul(this.getRotationMatrix(this.right, this.pitch * angle));
+		if (this.roll !== 0) rot = rot.mul(this.getRotationMatrix(this.forward, this.roll * angle));
 
-			for (let d of [rot_x, rot_y, rot_z]) {
-				if (d) rot2 = rot2.mul(d);
-			}
-			rot = rot.mul(rot2);
-		}
-		if (this.roll !== 0) {
-			let rot3 = Matrix.identity();
-			let rot_x, rot_y, rot_z;
-			if (this.forward.x !== 0) rot_x = Matrix.rotation(this.xAxis, this.roll * angle * this.forward.x);
-			if (this.forward.y !== 0) rot_y = Matrix.rotation(this.yAxis, this.roll * angle * this.forward.y);
-			if (this.forward.z !== 0) rot_z = Matrix.rotation(this.zAxis, this.roll * angle * this.forward.z);
-
-			for (let d of [rot_x, rot_y, rot_z]) {
-				if (d) rot3 = rot3.mul(d);
-			}
-			rot = rot.mul(rot3);
-		}
 		const rot_inv = rot.invert();
 		this.up = rot_inv.mul(this.up);
 		this.right = rot_inv.mul(this.right);
 		this.forward = rot_inv.mul(this.forward);
+
+		return rot;
+	}
+
+	getRotationMatrix(relative, angle) {
+		let rot = Matrix.identity();
+		let rot_x, rot_y, rot_z;
+		if (relative.x !== 0) rot_x = Matrix.rotation(this.xAxis, angle * relative.x);
+		if (relative.y !== 0) rot_y = Matrix.rotation(this.yAxis, angle * relative.y);
+		if (relative.z !== 0) rot_z = Matrix.rotation(this.zAxis, angle * relative.z);
+
+		for (let d of [rot_x, rot_y, rot_z]) {
+			if (d) rot = rot.mul(d);
+		}
 		return rot;
 	}
 }
