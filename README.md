@@ -25,7 +25,13 @@
 **k**&emsp;Move backward<br>
 **l**&emsp;Move right
 
+### FreeRotor
+**x**&emsp;Rotate around x axis (pitch)<br>
+**y**&emsp;Rotate around y axis (yaw)<br>
+**z**&emsp;Rotate around z axis (roll)
+
 #### Misc
 **p**&emsp;Pause all animations, except Drivers<br>
-**f**&emsp;Toggle fullscreen mode
-**v**&emsp;Toggle specs view
+**f**&emsp;Toggle fullscreen mode<br>
+**v**&emsp;Toggle specs view<br>
+**m**&emsp;Toggle menu view
