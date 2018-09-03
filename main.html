@@ -39,7 +39,7 @@
 	</div>
 	<div class="disabled" id="menu-view">
 		<button id="sg-export-btn"
-				onclick="this.innerText='';this.className='loading-button';SceneGraphLoader.export(sg, animationNodes)">
+				onclick="this.innerText='';this.className='loading-button';SceneGraphExporter.export(sg, animationNodes)">
 			Export Scenegraph
 		</button>
 		<div id="import-request">Drop a .json file for importing.</div>
@@ -75,7 +75,8 @@
 	<script src="preferences.js"></script>
 	<script src="specsView.js"></script>
 	<script src="menuView.js"></script>
-	<script src="io/SceneGraphLoader.js"></script>
+	<script src="io/SceneGraphImporter.js"></script>
+	<script src="io/SceneGraphExporter.js"></script>
 	<script>
 		// set up canvas
 		const aspectW = 16;
@@ -209,7 +210,7 @@
 					// only take account of the first file
 					let reader = new FileReader();
 					reader.onload = function (res) {
-						let result = SceneGraphLoader.load(res.target.result);
+						let result = SceneGraphImporter.load(res.target.result);
 						if (result) {
 							sg = result.sg;
 							window.animationNodes = result.animationNodes;
