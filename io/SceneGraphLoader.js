@@ -2,6 +2,7 @@
  * Author: noxafy
  * Created: 02.09.18
  */
+let groupNodes = [];
 SceneGraphLoader = {
 
 	/**
@@ -11,9 +12,96 @@ SceneGraphLoader = {
 	 */
 	load(json) {
 		let sg_object = JSON.parse(json);
-		let sg = new GroupNode(Matrix.identity());
+		if (sg_object.sg.type !== "GroupNode") throw Error("Root node must be a GroupNode!")
+		let tree = this.traverse(sg_object.sg);
+		let animationNodes = this.createAnimationNodes(sg_object.animationNodes);
+		return {sg: tree, animationNodes: animationNodes};
+	},
+
+	traverse(obj) {
+		let This;
+		switch (obj.type) {
+			case "GroupNode":
+				This = new GroupNode(new Matrix(obj.matrix));
+				for (let k in obj.children) {
+					let childNode = this.traverse(obj.children[k]);
+					if (childNode) This.add(childNode);
+				}
+				groupNodes[obj.name] = This;
+				break;
+			case "SphereNode":
+				This = new SphereNode(new Position(obj.center), obj.radius,
+					Color.getFromJson(obj.color), Material.getFromJson(obj.material));
+				break;
+			case "AABoxNode":
+				This = new AABoxNode(new Position(obj.minPoint), new Position(obj.maxPoint),
+					Color.getFromJson(obj.color), Material.getFromJson(obj.material));
+				break;
+			case "PyramidNode":
+				This = new PyramidNode(obj.x_extent, obj.z_extent, obj.height,
+					Color.getFromJson(obj.color), Material.getFromJson(obj.material));
+				break;
+			case "ConeNode":
+				This = new ConeNode(obj.radius, obj.height, Color.getFromJson(obj.color), Material.getFromJson(obj.material));
+				break;
+			case "TextureBoxNode":
+				This = new TextureBoxNode(new Position(obj.minPoint), new Position(obj.maxPoint), obj.texture);
+				break;
+			case "CameraNode":
+				This = new CameraNode(new Position(obj.eye), new Vector(obj.direction), new Vector(0, 1, 0),
+					obj.aspect, obj.near, obj.far, obj.fovy);
+				break;
+			case "LightNode":
+				This = new LightNode(new Position(obj.position), Color.getFromJson(obj.color),
+					obj.intensity, obj.constant, obj.linear, obj.quadratic);
+				break;
+			default:
+				throw Error("Unknown node type: " + obj.type);
+		}
+		return This;
+	},
+
+	createAnimationNodes: function (nodes) {
 		let animationNodes = [];
-		return {rootNode: sg, animationNodes: animationNodes};
+		for (let k in nodes) {
+			let n = nodes[k];
+			let animator;
+			switch (n.animator.type) {
+				case "Driver2D":
+					animator = new Driver2D(n.animator.speed);
+					break;
+				case "Driver3D":
+					animator = new Driver3D(n.animator.speed);
+					break;
+				case "FreeFlight":
+					animator = new FreeFlight(n.animator.speed, n.animator.rotationSpeed, new Vector(n.animator.up));
+					break;
+				case "LinearJumper":
+					animator = new LinearJumper(new Vector(n.animator.axis), n.animator.jpm);
+					break;
+				case "SinJumper":
+					animator = new SinJumper(new Vector(n.animator.axis), n.animator.jpm);
+					break;
+				case "PhysicsJumper":
+					animator = new PhysicsJumper(new Vector(n.animator.axis), n.animator.g_scale);
+					break;
+				case "SimpleRotor":
+					animator = new SimpleRotor(new Vector(n.animator.axis), n.animator.speed);
+					break;
+				case "FreeRotor":
+					animator = new FreeRotor(n.animator.speed);
+					break;
+				case "AxisAlignedRotor":
+					animator = new AxisAlignedRotor(n.animator.speed);
+					break;
+				default:
+					throw new Error("Unknown animator type: " + n.animator.type);
+			}
+			const groupNode = groupNodes[n.groupNode];
+			if (!groupNode) throw Error("AnimationNode for unknown GroupNode found: " + n.groupNode);
+			animationNodes.push(new AnimationNode(groupNode, animator, n.active));
+		}
+		return animationNodes;
 	},
 
 	/**
@@ -78,9 +166,7 @@ class JsonGenerator extends Visitor {
 		};
 
 		this.toAppend.push(obj.children);
-		for (let child of node.children) {
-			child.accept(this);
-		}
+		super.visitGroupNode(node);
 		this.toAppend.pop();
 		this.append(obj);
 	}
@@ -134,6 +220,7 @@ class JsonGenerator extends Visitor {
 			eye: node.eye.data,
 			direction: node.center.sub(node.eye).data,
 			up: node.up.data, // just for simplicity
+			aspect: node.aspect,
 			near: node.near,
 			far: node.far,
 			fovy: node.fovy
@@ -144,7 +231,7 @@ class JsonGenerator extends Visitor {
 		this.append({
 			type: "LightNode",
 			position: node.position.data,
-			color: node.color.data,
+			color: node.color.toJsonObj(),
 			intensity: node.intensity,
 			constant: node.constant,
 			linear: node.linear,
@@ -181,33 +268,13 @@ class AnimationNodeJsonGenerator extends Visitor {
 
 		if (this.animationNode.groupNode === node) {
 			this.jsonObj = {
-				name: "gn" + this.groupNodeCnt,
+				groupNode: "gn" + this.groupNodeCnt,
 				active: this.animationNode.active,
 				animator: this.animationNode.animator.toJsonObj()
 			};
 			return;
 		}
 
-		for (let child of node.children) {
-			if (child instanceof GroupNode) {
-				child.accept(this);
-			}
-		}
-	}
-
-	visitLightableNode(node) {
-		//
-	}
-
-	visitTextureBoxNode(node) {
-		//
-	}
-
-	visitCameraNode(node) {
-		//
-	}
-
-	visitLightNode(node) {
-		//
+		super.visitGroupNode(node);
 	}
 }

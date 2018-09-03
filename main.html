@@ -42,6 +42,7 @@
 				onclick="this.innerText='';this.className='loading-button';SceneGraphLoader.export(sg, animationNodes)">
 			Export Scenegraph
 		</button>
+		<div id="import-request">Drop a .json file for importing.</div>
 	</div>
 	<canvas id="canvas" width="1920" height="1080"></canvas>
 	<script src="renderProcess.js"></script>
@@ -53,6 +54,7 @@
 	<script src="maths/matrix.js"></script>
 	<script src="maths/utils.js"></script>
 	<script src="maths/vector.js"></script>
+	<script src="maths/color.js"></script>
 	<script src="shader/raster-shape.js"></script>
 	<script src="shader/raster-box.js"></script>
 	<script src="shader/raster-sphere.js"></script>
@@ -185,6 +187,44 @@
 			}
 		}
 		renderProcess.startRaster();
+
+		document.body.addEventListener("dragover", function (e) {
+			e.preventDefault();
+		});
+		document.body.addEventListener("dragleave", function (e) {
+			e.preventDefault();
+		});
+		document.body.addEventListener("drop", function (e) {
+			e.preventDefault();
+			const file = e.dataTransfer.files[0];
+			if (!FileReader) {
+				window.alert("Sorry, file dropping not available!")
+				return false;
+			}
+
+			(function (file) {
+				renderProcess.stop(() => {
+					// only take account of the first file
+					let reader = new FileReader();
+					reader.onload = function (res) {
+						console.log('Before:');
+						const before = JSON.stringify(sg);
+						console.log(before);
+						let result = SceneGraphLoader.load(res.target.result);
+						sg = result.sg;
+						window.animationNodes = result.animationNodes;
+						console.log("After:");
+						const after = JSON.stringify(sg);
+						console.log(after);
+						renderProcess = new RenderProcess(document.getElementById("canvas"), result.sg, result.animationNodes);
+						renderProcess.startRaster();
+					}
+					reader.readAsText(file);
+				})
+			})(file);
+
+			return false;
+		});
 	</script>
 </div>
 </body>

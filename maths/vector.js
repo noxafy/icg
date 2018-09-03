@@ -10,7 +10,18 @@ class Vector {
      * @param  {number} w - The w component
      */
     constructor(x, y, z, w = 0) {
-        this.data = [x, y, z, w];
+		if (Array.isArray(x)) {
+			this.data = new Array(4);
+			let i = 0;
+			for (; i < 4 && i < x.length - 1; i++) {
+				this.data[i] = x[i];
+			}
+			for (; i < this.data.length; i++) {
+				this.data[i] = 0;
+			}
+		} else {
+			this.data = [x, y, z, w];
+		}
     }
 
     /**
@@ -193,96 +204,11 @@ class Position extends Vector {
 	 * @param z
 	 */
 	constructor(x, y, z) {
+		if (Array.isArray(x)) {
+			z = x[2];
+			y = x[1];
+			x = x[0];
+		}
 		super(x, y, z, 1);
-	}
-}
-
-class Color extends Vector {
-	/**
-	 * Create a color. Alpha is 1 per default if not given.
-	 * @param r
-	 * @param g
-	 * @param b
-	 * @param name
-	 * @param a
-	 */
-	constructor(r, g, b, name, a = 1) {
-		super(r, g, b, a);
-		if (typeof name === "string") this.name = name;
-		else this.a = name;
-	}
-
-	/**
-	 * Returns the red component
-	 * @return {number} The red component of the color
-	 */
-	get r() {
-		return this.data[0];
-	}
-
-	/**
-	 * Sets the red component of the color to val
-	 * @param  {number} val - The new red value
-	 */
-	set r(val) {
-		this.data[0] = val;
-	}
-
-	/**
-	 * Returns the green component of the color
-	 * @return {number} The green component
-	 */
-	get g() {
-		return this.data[1];
-	}
-
-	/**
-	 * Sets the green component of the color to val
-	 * @param  {number} val - The new green value
-	 */
-	set g(val) {
-		this.data[1] = val;
-	}
-
-	/**
-	 * Returns the blue component of the color
-	 * @return {number} The blue component
-	 */
-	get b() {
-		return this.data[2];
-	}
-
-	/**
-	 * Sets the blue component of the color to val
-	 * @param  {number} val - The new blue value
-	 */
-	set b(val) {
-		this.data[2] = val;
-	}
-
-	/**
-	 * Returns the alpha component of the color
-	 * @return {number} The alpha component
-	 */
-	get a() {
-		return this.data[3];
-	}
-
-	/**
-	 * Sets the alpha component of the color to val
-	 * @param  {number} val - The new alpha value
-	 */
-	set a(val) {
-		this.data[3] = val;
-	}
-
-	toString() {
-		if (this.name) return "Color: " + this.name.toUpperCase();
-		else return "Color: " + super.toString();
-	}
-
-	toJsonObj() {
-		if (this.name) return this.name.toUpperCase();
-		else return this.data;
 	}
 }

@@ -348,8 +348,9 @@ class Matrix {
 
 	toArray() {
 		let elements = [];
-		for (let e in this.data) {
-			elements.push(this.data[e])
+		const data = this.transpose().data;
+		for (let e in data) {
+			elements.push(data[e]);
 		}
 		return elements;
 	}

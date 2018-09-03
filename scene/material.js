@@ -28,13 +28,24 @@ class Material {
 			"shininess: " + this.shininess + ")";
 	}
 
+	static getFromJson(obj) {
+		if (typeof obj === "string") {
+			if (Materials[obj]) return Materials[obj];
+			else throw Error("Unknown material: " + obj);
+		} else if (!obj && obj.ambient && obj.diffuse && obj.specular && obj.shininess) {
+			return new Material(new Vector(obj.ambient), new Vector(obj.diffuse), new Vector(obj.specular), obj.shininess, obj.name);
+		}
+		throw Error("Invalid material specification: " + typeof obj);
+	}
+
 	toJsonObj() {
 		if (this.name) return this.name.toUpperCase();
 		else return {
 			ambient: this.ambient.data,
 			diffuse: this.diffuse.data,
 			specular: this.specular.data,
-			shininess: this.shininess
+			shininess: this.shininess,
+			name: (this.name) ? this.name : null
 		}
 	}
 }
