@@ -101,8 +101,8 @@ class RasterTextureBox extends RasterShape {
 		this.gl.enableVertexAttribArray(texCoords);
 		this.gl.vertexAttribPointer(texCoords, 2, this.gl.FLOAT, false, 0, 0);
 
-		this.gl.activeTexture(gl.TEXTURE0);
-		this.gl.bindTexture(gl.TEXTURE_2D, this.texBuffer);
+		this.gl.activeTexture(this.gl.TEXTURE0);
+		this.gl.bindTexture(this.gl.TEXTURE_2D, this.texBuffer);
 		shader.getUniformInt("sampler").set(0);
 
 		// draw

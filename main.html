@@ -43,7 +43,8 @@
 			Export Scenegraph
 		</button>
 	</div>
-	<canvas id="rasteriser" width="1920" height="1080"></canvas>
+	<canvas id="canvas" width="1920" height="1080"></canvas>
+	<script src="renderProcess.js"></script>
 	<script src="animation/animation-nodes.js"></script>
 	<script src="animation/animator.js"></script>
 	<script src="animation/driver.js"></script>
@@ -78,7 +79,7 @@
 		const aspectResolution = 120;
 
 		// init canvas
-		const canvas = document.getElementById("rasteriser");
+		const canvas = document.getElementById("canvas");
 		canvas.setAttribute("width", aspectW * aspectResolution);
 		canvas.setAttribute("height", aspectH * aspectResolution);
 		const container = document.getElementById("canvas-container");
@@ -121,7 +122,7 @@
 		//   |
 		// sphere
 
-		const sg = new GroupNode(Matrix.identity())
+		let sg = new GroupNode(Matrix.identity())
 		const gn1 = new GroupNode(Matrix.translation(new Vector(-.3, -0.4, .1))); // Tc
 		const gn3 = new GroupNode(Matrix.identity());
 		const gn2 = new GroupNode(Matrix.translation(new Vector(-4, -1, -2))); // Ts
@@ -164,44 +165,26 @@
 			new AnimationNode(gn6, new FreeFlight(4, camera.up))
 		];
 
-		// setup for rendering
-		const gl = canvas.getContext("webgl");
-		const setupVisitor = new RasterSetupVisitor(gl);
-		setupVisitor.setup(sg);
+		let renderProcess = new RenderProcess(canvas, sg, animationNodes);
+		window.run = function (timestamp) {
+			if (!renderProcess.onStop) {
+				let deltaT = timestamp - renderProcess.lastTimestamp;
+				if (Preferences.showSpecs) SpecsView.FPS.add(deltaT);
+				simulate(deltaT);
+				renderProcess.visitor.render(sg);
+				renderProcess.lastTimestamp = timestamp;
+				window.requestAnimationFrame(window.run);
+			} else {
+				renderProcess.onStop();
+			}
 
-		const phongShader = new Shader(gl,
-			"shader/phong-vertex-perspective-shader.glsl",
-			"shader/phong-fragment-shader.glsl"
-		);
-		const textureShader = new Shader(gl,
-			"shader/texture-vertex-perspective-shader.glsl",
-			"shader/texture-fragment-shader.glsl"
-		);
-
-		// do animation as soon as shader are loaded
-		Promise.all(
-			[phongShader.load(), textureShader.load()]
-		).then(x =>
-			window.requestAnimationFrame(animate)
-		);
-
-		const visitor = new RasterVisitor(gl, phongShader, textureShader);
-
-		let lastTimestamp = performance.now();
-		function animate(timestamp) {
-			let deltaT = timestamp - lastTimestamp;
-			if (Preferences.showSpecs) SpecsView.FPS.add(deltaT);
-			simulate(deltaT);
-			visitor.render(sg);
-			lastTimestamp = timestamp;
-			window.requestAnimationFrame(animate);
-		}
-
-		function simulate(deltaT) {
-			for (let animationNode of animationNodes) {
-				animationNode.simulate(deltaT);
+			function simulate(deltaT) {
+				for (let animationNode of renderProcess.animationNodes) {
+					animationNode.simulate(deltaT);
+				}
 			}
 		}
+		renderProcess.startRaster();
 	</script>
 </div>
 </body>
