@@ -1,15 +1,3 @@
-class RasterVisitor extends StackingVisitor {
-	/**
-	 * Creates a new RasterVisitor
-	 * @param {WebGLRenderingContext} context
-	 * @param {RasterRenderer} renderer
-	 */
-	constructor(context, renderer) {
-		super(context);
-		this.renderer = renderer;
-	}
-}
-
 // you can set this in console to get one debug log of the current lookat matrix
 window.debugLookAt = false;
 
@@ -51,8 +39,14 @@ class RasterLightTraverser extends LightTraverser {
 
 class RasterDrawTraverser extends DrawTraverser {
 
+	constructor(phongShader, textureShader) {
+		super();
+		this.phongShader = phongShader;
+		this.textureShader = textureShader;
+	}
+
 	visitLightableNode(node) {
-		let phongShader = this.renderer.phongShader;
+		let phongShader = this.phongShader;
 		phongShader.use();
 
 		let mat = this.setupPVM(phongShader);
@@ -64,7 +58,7 @@ class RasterDrawTraverser extends DrawTraverser {
 	}
 
 	visitTextureBoxNode(node) {
-		let textureShader = this.renderer.textureShader;
+		let textureShader = this.textureShader;
 		textureShader.use();
 
 		let mat = this.setupPVM(textureShader);
@@ -137,41 +131,3 @@ class RasterDrawTraverser extends DrawTraverser {
 	}
 }
 
-/**
- * Class representing a Visitor that sets up buffers for use by the RasterRenderer
- */
-class RasterSetupVisitor extends Visitor {
-
-	/**
-	 * Creates a new RasterSetupVisitor
-	 * @param {WebGLRenderingContext} context
-	 */
-	constructor(context) {
-		super();
-		this.gl = context;
-	}
-
-	/**
-	 * Sets up all needed buffers
-	 * @param  {Node} rootNode - The root node of the Scenegraph
-	 */
-	setup(rootNode) {
-		// Clear to white, fully opaque
-		this.gl.clearColor(1.0, 1.0, 1.0, 1.0);
-		// Clear everything
-		this.gl.clearDepth(1.0);
-		// Enable depth testing
-		this.gl.enable(this.gl.DEPTH_TEST);
-		this.gl.depthFunc(this.gl.LEQUAL);
-
-		rootNode.accept(this);
-	}
-
-	visitLightableNode(node) {
-		node.setRasterRenderer(this.gl);
-	}
-
-	visitTextureBoxNode(node) {
-		node.setRasterRenderer(this.gl);
-	}
-}

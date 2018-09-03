@@ -11,10 +11,8 @@ class RasterRenderer extends Renderer {
 	constructor(context, phongShader, textureShader) {
 		super(new RasterCameraTraverser(),
 			new RasterLightTraverser(),
-			new RasterDrawTraverser());
+			new RasterDrawTraverser(phongShader, textureShader));
 		this.gl = context;
-		this.phongShader = phongShader;
-		this.textureShader = textureShader;
 	}
 
 	/**
