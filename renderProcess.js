@@ -10,37 +10,37 @@ class RenderProcess {
 		this.onStop = undefined;
 	}
 
-	startRaster() {
-		console.log("Raster render process started!");
-		const gl = this.canvas.getContext("webgl");
+	start() {
+		if (Preferences.useRasterRenderer) {
+			console.log("Raster render process started!");
+			const gl = this.canvas.getContext("webgl");
 
-		const setupVisitor = new RasterSetupVisitor(gl);
-		setupVisitor.setup(sg);
+			const setupVisitor = new RasterSetupVisitor(gl);
+			setupVisitor.setup(sg);
 
-		const phongShader = new Shader(gl,
-			"shader/phong-vertex-perspective-shader.glsl",
-			"shader/phong-fragment-shader.glsl"
-		);
-		const textureShader = new Shader(gl,
-			"shader/texture-vertex-perspective-shader.glsl",
-			"shader/texture-fragment-shader.glsl"
-		);
-		this.visitor = new RasterVisitor(gl, phongShader, textureShader);
+			const phongShader = new Shader(gl,
+				"rasterizer/phong-vertex-perspective-shader.glsl",
+				"rasterizer/phong-fragment-shader.glsl"
+			);
+			const textureShader = new Shader(gl,
+				"rasterizer/texture-vertex-perspective-shader.glsl",
+				"rasterizer/texture-fragment-shader.glsl"
+			);
+			this.renderer = new RasterRenderer(gl, phongShader, textureShader);
 
-		Promise.all(
-			[phongShader.load(), textureShader.load()]
-		).then(x =>
-			window.requestAnimationFrame(window.run)
-		);
+			Promise.all(
+				[phongShader.load(), textureShader.load()]
+			).then(x =>
+				window.requestAnimationFrame(window.run)
+			);
 
-		this.lastTimestamp = performance.now();
-	}
-
-	startRaytracing() {
-		console.log("Raytracing render process started!");
-		// this.visitor = new RayTracingVisitor();
-		// this.lastTimestamp = performance.now();
-		// window.requestAnimationFrame(window.run);
+			this.lastTimestamp = performance.now();
+		} else {
+			console.log("Raytracing render process started!");
+			// this.renderer = new RayTracingVisitor();
+			// this.lastTimestamp = performance.now();
+			// window.requestAnimationFrame(window.run);
+		}
 	}
 
 	stop(cb) {

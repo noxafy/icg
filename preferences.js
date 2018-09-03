@@ -23,5 +23,9 @@ Preferences = {
 	},
 	getDefaultSceneGraph: function () {
 		return "";
+	},
+	useRasterRenderer: true,
+	toggleRenderer: function () {
+		this.useRasterRenderer = !this.useRasterRenderer;
 	}
 }

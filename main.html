@@ -19,8 +19,8 @@
 				<select id="lights" onfocus="(function fetchLights(dropdown) {
 					let val = dropdown.value;
 					dropdown.innerHTML = `<option value=default>Please choose a light...</option>`;
-					for(let i = 0; i < visitor.lights.length; i++) {
-						let light = visitor.lights[i];
+					for(let i = 0; i < renderProcess.renderer.lights.length; i++) {
+						let light = renderProcess.renderer.lights[i];
 						dropdown.innerHTML += `<option value=${i}>${light.toString()}</option>`
 					}
 					if(val) dropdown.value = val;
@@ -28,7 +28,7 @@
 					if(val === 'default') {
 						SpecsView.LightChanger.disable();
 					} else {
-						SpecsView.LightChanger.enable(visitor.lights[val]);
+						SpecsView.LightChanger.enable(renderProcess.renderer.lights[val]);
 					}
 				})(this.value)">
 					<option>Please choose a light...</option>
@@ -45,30 +45,32 @@
 		<div id="import-request">Drop a .json file for importing.</div>
 	</div>
 	<canvas id="canvas" width="1920" height="1080"></canvas>
-	<script src="renderProcess.js"></script>
+	<script src="maths/matrix.js"></script>
+	<script src="maths/utils.js"></script>
+	<script src="maths/vector.js"></script>
+	<script src="maths/color.js"></script>
 	<script src="animation/animation-nodes.js"></script>
 	<script src="animation/animator.js"></script>
 	<script src="animation/driver.js"></script>
 	<script src="animation/jumper.js"></script>
 	<script src="animation/rotor.js"></script>
-	<script src="maths/matrix.js"></script>
-	<script src="maths/utils.js"></script>
-	<script src="maths/vector.js"></script>
-	<script src="maths/color.js"></script>
-	<script src="shader/raster-shape.js"></script>
-	<script src="shader/raster-box.js"></script>
-	<script src="shader/raster-sphere.js"></script>
-	<script src="shader/raster-texture-box.js"></script>
-	<script src="shader/raster-pyramid.js"></script>
-	<script src="shader/raster-cone.js"></script>
 	<script src="scene/material.js"></script>
 	<script src="scene/nodes.js"></script>
 	<script src="scene/lightableNode.js"></script> <!--must be after nodes.js-->
 	<script src="scene/visitor.js"></script>
-	<script src="scene/rasterVisitor.js"></script>
-	<script src="shader/shader.js"></script>
+	<script src="scene/renderer.js"></script>
+	<script src="rasterizer/raster-shape.js"></script>
+	<script src="rasterizer/raster-box.js"></script>
+	<script src="rasterizer/raster-sphere.js"></script>
+	<script src="rasterizer/raster-texture-box.js"></script>
+	<script src="rasterizer/raster-pyramid.js"></script>
+	<script src="rasterizer/raster-cone.js"></script>
+	<script src="rasterizer/shader.js"></script>
+	<script src="rasterizer/rasterVisitor.js"></script>
+	<script src="rasterizer/rasterRenderer.js"></script>
 	<script src="resources/materials.js"></script>
 	<script src="resources/colors.js"></script>
+	<script src="renderProcess.js"></script>
 	<script src="interaction.js"></script>
 	<script src="preferences.js"></script>
 	<script src="specsView.js"></script>
@@ -173,7 +175,7 @@
 				let deltaT = timestamp - renderProcess.lastTimestamp;
 				if (Preferences.showSpecs) SpecsView.FPS.add(deltaT);
 				simulate(deltaT);
-				renderProcess.visitor.render(sg);
+				renderProcess.renderer.render(sg);
 				renderProcess.lastTimestamp = timestamp;
 				window.requestAnimationFrame(window.run);
 			} else {
@@ -186,7 +188,7 @@
 				}
 			}
 		}
-		renderProcess.startRaster();
+		renderProcess.start();
 
 		document.body.addEventListener("dragover", function (e) {
 			e.preventDefault();
@@ -207,17 +209,11 @@
 					// only take account of the first file
 					let reader = new FileReader();
 					reader.onload = function (res) {
-						console.log('Before:');
-						const before = JSON.stringify(sg);
-						console.log(before);
 						let result = SceneGraphLoader.load(res.target.result);
 						sg = result.sg;
 						window.animationNodes = result.animationNodes;
-						console.log("After:");
-						const after = JSON.stringify(sg);
-						console.log(after);
 						renderProcess = new RenderProcess(document.getElementById("canvas"), result.sg, result.animationNodes);
-						renderProcess.startRaster();
+						renderProcess.start();
 					}
 					reader.readAsText(file);
 				})

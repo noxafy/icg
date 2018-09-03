@@ -1,6 +1,5 @@
 class Visitor {
-	constructor(context) {
-		this.gl = context;
+	constructor() {
 	}
 
 	/**
@@ -41,4 +40,47 @@ class Visitor {
 	 */
 	visitLightNode(node) {
 	}
+}
+
+class StackingVisitor extends Visitor {
+	constructor() {
+		super();
+		this.modelMatrices = [];
+	}
+
+	/**
+	 * Visit the group node and put the node's matrix upon the stack
+	 * @param {GroupNode} node
+	 */
+	visitGroupNode(node) {
+		if (this.modelMatrices.length === 0) {
+			this.modelMatrices.push(node.matrix);
+		} else {
+			const top = this.getTopMatrix();
+			this.modelMatrices.push(top.mul(node.matrix));
+		}
+		super.visitGroupNode(node);
+		this.modelMatrices.pop();
+	}
+
+	/**
+	 * Get the last (up-multiplied) matrix on the stack
+	 * @return {Matrix}
+	 */
+	getTopMatrix() {
+		return this.modelMatrices[this.modelMatrices.length - 1];
+	}
+
+	setRenderer(renderer) {
+		this.renderer = renderer;
+	}
+}
+
+class CameraTraverser extends StackingVisitor {
+}
+
+class LightTraverser extends StackingVisitor {
+}
+
+class DrawTraverser extends StackingVisitor {
 }
