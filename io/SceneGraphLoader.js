@@ -11,11 +11,17 @@ SceneGraphLoader = {
 	 * @return {{GroupNode, Array}} sceneGraph - The rootNode of the SceneGraph and the associated animation nodes
 	 */
 	load(json) {
-		let sg_object = JSON.parse(json);
-		if (sg_object.sg.type !== "GroupNode") throw Error("Root node must be a GroupNode!")
-		let tree = this.traverse(sg_object.sg);
-		let animationNodes = this.createAnimationNodes(sg_object.animationNodes);
-		return {sg: tree, animationNodes: animationNodes};
+		try {
+			let sg_object = JSON.parse(json);
+			if (!sg_object.sg) throw Error("Invalid scene graph json: sg_object.sg not defined")
+			if (sg_object.sg.type !== "GroupNode") throw Error("Root node must be a GroupNode!")
+			let tree = this.traverse(sg_object.sg);
+			if (!sg_object.animationNodes) throw Error("Invalid scene graph json: sg_object.animationNodes not defined")
+				let animationNodes = this.createAnimationNodes(sg_object.animationNodes);
+			return {sg: tree, animationNodes: animationNodes};
+		} catch (e) {
+			console.error(e);
+		}
 	},
 
 	traverse(obj) {

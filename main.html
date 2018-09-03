@@ -210,9 +210,13 @@
 					let reader = new FileReader();
 					reader.onload = function (res) {
 						let result = SceneGraphLoader.load(res.target.result);
-						sg = result.sg;
-						window.animationNodes = result.animationNodes;
-						renderProcess = new RenderProcess(document.getElementById("canvas"), result.sg, result.animationNodes);
+						if (result) {
+							sg = result.sg;
+							window.animationNodes = result.animationNodes;
+						} else {
+							console.log("Couldn't load file: " + file.name);
+						}
+						renderProcess = new RenderProcess(document.getElementById("canvas"), sg, window.animationNodes);
 						renderProcess.start();
 					}
 					reader.readAsText(file);
