@@ -27,15 +27,15 @@ class RasterVisitor {
 		this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
 
 		// camera traversal
-		this.cameraTraverser.traverse(rootNode);
+		rootNode.accept(this.cameraTraverser);
 
 		// light traversal
 		this.lightPositions = [];
 		this.lights = [];
-		this.lightTraverser.traverse(rootNode);
+		rootNode.accept(this.lightTraverser);
 
 		// draw traversal
-		this.drawTraverser.traverse(rootNode);
+		rootNode.accept(this.drawTraverser);
 	}
 }
 
@@ -49,6 +49,10 @@ class RasterTraverser extends Visitor {
 		this.modelMatrices = [];
 	}
 
+	/**
+	 *
+	 * @param {GroupNode} node
+	 */
 	visitGroupNode(node) {
 		if (this.modelMatrices.length === 0) {
 			this.modelMatrices.push(node.matrix);
@@ -56,12 +60,14 @@ class RasterTraverser extends Visitor {
 			const top = this.getM();
 			this.modelMatrices.push(top.mul(node.matrix));
 		}
-		for (let childNode of node.children) {
-			childNode.accept(this);
-		}
+		super.visitGroupNode(node);
 		this.modelMatrices.pop();
 	}
 
+	/**
+	 * Get the last (up-multiplied) matrix on the stack, also known as model matrix (M)
+	 * @return {Matrix}
+	 */
 	getM() {
 		return this.modelMatrices[this.modelMatrices.length - 1];
 	}
@@ -86,6 +92,10 @@ class RasterTraverser extends Visitor {
 		return mat;
 	}
 
+	/**
+	 * Pass the properties of all lights to shader
+	 * @param {Shader} shader
+	 */
 	setupLightProperties(shader) {
 		for (let i = 0; i < this.visitor.lightPositions.length; i++) {
 			let lightName = "lights[" + i + "]";
@@ -106,7 +116,7 @@ class RasterTraverser extends Visitor {
 	}
 
 	/**
-	 *
+	 * Pass the material properties to shader
 	 * @param {Shader} shader
 	 * @param {Material} material
 	 */
@@ -121,14 +131,6 @@ class RasterTraverser extends Visitor {
 		// ((V * M)^T)^-1
 		shader.getUniformMatrix("N").set(this.visitor.lookat.mul(mat).transpose().invert());
 	}
-
-	/**
-	 * Start traversing here
-	 * @param {Node} node
-	 */
-	traverse(node) {
-		node.accept(this);
-	}
 }
 
 // you can set this in console to get one debug log of the current lookat matrix
@@ -141,14 +143,6 @@ class CameraTraverser extends RasterTraverser {
 	 */
 	constructor(context, visitor) {
 		super(context, visitor);
-	}
-
-	visitLightableNode(node) {
-		// do nothing
-	}
-
-	visitTextureBoxNode(node) {
-		// do nothing
 	}
 
 	visitCameraNode(node) {
@@ -173,10 +167,6 @@ class CameraTraverser extends RasterTraverser {
 			camera.far
 		);
 	}
-
-	visitLightNode(node) {
-		// do nothing
-	}
 }
 
 class LightTraverser extends RasterTraverser {
@@ -186,18 +176,6 @@ class LightTraverser extends RasterTraverser {
 	 */
 	constructor(context, visitor) {
 		super(context, visitor);
-	}
-
-	visitLightableNode(node) {
-		// do nothing
-	}
-
-	visitTextureBoxNode(node) {
-		// do nothing
-	}
-
-	visitCameraNode(node) {
-		// do nothing
 	}
 
 	visitLightNode(node) {
@@ -238,14 +216,6 @@ class DrawTraverser extends RasterTraverser {
 
 		node.raster.render(textureShader);
 	}
-
-	visitCameraNode(node) {
-		// do nothing
-	}
-
-	visitLightNode(node) {
-		// do nothing
-	}
 }
 
 /**
@@ -268,29 +238,11 @@ class RasterSetupVisitor extends Visitor {
 		rootNode.accept(this);
 	}
 
-	visitGroupNode(node) {
-		for (let child of node.children) {
-			child.accept(this);
-		}
-	}
-
-	visitSphereNode(node) {
-		node.setRasterRenderer(this.gl);
-	}
-
 	visitLightableNode(node) {
 		node.setRasterRenderer(this.gl);
 	}
 
 	visitTextureBoxNode(node) {
 		node.setRasterRenderer(this.gl);
-	}
-
-	visitCameraNode(node) {
-		// nothing to do
-	}
-
-	visitLightNode(node) {
-		// nothing to do
 	}
 }

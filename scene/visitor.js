@@ -4,11 +4,13 @@ class Visitor {
 	}
 
 	/**
-	 * Visits a group node
+	 * Visits a group node, calling accept for all children.
 	 * @param  {GroupNode} node - The node to visit
 	 */
 	visitGroupNode(node) {
-		throw Error("Unsupported operation");
+		for (let child of node.children) {
+			child.accept(this);
+		}
 	}
 
 	/**
@@ -16,7 +18,6 @@ class Visitor {
 	 * @param  {LightableNode} node - The node to visit
 	 */
 	visitLightableNode(node) {
-		throw Error("Unsupported operation");
 	}
 
 	/**
@@ -25,7 +26,6 @@ class Visitor {
 	 * @param  {TextureBoxNode} node - The node to visit
 	 */
 	visitTextureBoxNode(node) {
-		throw Error("Unsupported operation");
 	}
 
 	/**
@@ -33,7 +33,6 @@ class Visitor {
 	 * @param  {CameraNode} node - The node to visit
 	 */
 	visitCameraNode(node) {
-		throw Error("Unsupported operation");
 	}
 
 	/**
@@ -41,6 +40,5 @@ class Visitor {
 	 * @param  {LightNode} node - The node to visit
 	 */
 	visitLightNode(node) {
-		throw Error("Unsupported operation");
 	}
 }
