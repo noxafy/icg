@@ -19,12 +19,12 @@ class RenderProcess {
 			setupVisitor.setup(sg);
 
 			const phongShader = new Shader(gl,
-				"rasterizer/phong-vertex-perspective-shader.glsl",
-				"rasterizer/phong-fragment-shader.glsl"
+				"rasterizer/shader/phong-vertex-perspective-shader.glsl",
+				"rasterizer/shader/phong-fragment-shader.glsl"
 			);
 			const textureShader = new Shader(gl,
-				"rasterizer/texture-vertex-perspective-shader.glsl",
-				"rasterizer/texture-fragment-shader.glsl"
+				"rasterizer/shader/texture-vertex-perspective-shader.glsl",
+				"rasterizer/shader/texture-fragment-shader.glsl"
 			);
 			this.renderer = new RasterRenderer(gl, phongShader, textureShader);
 
