@@ -13,6 +13,10 @@ body {
 	font-size: 15px;
 }
 
+.disabled {
+	display: none !important;
+}
+
 #canvas-container {
 	-webkit-user-select: none;
 	-moz-user-select: none;
@@ -29,21 +33,72 @@ body {
 #specs-view {
 	position: relative;
 	height: 0px;
+	min-width: calc(25vw + 12px);
+}
+
+#fps {
+	padding: 6px 0px 3px 6px;
+	background: rgba(240, 240, 255, 0.4);
+}
+
+#fps_val {
+	display: inline;
+}
+
+#light_props {
+	padding: 3px 0px;
+	background: rgba(240, 240, 255, 0.4);
+}
+
+#light_props_title {
+	font-weight: bold;
+	margin-left: 6px;
+}
+
+#lights {
+	margin: 6px 0px 0px 6px;
+}
+
+#light_props_sliders {
+	display: grid;
+	max-width: 400px;
+	width: 25vw;
+	margin: 6px;
+}
+
+#light_props_sliders > input {
+	width: 100%;
+	margin: 0;
+}
+
+#light_props_sliders > label {
+	margin-top: 2px;
 }
 
 #menu-view {
 	position: relative;
 	height: 0px;
 	float: right;
+	width: 116px;
 }
 
 #sg-export-btn {
-	margin: 5px;
+	cursor: pointer;
+	margin: 6px 6px 3px 0px;
 	padding: 3px;
 	background: none;
 	border: 1px solid black;
 	border-radius: 3px;
-	min-width: 100px;
+	min-width: 108px;
+	box-shadow: 1px 1px rgba(127, 127, 127, 0.3);
+}
+
+#sg-export-btn:active {
+	box-shadow: unset;
+	position: relative;
+	left: 1px;
+	top: 1px;
+	color: white;
 }
 
 .loading-button:after {
@@ -71,39 +126,7 @@ body {
 }
 
 #import-request {
-	margin: 5px;
+	margin: 3px;
 	width: 106px;
-}
-
-#fps {
-	padding: 5px;
-}
-
-#fps_val {
-	display: inline;
-}
-
-#light_props_title {
-	font-weight: bold;
-	margin-right: 5px;
-}
-
-#light_props {
-	padding: 5px;
-}
-
-#light_props_sliders {
-	display: grid;
-	max-width: 400px;
-	width: 25vw;
-	padding: 5px;
-}
-
-#light_props_sliders > input {
-	width: 100%;
-	margin: 0;
-}
-
-.disabled {
-	display: none !important;
+	font-size: 13px;
 }

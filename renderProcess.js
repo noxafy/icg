@@ -44,10 +44,6 @@ class RenderProcess {
 	}
 
 	stop(cb) {
-		this.onStop = () => {
-			console.log("Render process stopped!");
-			this.onStop = undefined;
-			cb();
-		};
+		this.onStop = cb;
 	}
 }

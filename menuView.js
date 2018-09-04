@@ -4,6 +4,11 @@
  */
 MenuView = {
 	menuElem: document.getElementById("menu-view"),
+	init() {
+		if (Preferences.showMenu) {
+			this.enable();
+		}
+	},
 	disable() {
 		this.menuElem.className = "disabled";
 	},
@@ -16,3 +21,5 @@ MenuView = {
 		bnt.innerText = "Export Scenegraph"
 	}
 }
+
+MenuView.init();
