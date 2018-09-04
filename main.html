@@ -34,7 +34,7 @@
 	<script src="resources/materials.js"></script>
 	<script src="resources/colors.js"></script>
 	<script src="renderProcess.js"></script>
-	<script src="user-interaction.js"></script>
+	<script src="interaction.js"></script>
 	<script src="preferences.js"></script>
 	<script src="io/scenegraph-exporter.js"></script>
 	<script src="io/scenegraph-importer.js"></script>
@@ -134,7 +134,7 @@
 		//   |
 		// sphere
 
-		let sg = new GroupNode(Matrix.identity())
+		window.sg = new GroupNode(Matrix.identity())
 		const gn1 = new GroupNode(Matrix.translation(new Vector(-.3, -0.4, .1))); // Tc
 		const gn3 = new GroupNode(Matrix.identity());
 		const gn2 = new GroupNode(Matrix.translation(new Vector(-4, -1, -2))); // Ts
@@ -198,40 +198,24 @@
 		}
 		renderProcess.start();
 
-		document.body.addEventListener("dragover", function (e) {
-			e.preventDefault();
-		});
-		document.body.addEventListener("dragleave", function (e) {
-			e.preventDefault();
-		});
-		document.body.addEventListener("drop", function (e) {
-			e.preventDefault();
-			const file = e.dataTransfer.files[0];
-			if (!FileReader) {
-				window.alert("Sorry, file dropping not available!")
-				return false;
-			}
-
-			(function (file) {
-				renderProcess.stop(() => {
-					// only take account of the first file
-					let reader = new FileReader();
-					reader.onload = function (res) {
-						let result = SceneGraphImporter.load(res.target.result);
-						if (result) {
-							sg = result.sg;
-							window.animationNodes = result.animationNodes;
-						} else {
-							console.log("Couldn't load file: " + file.name);
-						}
-						renderProcess = new RenderProcess(document.getElementById("canvas"), sg, window.animationNodes);
-						renderProcess.start();
+		UserInteraction.init();
+		UserInteraction.onFileDropped((file) => {
+			renderProcess.stop(() => {
+				// only take account of the first file
+				let reader = new FileReader();
+				reader.onload = function (res) {
+					let result = SceneGraphImporter.load(res.target.result);
+					if (result) {
+						window.sg = result.sg;
+						window.animationNodes = result.animationNodes;
+					} else {
+						console.log("Couldn't load file: " + file.name);
 					}
-					reader.readAsText(file);
-				})
-			})(file);
-
-			return false;
+					renderProcess = new RenderProcess(canvas, sg, animationNodes);
+					renderProcess.start();
+				}
+				reader.readAsText(file);
+			});
 		});
 	</script>
 </div>
