@@ -6,13 +6,12 @@ class RasterSphere extends RasterShape {
      * Creates all WebGL buffers for the sphere
      * @param {WebGLRenderingContext} gl - The canvas' context
      * @param {Position} center   - The center of the sphere
-     * @param {number} radius   - The radius of the sphere
-     * @param {Color} color    - The color of the sphere
+     * @param {number}   radius   - The radius of the sphere
+     * @param {number}   ringsize - The number of edges in both axis'
+     * @param {Color}    color    - The color of the sphere
      */
-    constructor(gl, center, radius, color) {
+	constructor(gl, center, radius, ringsize, color) {
 		super(gl);
-
-		let ringsize = 30;
 
 		let vertices = [];
 		let normals = [];

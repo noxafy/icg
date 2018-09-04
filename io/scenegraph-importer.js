@@ -37,7 +37,7 @@ SceneGraphImporter = {
 				break;
 			case "SphereNode":
 				This = new SphereNode(new Position(obj.center), obj.radius,
-					Color.getFromJson(obj.color), Material.getFromJson(obj.material));
+					Color.getFromJson(obj.color), Material.getFromJson(obj.material), obj.ringsize);
 				break;
 			case "AABoxNode":
 				This = new AABoxNode(new Position(obj.minPoint), new Position(obj.maxPoint),

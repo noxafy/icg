@@ -81,7 +81,8 @@ class SceneGraphJsonGenerator extends Visitor {
 			obj = {
 				type: "SphereNode",
 				center: node.center.data,
-				radius: node.radius
+				radius: node.radius,
+				ringsize: node.ringsize
 			};
 		} else if (node instanceof AABoxNode) {
 			obj = {

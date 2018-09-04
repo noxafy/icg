@@ -51,15 +51,17 @@ class SphereNode extends LightableNode {
 	 * @param  {number} radius - The radius of the Sphere
 	 * @param  {Color} color  - The color of the Sphere
 	 * @param  {Material} material - The material of the sphere
+	 * @param  {number}   ringsize - The number of edges in both axis'
 	 */
-	constructor(center, radius, color, material) {
+	constructor(center, radius, color, material, ringsize = 50) {
 		super(color, material);
 		this.center = center;
 		this.radius = radius;
+		this.ringsize = ringsize;
 	}
 
 	setRasterRenderer(gl) {
-		this.setRasterShape(new RasterSphere(gl, this.center, this.radius, this.color))
+		this.setRasterShape(new RasterSphere(gl, this.center, this.radius, this.ringsize, this.color))
 	}
 
 	toString() {
