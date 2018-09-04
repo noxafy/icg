@@ -6,7 +6,7 @@ class LightableNode extends Node {
 
 	/**
 	 *
-	 * @param {Color} color - The color of the shape
+	 * @param {Color}    color    - The color of the shape
 	 * @param {Material} material - The material of the shape
 	 */
 	constructor(color, material) {
@@ -47,9 +47,9 @@ class LightableNode extends Node {
 class SphereNode extends LightableNode {
 	/**
 	 * Creates a new Sphere with center and radius
-	 * @param  {Position} center - The center of the Sphere
-	 * @param  {number} radius - The radius of the Sphere
-	 * @param  {Color} color  - The color of the Sphere
+	 * @param  {Position} center   - The center of the Sphere
+	 * @param  {number}   radius   - The radius of the Sphere
+	 * @param  {Color}    color    - The color of the Sphere
 	 * @param  {Material} material - The material of the sphere
 	 * @param  {number}   ringsize - The number of edges in both axis'
 	 */
@@ -81,7 +81,7 @@ class AABoxNode extends LightableNode {
 	 * Creates an axis aligned box
 	 * @param  {Position} minPoint - The minimum Point
 	 * @param  {Position} maxPoint - The maximum Point
-	 * @param  {Color} color    - The color of the cube
+	 * @param  {Color}    color    - The color of the cube
 	 * @param  {Material} material - The material of the cube
 	 */
 	constructor(minPoint, maxPoint, color, material) {
@@ -109,10 +109,10 @@ class AABoxNode extends LightableNode {
 class PyramidNode extends LightableNode {
 	/**
 	 * Creates a pyramid
-	 * @param  {number} x_extent - The x extent of the pyramid
-	 * @param  {number} z_extent - The z extent of the pyramid
-	 * @param  {number} height - The y extent of the pyramid
-	 * @param  {Color} color - The color of the pyramid
+	 * @param  {number}   x_extent - The x extent of the pyramid
+	 * @param  {number}   z_extent - The z extent of the pyramid
+	 * @param  {number}   height   - The y extent of the pyramid
+	 * @param  {Color}    color    - The color of the pyramid
 	 * @param  {Material} material - The material of the pyramid
 	 */
 	constructor(x_extent, z_extent, height, color, material) {
@@ -146,11 +146,11 @@ class ConeNode extends LightableNode {
 
 	/**
 	 * Creates a cone
-	 * @param  {number} radius - The radius of the bottom of the cone
-	 * @param  {number} height - The y extent of the cone
-	 * @param  {Color} color - The color of the cone
+	 * @param  {number}   radius   - The radius of the bottom of the cone
+	 * @param  {number}   height   - The y extent of the cone
+	 * @param  {Color}    color    - The color of the cone
 	 * @param  {Material} material - The material of the cone
-	 * @param  {number} ringsize - The number of vertices of the bottom
+	 * @param  {number}   ringsize - The number of vertices of the bottom
 	 */
 	constructor(radius, height, color, material, ringsize = 50) {
 		super(color, material);

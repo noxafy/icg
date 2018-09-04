@@ -68,7 +68,7 @@ class SinJumper extends Jumper {
 	/**
 	 * Creates a new sinus jumper animation
 	 * @param {Vector} axis - The axis to rotate around
-	 * @param {number} jpm - Jumps per Minute
+	 * @param {number} jpm  - Jumps per Minute
 	 */
 	constructor(axis, jpm = 60) {
 		super(axis, 60000 / jpm);
@@ -90,7 +90,7 @@ class SinJumper extends Jumper {
 class PhysicsJumper extends Jumper {
 	/**
 	 * Creates a new physics imitating jumper animation
-	 * @param {Vector} axis - The axis to rotate around
+	 * @param {Vector} axis    - The axis to rotate around
 	 * @param {number} g_scale - Scaling factor for gravitational acceleration
 	 */
 	constructor(axis, g_scale = 1) {

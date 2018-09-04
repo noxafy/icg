@@ -1,11 +1,11 @@
 class Color extends Vector {
 	/**
 	 * Create a color. Alpha is 1 per default if not given.
-	 * @param r
-	 * @param g
-	 * @param b
-	 * @param name
-	 * @param a
+	 * @param {number} r    - The red value
+	 * @param {number} g    - The green value
+	 * @param {number} b    - The blue value
+	 * @param {string} name - (optional) The name of the color
+	 * @param {number} a    - (optional) The alpha value
 	 */
 	constructor(r, g, b, name, a = 1) {
 		if (Array.isArray(r)) {
@@ -28,7 +28,7 @@ class Color extends Vector {
 
 	/**
 	 * Sets the red component of the color to val
-	 * @param  {number} val - The new red value
+	 * @param {number} val - The new red value
 	 */
 	set r(val) {
 		this.data[0] = val;
@@ -44,7 +44,7 @@ class Color extends Vector {
 
 	/**
 	 * Sets the green component of the color to val
-	 * @param  {number} val - The new green value
+	 * @param {number} val - The new green value
 	 */
 	set g(val) {
 		this.data[1] = val;
@@ -60,7 +60,7 @@ class Color extends Vector {
 
 	/**
 	 * Sets the blue component of the color to val
-	 * @param  {number} val - The new blue value
+	 * @param {number} val - The new blue value
 	 */
 	set b(val) {
 		this.data[2] = val;
@@ -76,7 +76,7 @@ class Color extends Vector {
 
 	/**
 	 * Sets the alpha component of the color to val
-	 * @param  {number} val - The new alpha value
+	 * @param {number} val - The new alpha value
 	 */
 	set a(val) {
 		this.data[3] = val;

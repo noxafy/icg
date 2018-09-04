@@ -13,10 +13,10 @@ class RasterPyramid extends RasterShape {
 	 *
 	 *  looking in negative z axis direction
 	 * @param {WebGLRenderingContext} gl - The canvas' context
-	 * @param {Position} minPoint - The minimal x,0,z of the pyramid's bottom
-	 * @param {Position} maxPoint - The maximal x,0,z of the pyramid's bottom
-	 * @param {Position} top - The pyramid's summit
-	 * @param {Color} color - The color of the pyramid
+	 * @param {Position}        minPoint - The minimal x,0,z of the pyramid's bottom
+	 * @param {Position}        maxPoint - The maximal x,0,z of the pyramid's bottom
+	 * @param {Position}        top      - The pyramid's summit
+	 * @param {Color}           color    - The color of the pyramid
 	 */
 	constructor(gl, minPoint, maxPoint, top, color) {
 		super(gl);

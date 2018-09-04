@@ -22,7 +22,7 @@ class Rotor extends Animator {
 	/**
 	 * Create the rotation matrix
 	 * @param {number} angle - The angle at which the object should be rotated
-	 * @return {Matrix} - The resulting rotation matrix
+	 * @return {Matrix}        The resulting rotation matrix
 	 */
 	rotate(angle) {
 		throw new Error("Unsupported operation");
@@ -33,7 +33,7 @@ class SimpleRotor extends Rotor {
 
 	/**
 	 * Creates a new constant rotor animation on a single axis
-	 * @param {Vector} axis - The axis to rotate around
+	 * @param {Vector} axis  - The axis to rotate around
 	 * @param {number} speed - Speed of rotation in angle per second
 	 */
 	constructor(axis, speed = 60) {

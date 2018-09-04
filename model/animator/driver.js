@@ -22,8 +22,8 @@ class Driver extends UserControllable {
 
 	/**
 	 * Calculates the position change
-	 * @param {number} deltaT - The time difference, the animation is advanced by
-	 * @return {Matrix} Resulting position change
+	 * @param {number}  deltaT - The time difference, the animation is advanced by
+	 * @return {Matrix}          The resulting position change
 	 */
 	drive(deltaT) {
 		throw Error("Unsupported operation.")
@@ -92,11 +92,11 @@ class Driver3D extends Driver {
 class FreeFlight extends Driver {
 	/**
 	 * Creates a new user controllable, continuous free flight 3D driver animation, using rotation for left right orientation
-	 * @param {number} movingSpeed - The constant speed of driving in 1/second in each direction
+	 * @param {number} movingSpeed   - The constant speed of driving in 1/second in each direction
 	 * @param {number} rotationSpeed - The constant speed of rotating on x axis in angle/second
-	 * @param {Vector} up - The up vector of the element at start
+	 * @param {Vector} up            - The up vector of the element at start
 	 */
-	constructor(movingSpeed = 1, rotationSpeed = 60, up = new Vector(0, 1, 0)) { // humans rotate around y axis normally when turning left/right
+	constructor(movingSpeed = 1, rotationSpeed = 60, up = new Vector(0, 1, 0)) { // humans normally are vertical
 		super(movingSpeed);
 		if (rotationSpeed instanceof Vector) {
 			up = rotationSpeed;

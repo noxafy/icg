@@ -7,10 +7,10 @@ class RasterCone extends RasterShape {
 	/**
 	 * Creates all WebGL buffers for the cone
 	 * @param {WebGLRenderingContext} gl - The canvas' context
-	 * @param {number} radius - The radius of the cone
-	 * @param {Position} top - The top of the cone
-	 * @param {number} ringsize - The number of vertices for the bottom
-	 * @param {Color} color - The color of the cone
+	 * @param {number}          radius   - The radius of the cone
+	 * @param {Position}        top      - The top of the cone
+	 * @param {number}          ringsize - The number of vertices for the bottom
+	 * @param {Color}           color    - The color of the cone
 	 */
 	constructor(gl, radius, top, ringsize, color) {
 		super(gl);

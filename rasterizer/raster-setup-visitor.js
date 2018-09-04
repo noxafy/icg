@@ -14,7 +14,7 @@ class RasterSetupVisitor extends Visitor {
 
 	/**
 	 * Sets up all needed buffers
-	 * @param  {Node} rootNode - The root node of the Scenegraph
+	 * @param {Node} rootNode - The root node of the Scenegraph
 	 */
 	setup(rootNode) {
 		// Clear to white, fully opaque

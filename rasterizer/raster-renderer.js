@@ -17,7 +17,7 @@ class RasterRenderer extends Renderer {
 
 	/**
 	 * Renders the Scenegraph
-	 * @param  {Node} rootNode                 - The root node of the Scenegraph
+	 * @param {GroupNode} rootNode - The root node of the Scenegraph
 	 */
 	render(rootNode) {
 		// clear

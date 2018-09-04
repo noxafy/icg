@@ -13,9 +13,9 @@ class RasterTextureBox extends RasterShape {
 	 *   0 ------- 1
 	 *  looking in negative z axis direction
 	 * @param {WebGLRenderingContext} gl - The canvas' context
-	 * @param {Vector} minPoint - The minimal x,y,z of the box
-	 * @param {Vector} maxPoint - The maximal x,y,z of the box
-	 * @param {string} texture - The image filename for the texture
+	 * @param {Vector}          minPoint - The minimal x,y,z of the box
+	 * @param {Vector}          maxPoint - The maximal x,y,z of the box
+	 * @param {string}          texture  - The image filename for the texture
 	 */
 	constructor(gl, minPoint, maxPoint, texture) {
 		super(gl);

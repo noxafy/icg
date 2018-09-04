@@ -5,8 +5,8 @@ class AnimationNode {
 	/**
 	 * Creates a new AnimationNode
 	 * @param {GroupNode} groupNode - The GroupNode to attach to
-	 * @param {Animator} animator - The Animator that executes the matrix calculation
-	 * @param {Boolean} active - If the Animation starts active
+	 * @param {Animator}  animator  - The Animator that executes the matrix calculation
+	 * @param {Boolean}   active    - If the Animation starts active
 	 */
 	constructor(groupNode, animator, active = true) {
 		this.groupNode = groupNode;
@@ -25,7 +25,7 @@ class AnimationNode {
 
 	/**
 	 * Advances the animation by deltaT
-	 * @param  {number} deltaT - The time difference, the animation is advanced by
+	 * @param {number} deltaT - The time difference, the animation is advanced by
 	 */
 	simulate(deltaT) {
 		// change the matrix of the attached

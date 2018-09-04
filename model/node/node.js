@@ -140,12 +140,12 @@ class CameraNode extends Node {
 class LightNode extends Node {
 	/**
 	 * Creates a new light with position and light color
-	 * @param  {Position} position - The position of the light
-	 * @param  {Vector} color  - The color of the light
-	 * @param  {number} intensity - The intensity of the light
-	 * @param  {number} constant - the constant lighting from this light
-	 * @param  {number} linear - the linear with distance decreasing factor
-	 * @param  {number} quadratic - the quadratic with distance decreasing factor
+	 * @param {Position} position  - The position of the light
+	 * @param {Vector}   color     - The color of the light
+	 * @param {number}   intensity - The intensity of the light
+	 * @param {number}   constant  - the constant lighting from this light
+	 * @param {number}   linear    - the linear with distance decreasing factor
+	 * @param {number}   quadratic - the quadratic with distance decreasing factor
 	 */
 	constructor(position, color, intensity, constant, linear, quadratic) {
 		super();
@@ -164,7 +164,7 @@ class LightNode extends Node {
 
 	/**
 	 * Accepts a visitor according to the visitor pattern
-	 * @param  {Visitor} visitor - The visitor
+	 * @param {Visitor} visitor - The visitor
 	 */
 	accept(visitor) {
 		visitor.visitLightNode(this);

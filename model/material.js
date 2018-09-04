@@ -5,11 +5,11 @@
 class Material {
 	/**
 	 * Setup a material
-	 * @param {Vector} ambient
-	 * @param {Vector} diffuse
-	 * @param {Vector} specular
-	 * @param {number} shininess
-	 * @param {string} name
+	 * @param {Vector} ambient   - The ambient reflecting constant of the material
+	 * @param {Vector} diffuse   - The diffuse reflecting constant of the material
+	 * @param {Vector} specular  - The specular reflecting constant of the material
+	 * @param {number} shininess - The shininess effect of the material
+	 * @param {string} name      - The name of the material
 	 */
 	constructor(ambient, diffuse, specular, shininess, name) {
 		this.ambient = ambient;

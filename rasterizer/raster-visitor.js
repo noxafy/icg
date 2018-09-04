@@ -68,7 +68,7 @@ class RasterDrawTraverser extends DrawTraverser {
 
 	/**
 	 * Setup uniform matrices needed for drawing projection, view and model matrix
-	 * @param {Shader} shader
+	 * @param {Shader}  shader
 	 * @return {Matrix} Last element of this.modelMatrices to be used for normal calculation etc.
 	 */
 	setupPVM(shader) {
@@ -110,7 +110,7 @@ class RasterDrawTraverser extends DrawTraverser {
 
 	/**
 	 * Pass the material properties to shader
-	 * @param {Shader} shader
+	 * @param {Shader}   shader
 	 * @param {Material} material
 	 */
 	setupMaterialProperties(shader, material) {

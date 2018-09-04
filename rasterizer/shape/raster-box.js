@@ -13,9 +13,9 @@ class RasterBox extends RasterShape {
 	 *   0 ------- 1
 	 *  looking in negative z axis direction
 	 * @param {WebGLRenderingContext} gl - The canvas' context
-	 * @param {Position} minPoint - The minimal x,y,z of the box
-	 * @param {Position} maxPoint - The maximal x,y,z of the box
-	 * @param {Color} color - The color of the cube
+	 * @param {Position}        minPoint - The minimal x,y,z of the box
+	 * @param {Position}        maxPoint - The maximal x,y,z of the box
+	 * @param {Color}           color    - The color of the cube
 	 */
 	constructor(gl, minPoint, maxPoint, color) {
 		super(gl);

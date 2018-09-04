@@ -7,8 +7,8 @@ class Renderer {
 	/**
 	 * Create a new renderer taking the three traversers as arguments
 	 * @param {CameraTraverser} cameraTraverser
-	 * @param {LightTraverser} lightTraverser
-	 * @param {DrawTraverser} drawTraverser
+	 * @param {LightTraverser}  lightTraverser
+	 * @param {DrawTraverser}   drawTraverser
 	 */
 	constructor(cameraTraverser, lightTraverser, drawTraverser) {
 		this.cameraTraverser = cameraTraverser;
@@ -22,7 +22,7 @@ class Renderer {
 
 	/**
 	 * Renders the Scenegraph, traversing scene graph for camera, lights and shapes
-	 * @param  {Node} rootNode - The root node of the Scenegraph
+	 * @param {GroupNode} rootNode - The root node of the Scenegraph
 	 */
 	render(rootNode) {
 		// camera traversal
@@ -39,7 +39,7 @@ class Renderer {
 
 	/**
 	 * Add a light to the cache. Should be called by the light traverser.
-	 * @param {Position} pos - The position of the light node as used by the draw traverser
+	 * @param {Position}  pos  - The position of the light node as used by the draw traverser
 	 * @param {LightNode} node - The light node as used by the draw traverser
 	 */
 	addLight(pos, node) {
