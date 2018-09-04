@@ -48,21 +48,13 @@
 		<div id="light_props">
 			<div id="light_props_header">
 				<label for="lights" id="light_props_title">Light properties </label>
-				<select id="lights" onfocus="(function fetchLights(dropdown) {
-					let val = dropdown.value;
-					dropdown.innerHTML = `<option value=default>Please choose a light...</option>`;
-					for(let i = 0; i < renderProcess.renderer.lights.length; i++) {
-						let light = renderProcess.renderer.lights[i];
-						dropdown.innerHTML += `<option value=${i}>${light.toString()}</option>`
-					}
-					if(val) dropdown.value = val;
-				})(this)" oninput="(function(val) {
-					if(val === 'default') {
-						SpecsView.LightChanger.disable();
-					} else {
-						SpecsView.LightChanger.enable(renderProcess.renderer.lights[val]);
-					}
-				})(this.value)">
+				<select id="lights" oninput="(function(val) {
+							if(val === 'default') {
+								SpecsView.LightChanger.disable();
+							} else {
+								SpecsView.LightChanger.enable(renderProcess.renderer.lights[val]);
+							}
+						})(this.value)">
 					<option>Please choose a light...</option>
 				</select>
 			</div>

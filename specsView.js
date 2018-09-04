@@ -11,6 +11,9 @@ SpecsView = {
 	enable() {
 		this.FPS.init();
 		this.specsElem.className = "";
+		this.LightChanger.fetchLights();
+		const specs_width = document.getElementById("lights").offsetWidth + 12 + "px";
+		this.specsElem.style.width = specs_width;
 	},
 	init() {
 		this.FPS.init();
@@ -38,7 +41,12 @@ SpecsView = {
 	},
 	LightChanger: {
 		sliders: document.getElementById("light_props_sliders"),
+		dropdown: document.getElementById("lights"),
+		current_light: undefined,
 		enable(light) {
+			if (this.current_light === light) return;
+			this.current_light = light;
+
 			this.registerSlider("intensity", light.intensity, function (val) {
 				return light.intensity = val;
 			}, 5);
@@ -53,6 +61,13 @@ SpecsView = {
 			});
 
 			this.sliders.className = "";
+		},
+		fetchLights() {
+			this.dropdown.innerHTML = `<option value=default>Please choose a light...</option>`;
+			for (let i = 0; i < renderProcess.renderer.lights.length; i++) {
+				let light = renderProcess.renderer.lights[i];
+				this.dropdown.innerHTML += `<option value=${i}>${light.toString()}</option>`
+			}
 		},
 		registerSlider(id, default_val, set, max = 1, min = 0, step = 0.001) {
 			// label
@@ -83,6 +98,7 @@ SpecsView = {
 		disable() {
 			this.sliders.innerHTML = "";
 			this.sliders.className = "disabled";
+			this.current_light = undefined;
 		}
 	}
 }
