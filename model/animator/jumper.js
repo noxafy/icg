@@ -110,7 +110,7 @@ class PhysicsJumper extends Jumper {
 	}
 
 	jump(timePassed) {
-		if (this.g < .1E-16) return;
+		if (this.g < Number.EPSILON) return;
 		return this.jumpDirection * Math.pow(timePassed * this.halfJumpsPerMillisecond - 1, 2) + 1;
 	}
 
