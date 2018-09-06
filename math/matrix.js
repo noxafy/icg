@@ -199,7 +199,7 @@ class Matrix {
 					res[row] += this.getVal(row, row_or_col) * other.data[row_or_col];
 				}
 			}
-			return new Vector(res[0], res[1], res[2], res[3]);
+			return new other.constructor(res[0], res[1], res[2], res[3]);
 		} else {
 			console.error("Unsupported data type:")
 			console.error(other);

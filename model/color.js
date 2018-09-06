@@ -7,7 +7,7 @@ class Color extends Vector {
 	 * @param {string} name - (optional) The name of the color
 	 * @param {number} a    - (optional) The alpha value
 	 */
-	constructor(r, g, b, name, a = 1) {
+	constructor(r, g, b, name = "", a = 1) {
 		if (Array.isArray(r)) {
 			b = r[2];
 			g = r[1];

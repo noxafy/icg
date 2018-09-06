@@ -98,38 +98,38 @@ class Vector {
 
     /**
      * Creates a new vector with the vector added
-     * @param {Vector} other - The vector to add
-     * @return {Vector}        The new vector;
+     * @param {Vector} other         - The vector to add
+     * @return {Vector|Position|Color} The new vector;
      */
     add(other) {
-		return new Vector(this.x + other.x, this.y + other.y, this.z + other.z, this.w + other.w);
+		return new other.constructor(this.x + other.x, this.y + other.y, this.z + other.z, this.w + other.w);
     }
 
     /**
      * Creates a new vector with the vector subtracted
-     * @param {Vector} other - The vector to subtract
-     * @return {Vector}        The new vector
+     * @param {Vector} other         - The vector to subtract
+     * @return {Vector|Position|Color} The new vector
      */
     sub(other) {
-		return new Vector(this.x - other.x, this.y - other.y, this.z - other.z, this.w - other.w);
+		return new other.constructor(this.x - other.x, this.y - other.y, this.z - other.z, this.w - other.w);
     }
 
     /**
      * Creates a new vector with the scalar multiplied
-     * @param {number} other - The scalar to multiply
-     * @return {Vector}        The new vector
+     * @param {number} other         - The scalar to multiply
+     * @return {Vector|Position|Color} The new vector
      */
     mul(other) {
-		return new Vector(this.x * other, this.y * other, this.z * other, this.w);
+		return new this.constructor(this.x * other, this.y * other, this.z * other, this.w);
     }
 
     /**
      * Creates a new vector with the scalar divided
-     * @param {number} other - The scalar to divide
-     * @return {Vector}        The new vector
+     * @param {number} other         - The scalar to divide
+     * @return {Vector|Position|Color} The new vector
      */
     div(other) {
-		return new Vector(this.x / other, this.y / other, this.z / other, this.w);
+		return new this.constructor(this.x / other, this.y / other, this.z / other, this.w);
     }
 
     /**
@@ -202,13 +202,14 @@ class Position extends Vector {
 	 * @param x
 	 * @param y
 	 * @param z
+	 * @param w
 	 */
-	constructor(x, y, z) {
+	constructor(x, y, z, w = 1) {
 		if (Array.isArray(x)) {
 			z = x[2];
 			y = x[1];
 			x = x[0];
 		}
-		super(x, y, z, 1);
+		super(x, y, z, w);
 	}
 }
