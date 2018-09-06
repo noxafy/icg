@@ -31,11 +31,18 @@
 	<script src="rasterizer/raster-visitor.js"></script>
 	<script src="rasterizer/raster-setup-visitor.js"></script>
 	<script src="rasterizer/raster-renderer.js"></script>
+	<script src="raytracer/shape/sphere.js"></script>
+	<script src="raytracer/shape/aabox.js"></script>
+	<script src="raytracer/camera.js"></script>
+	<script src="raytracer/intersection.js"></script>
+	<script src="raytracer/phong.js"></script>
+	<script src="raytracer/ray.js"></script>
+	<script src="raytracer/raytracing-renderer.js"></script>
+	<script src="raytracer/raytracing-visitor.js"></script>
 	<script src="resources/materials.js"></script>
 	<script src="resources/colors.js"></script>
 	<script src="renderProcess.js"></script>
 	<script src="interaction.js"></script>
-	<script src="preferences.js"></script>
 	<script src="io/scenegraph-exporter.js"></script>
 	<script src="io/scenegraph-importer.js"></script>
 </head>
@@ -52,7 +59,7 @@
 							if(val === 'default') {
 								SpecsView.LightChanger.disable();
 							} else {
-								SpecsView.LightChanger.enable(renderProcess.renderer.lights[val]);
+								SpecsView.LightChanger.enable(window.renderProcess.renderer.lights[val]);
 							}
 						})(this.value)">
 					<option>Please choose a light...</option>
@@ -72,20 +79,24 @@
 		</button>
 		<div id="import-request">Drop a .json file for importing.</div>
 	</div>
-	<canvas id="canvas" width="1920" height="1080"></canvas>
+	<canvas id="rasterizer" width="1920" height="1080"></canvas>
+	<canvas class="disabled" id="raytracer" width="500" height="500"></canvas>
 
+	<script src="preferences.js"></script>
 	<script src="specsView.js"></script>
 	<script src="menuView.js"></script>
 	<script>
 		// set up canvas
 		const aspectW = 16;
-		const aspectH = 9;
+		const aspectH = 16;
 		const aspectResolution = 120;
 
-		// init canvas
-		const canvas = document.getElementById("canvas");
+		// init rasterizer canvas
+		let canvas = document.getElementById("rasterizer");
 		canvas.setAttribute("width", aspectW * aspectResolution);
 		canvas.setAttribute("height", aspectH * aspectResolution);
+
+		// init canvas container
 		const container = document.getElementById("canvas-container");
 		window.onresize = function () {
 			let s = Math.min(window.innerWidth / aspectW, window.innerHeight / aspectH);
@@ -153,8 +164,8 @@
 		gn7.add(light);
 		gn7.add(lightSphere)
 
-		sg.add(gn8);
-		gn8.add(cube);
+		// sg.add(gn8);
+		// gn8.add(cube);
 
 		sg.add(gn9);
 		// gn9.add(pyramid);
@@ -169,30 +180,32 @@
 			new AnimationNode(gn6, new FreeFlight(4, camera.up))
 		];
 
-		let renderProcess = new RenderProcess(canvas, sg, animationNodes);
+		// start render process
+		window.renderProcess = new RenderProcess();
 		window.run = function (timestamp) {
 			if (!renderProcess.onStop) {
-				let deltaT = timestamp - renderProcess.lastTimestamp;
+				let deltaT = timestamp - window.renderProcess.lastTimestamp;
 				if (Preferences.showSpecs) SpecsView.FPS.add(deltaT);
 				simulate(deltaT);
-				renderProcess.renderer.render(sg);
-				renderProcess.lastTimestamp = timestamp;
+				window.renderProcess.renderer.render(window.sg);
+				window.renderProcess.lastTimestamp = timestamp;
 				window.requestAnimationFrame(window.run);
 			} else {
-				renderProcess.onStop();
+				window.renderProcess.onStop();
 			}
 
 			function simulate(deltaT) {
-				for (let animationNode of renderProcess.animationNodes) {
+				for (let animationNode of window.animationNodes) {
 					animationNode.simulate(deltaT);
 				}
 			}
 		}
-		renderProcess.start();
+		Preferences.toggleRenderer();
+		window.renderProcess.onStop();
 
 		UserInteraction.init();
 		UserInteraction.onFileDropped((file) => {
-			renderProcess.stop(() => {
+			window.renderProcess.stop(() => {
 				// only take account of the first file
 				let reader = new FileReader();
 				reader.onload = function (res) {
@@ -203,8 +216,8 @@
 					} else {
 						console.log("Couldn't load file: " + file.name);
 					}
-					renderProcess = new RenderProcess(canvas, sg, animationNodes);
-					renderProcess.start();
+					window.renderProcess = new RenderProcess();
+					window.renderProcess.start();
 				}
 				reader.readAsText(file);
 			});

@@ -25,7 +25,20 @@ Preferences = {
 		return "";
 	},
 	useRasterRenderer: true,
+	canvas_rasterizer: document.getElementById("rasterizer"),
+	canvas_raytracer: document.getElementById("raytracer"),
 	toggleRenderer: function () {
 		this.useRasterRenderer = !this.useRasterRenderer;
+		if (this.useRasterRenderer) {
+			this.canvas_rasterizer.className = "";
+			this.canvas_raytracer.className = "disabled";
+		} else {
+			this.canvas_rasterizer.className = "disabled";
+			this.canvas_raytracer.className = "";
+		}
+		window.renderProcess.stop(function () {
+			window.renderProcess = new RenderProcess();
+			window.renderProcess.start();
+		});
 	}
 }

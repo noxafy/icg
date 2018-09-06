@@ -25,6 +25,8 @@ class Renderer {
 	 * @param {GroupNode} rootNode - The root node of the Scenegraph
 	 */
 	render(rootNode) {
+		this.clear();
+
 		// camera traversal
 		rootNode.accept(this.cameraTraverser);
 
@@ -45,6 +47,12 @@ class Renderer {
 	addLight(pos, node) {
 		this.lightPositions.push(pos);
 		this.lights.push(node);
+	}
+
+	/**
+	 * Clear the screen
+	 */
+	clear() {
 	}
 }
 

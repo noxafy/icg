@@ -36,11 +36,11 @@ SceneGraphImporter = {
 				groupNodes[obj.name] = This;
 				break;
 			case "SphereNode":
-				This = new SphereNode(new Position(obj.center), obj.radius,
+				This = new SphereNode(Position.fromArray(obj.center), obj.radius,
 					Color.getFromJson(obj.color), Material.getFromJson(obj.material), obj.ringsize);
 				break;
 			case "AABoxNode":
-				This = new AABoxNode(new Position(obj.minPoint), new Position(obj.maxPoint),
+				This = new AABoxNode(Position.fromArray(obj.minPoint), Position.fromArray(obj.maxPoint),
 					Color.getFromJson(obj.color), Material.getFromJson(obj.material));
 				break;
 			case "PyramidNode":
@@ -51,14 +51,14 @@ SceneGraphImporter = {
 				This = new ConeNode(obj.radius, obj.height, Color.getFromJson(obj.color), Material.getFromJson(obj.material));
 				break;
 			case "TextureBoxNode":
-				This = new TextureBoxNode(new Position(obj.minPoint), new Position(obj.maxPoint), obj.texture);
+				This = new TextureBoxNode(Position.fromArray(obj.minPoint), Position.fromArray(obj.maxPoint), obj.texture);
 				break;
 			case "CameraNode":
-				This = new CameraNode(new Position(obj.eye), new Vector(obj.direction), new Vector(0, 1, 0),
-					obj.aspect, obj.near, obj.far, obj.fovy);
+				This = new CameraNode(Position.fromArray(obj.eye), Vector.fromArray(obj.direction),
+					new Vector(0, 1, 0), obj.aspect, obj.near, obj.far, obj.fovy);
 				break;
 			case "LightNode":
-				This = new LightNode(new Position(obj.position), Color.getFromJson(obj.color),
+				This = new LightNode(Position.fromArray(obj.position), Color.getFromJson(obj.color),
 					obj.intensity, obj.constant, obj.linear, obj.quadratic);
 				break;
 			default:
@@ -80,19 +80,19 @@ SceneGraphImporter = {
 					animator = new Driver3D(n.animator.speed);
 					break;
 				case "FreeFlight":
-					animator = new FreeFlight(n.animator.speed, n.animator.rotationSpeed, new Vector(n.animator.up));
+					animator = new FreeFlight(n.animator.speed, n.animator.rotationSpeed, Vector.fromArray(n.animator.up));
 					break;
 				case "LinearJumper":
-					animator = new LinearJumper(new Vector(n.animator.axis), n.animator.jpm);
+					animator = new LinearJumper(Vector.fromArray(n.animator.axis), n.animator.jpm);
 					break;
 				case "SinJumper":
-					animator = new SinJumper(new Vector(n.animator.axis), n.animator.jpm);
+					animator = new SinJumper(Vector.fromArray(n.animator.axis), n.animator.jpm);
 					break;
 				case "PhysicsJumper":
-					animator = new PhysicsJumper(new Vector(n.animator.axis), n.animator.g_scale);
+					animator = new PhysicsJumper(Vector.fromArray(n.animator.axis), n.animator.g_scale);
 					break;
 				case "SimpleRotor":
-					animator = new SimpleRotor(new Vector(n.animator.axis), n.animator.speed);
+					animator = new SimpleRotor(Vector.fromArray(n.animator.axis), n.animator.speed);
 					break;
 				case "FreeRotor":
 					animator = new FreeRotor(n.animator.speed);

@@ -15,14 +15,7 @@ class RasterRenderer extends Renderer {
 		this.gl = context;
 	}
 
-	/**
-	 * Renders the Scenegraph
-	 * @param {GroupNode} rootNode - The root node of the Scenegraph
-	 */
-	render(rootNode) {
-		// clear
+	clear() {
 		this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
-
-		super.render(rootNode);
 	}
 }

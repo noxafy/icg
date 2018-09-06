@@ -40,6 +40,9 @@ UserInteraction = {
 					case "m":
 						Preferences.toggleShowMenu();
 						break;
+					case "r":
+						Preferences.toggleRenderer();
+						break;
 				}
 
 				this.animationControl(key, true);

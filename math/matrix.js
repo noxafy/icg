@@ -176,8 +176,8 @@ class Matrix {
 
 	/**
 	 * Matrix multiplication
-	 * @param  {Matrix|Vector} other - The matrix or vector to multiplicate with
-	 * @return {Matrix|Vector}         The result of the multiplication this*other
+	 * @param  {Matrix|Vector} other        - The matrix or vector to multiplicate with
+	 * @return {Matrix|Vector|Color|Position} The result of the multiplication this*other
 	 */
 	mul(other) {
 		if (other instanceof Matrix) {
@@ -199,7 +199,7 @@ class Matrix {
 					res[row] += this.getVal(row, row_or_col) * other.data[row_or_col];
 				}
 			}
-			return new other.constructor(res[0], res[1], res[2], res[3]);
+			return other.constructor.fromArray(res);
 		} else {
 			console.error("Unsupported data type:")
 			console.error(other);

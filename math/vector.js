@@ -10,18 +10,7 @@ class Vector {
      * @param  {number} w - The w component
      */
     constructor(x, y, z, w = 0) {
-		if (Array.isArray(x)) {
-			this.data = new Array(4);
-			let i = 0;
-			for (; i < 4 && i < x.length - 1; i++) {
-				this.data[i] = x[i];
-			}
-			for (; i < this.data.length; i++) {
-				this.data[i] = 0;
-			}
-		} else {
-			this.data = [x, y, z, w];
-		}
+    	this.data = [x, y, z, w];
     }
 
     /**
@@ -93,7 +82,7 @@ class Vector {
      * @return {number} The length of the vector
      */
     get length() {
-		return Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2) + Math.pow(this.z, 2));
+		return Math.sqrt(this.dot(this));
     }
 
     /**
@@ -174,8 +163,13 @@ class Vector {
      * @return {Vector} A vector with length 1
      */
     normalised() {
-        return this.div(this.length);
+		let length = this.length;
+		return new Vector(this.x / length, this.y / length, this.z / length, this.w);
     }
+
+	static fromArray(arr) {
+		return new Vector(arr[0], arr[1], arr[2], arr[3]);
+	}
 
     /**
      * Compares the vector to another
@@ -205,11 +199,10 @@ class Position extends Vector {
 	 * @param w
 	 */
 	constructor(x, y, z, w = 1) {
-		if (Array.isArray(x)) {
-			z = x[2];
-			y = x[1];
-			x = x[0];
-		}
 		super(x, y, z, w);
+	}
+
+	static fromArray(arr) {
+		return new Position(arr[0], arr[1], arr[2], arr[3]);
 	}
 }

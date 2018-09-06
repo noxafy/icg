@@ -64,8 +64,8 @@ SpecsView = {
 		},
 		fetchLights() {
 			this.dropdown.innerHTML = `<option value=default>Please choose a light...</option>`;
-			for (let i = 0; i < renderProcess.renderer.lights.length; i++) {
-				let light = renderProcess.renderer.lights[i];
+			for (let i = 0; i < window.renderProcess.renderer.lights.length; i++) {
+				let light = window.renderProcess.renderer.lights[i];
 				this.dropdown.innerHTML += `<option value=${i}>${light.toString()}</option>`
 			}
 		},

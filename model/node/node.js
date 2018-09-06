@@ -112,6 +112,7 @@ class CameraNode extends Node {
 	constructor(eye, direction, up, aspect, near = 0.1, far = 100, fovy = 60) {
 		super();
 		this.eye = eye;
+		this.direction = direction; // for ray tracer
 		this.center = eye.add(direction);
 		let angleTo90 = direction.angleTo(up) - Math.PI / 2;
 		this.up = Matrix.rotation(new Vector(1, 0, 0), angleTo90).mul(up);

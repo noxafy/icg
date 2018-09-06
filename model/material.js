@@ -33,7 +33,8 @@ class Material {
 			if (Materials[obj]) return Materials[obj];
 			else throw Error("Unknown material: " + obj);
 		} else if (!obj && obj.ambient && obj.diffuse && obj.specular && obj.shininess) {
-			return new Material(new Vector(obj.ambient), new Vector(obj.diffuse), new Vector(obj.specular), obj.shininess, obj.name);
+			return new Material(Vector.fromArray(obj.ambient), Vector.fromArray(obj.diffuse),
+				Vector.fromArray(obj.specular), obj.shininess, obj.name);
 		}
 		throw Error("Invalid material specification: " + typeof obj);
 	}

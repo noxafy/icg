@@ -8,14 +8,8 @@ class Color extends Vector {
 	 * @param {number} a    - (optional) The alpha value
 	 */
 	constructor(r, g, b, name = "", a = 1) {
-		if (Array.isArray(r)) {
-			b = r[2];
-			g = r[1];
-			r = r[0];
-		}
 		super(r, g, b, a);
-		if (typeof name === "string") this.name = name;
-		else this.a = name;
+		this.name = name;
 	}
 
 	/**
@@ -82,12 +76,16 @@ class Color extends Vector {
 		this.data[3] = val;
 	}
 
+	static fromArray(arr) {
+		return new Color(arr[0], arr[1], arr[2], arr[3]);
+	}
+
 	static getFromJson(obj) {
 		if (typeof obj === "string") {
 			if (Colors[obj]) return Colors[obj];
 			else throw Error("Unknown color: " + obj);
 		} else if (Array.isArray(obj)) {
-			return new Color(obj);
+			return Color.fromArray(obj);
 		}
 		throw Error("Invalid data type for color: " + typeof obj);
 	}
