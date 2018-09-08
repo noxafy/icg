@@ -4,10 +4,10 @@ class Color extends Vector {
 	 * @param {number} r    - The red value
 	 * @param {number} g    - The green value
 	 * @param {number} b    - The blue value
-	 * @param {string} name - (optional) The name of the color
 	 * @param {number} a    - (optional) The alpha value
+	 * @param {string} name - (optional) The name of the color
 	 */
-	constructor(r, g, b, name = "", a = 1) {
+	constructor(r, g, b, a = 1, name = undefined) {
 		super(r, g, b, a);
 		this.name = name;
 	}
