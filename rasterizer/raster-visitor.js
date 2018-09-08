@@ -1,29 +1,8 @@
-// you can set this in console to get one debug log of the current lookat matrix
-window.debugLookAt = false;
-
 class RasterCameraTraverser extends CameraTraverser {
 
 	visitCameraNode(node) {
-		this.renderer.lookat = Matrix.lookat(
-			node.eye,
-			node.center,
-			node.up
-		);
-		if (this.modelMatrices.length > 0) {
-			this.renderer.lookat = this.getTopMatrix().invert().mul(this.renderer.lookat);
-		}
-		if (window.debugLookAt) {
-			console.log("lookat:");
-			console.log(this.renderer.lookat.toString());
-			window.debugLookAt = false;
-		}
-
-		this.renderer.perspective = Matrix.perspective(
-			camera.fovy,
-			camera.aspect,
-			camera.near,
-			camera.far
-		);
+		this.renderer.lookat = this.getTopMatrix().invert().mul(Matrix.lookat(node.eye, node.center, node.up));
+		this.renderer.perspective = Matrix.perspective(camera.fovy, camera.aspect, camera.near, camera.far);
 	}
 }
 

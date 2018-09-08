@@ -23,11 +23,8 @@ class RayTracingRenderer extends Renderer {
 	 * @param {GroupNode} rootNode - The root node of the Scenegraph
 	 */
 	render(rootNode) {
-		console.time("super.render")
 		super.render(rootNode);
-		console.timeEnd("super.render")
 
-		console.time("trace")
 		const rw = (this.imageData.width - 1) / 2;
 		const rh = (this.imageData.height - 1) / 2;
 		const width = this.imageData.width;
@@ -55,7 +52,6 @@ class RayTracingRenderer extends Renderer {
 				}
 			}
 		}
-		console.timeEnd("trace")
 		this.context.putImageData(this.imageData, 0, 0);
 	}
 

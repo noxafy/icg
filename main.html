@@ -206,7 +206,7 @@
 						window.sg = result.sg;
 						window.animationNodes = result.animationNodes;
 					} else {
-						console.log("Couldn't load file: " + file.name);
+						console.error("Couldn't load file: " + file.name);
 					}
 					window.renderProcess = new RenderProcess();
 					window.renderProcess.start();

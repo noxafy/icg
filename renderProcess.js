@@ -17,8 +17,6 @@ class RenderProcess {
 	}
 
 	startRasterizer() {
-		console.log("Raster render process started!");
-
 		const rasterizer = Preferences.canvas.rasterizer;
 		const gl = rasterizer.getContext("webgl");
 
@@ -45,8 +43,6 @@ class RenderProcess {
 	}
 
 	startRayTracer() {
-		console.log("Raytracing render process started!");
-
 		const raytracer = Preferences.canvas.raytracer;
 		this.renderer = new RayTracingRenderer(raytracer.getContext("2d"), raytracer.width, raytracer.height);
 		this.lastTimestamp = performance.now();
