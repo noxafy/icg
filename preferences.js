@@ -36,6 +36,7 @@ Preferences = {
 			this.canvas_rasterizer.className = "disabled";
 			this.canvas_raytracer.className = "";
 		}
+		if (this.showSpecs) SpecsView.FPS.init();
 		window.renderProcess.stop(function () {
 			window.renderProcess = new RenderProcess();
 			window.renderProcess.start();

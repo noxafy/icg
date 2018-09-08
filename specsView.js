@@ -16,8 +16,8 @@ SpecsView = {
 		this.specsElem.style.width = specs_width;
 	},
 	init() {
-		this.FPS.init();
 		if (Preferences.showSpecs) {
+			this.FPS.init();
 			this.enable();
 		}
 		// disabled state is default
@@ -36,7 +36,9 @@ SpecsView = {
 			}
 		},
 		init() {
+			this.sum = 0;
 			this.i = this.cnt;
+			this.e.innerText = "Collecting data...";
 		}
 	},
 	LightChanger: {
