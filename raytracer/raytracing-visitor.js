@@ -18,8 +18,8 @@ class RayTracingCameraTraverser extends CameraTraverser {
 class RayTracingLightTraverser extends LightTraverser {
 
 	visitLightNode(node) {
-		let pos = this.getTopMatrix().mul(node.position);
-		this.renderer.addLight(pos, node);
+		node.m_position = this.getTopMatrix().mul(node.position);
+		this.renderer.lights.push(node);
 	}
 }
 

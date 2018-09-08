@@ -32,8 +32,8 @@ class RasterLightTraverser extends LightTraverser {
 	visitLightNode(node) {
 		let pos = this.getTopMatrix().mul(node.position);
 		// P * V * M (so we don't have to do that in vertex shader and can pass it directly to fragment shader)
-		pos = this.renderer.perspective.mul(this.renderer.lookat).mul(pos);
-		this.renderer.addLight(pos, node);
+		node.p_v_m_position = this.renderer.perspective.mul(this.renderer.lookat).mul(pos);
+		this.renderer.lights.push(node);
 	}
 }
 
@@ -90,11 +90,11 @@ class RasterDrawTraverser extends DrawTraverser {
 	 * @param {Shader} shader
 	 */
 	setupLightProperties(shader) {
-		for (let i = 0; i < this.renderer.lightPositions.length; i++) {
+		for (let i = 0; i < this.renderer.lights.length; i++) {
 			let lightName = "lights[" + i + "]";
 			let light = this.renderer.lights[i];
 
-			shader.getUniformVec3(lightName + ".position").set(this.renderer.lightPositions[i]);
+			shader.getUniformVec3(lightName + ".position").set(light.p_v_m_position);
 			shader.getUniformVec3(lightName + ".color").set(light.color);
 
 			shader.getUniformFloat(lightName + ".intensity").set(light.intensity);

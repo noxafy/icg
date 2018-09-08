@@ -40,16 +40,6 @@ class Renderer {
 	}
 
 	/**
-	 * Add a light to the cache. Should be called by the light traverser.
-	 * @param {Position}  pos  - The position of the light node as used by the draw traverser
-	 * @param {LightNode} node - The light node as used by the draw traverser
-	 */
-	addLight(pos, node) {
-		this.lightPositions.push(pos);
-		this.lights.push(node);
-	}
-
-	/**
 	 * Clear the screen
 	 */
 	clear() {

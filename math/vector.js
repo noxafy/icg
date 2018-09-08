@@ -105,10 +105,13 @@ class Vector {
 
     /**
      * Creates a new vector with the scalar multiplied
-     * @param {number} other         - The scalar to multiply
+	 * @param {number|Vector} other    - The scalar or vector to multiply
      * @return {Vector|Position|Color} The new vector
      */
     mul(other) {
+		if (other instanceof Vector) {
+			return new this.constructor(this.x * other.x, this.y * other.y, this.z * other.z, this.w);
+		}
 		return new this.constructor(this.x * other, this.y * other, this.z * other, this.w);
     }
 
