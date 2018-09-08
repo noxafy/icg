@@ -224,17 +224,18 @@ class Matrix {
 	 * Debug print to console
 	 */
 	print() {
-		return this.toString();
+		return console.log(this.toString());
 	}
 
 	toString() {
+		let res = "";
 		for (let row = 0; row < 4; row++) {
-			console.log("> " + this.getVal(row, 0) +
+			res += this.getVal(row, 0) +
 				"\t" + this.getVal(row, 1) +
 				"\t" + this.getVal(row, 2) +
-				"\t" + this.getVal(row, 3)
-			);
+				"\t" + this.getVal(row, 3) + "\n"
 		}
+		return res;
 	}
 
 	/**
