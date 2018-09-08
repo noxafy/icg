@@ -20,7 +20,6 @@ class RenderProcess {
 		console.log("Raster render process started!");
 
 		const rasterizer = Preferences.canvas_rasterizer;
-		rasterizer.className = "";
 		const gl = rasterizer.getContext("webgl");
 
 		const setupVisitor = new RasterSetupVisitor(gl);
@@ -49,9 +48,7 @@ class RenderProcess {
 		console.log("Raytracing render process started!");
 
 		const raytracer = Preferences.canvas_raytracer;
-		raytracer.className = "";
-		this.renderer = new RayTracingRenderer(raytracer.getContext("2d"),
-			raytracer.width, raytracer.height);
+		this.renderer = new RayTracingRenderer(raytracer.getContext("2d"), raytracer.width, raytracer.height);
 		this.lastTimestamp = performance.now();
 		window.requestAnimationFrame(window.run);
 	}

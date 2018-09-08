@@ -8,7 +8,7 @@
  * @return {Vector}                         The resulting colour
  */
 function phong(objColor, intersection, lightPositions, shininess, cameraPosition) {
-	const lightColor = new Color(1, 1, 1, 1);
+	const lightColor = new Color(1, 1, 1);
 	const kA = 0.8;
 	const kD = 0.8;
 	const kS = 0.2;

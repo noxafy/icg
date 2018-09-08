@@ -46,7 +46,7 @@ class RayTracingRenderer extends Renderer {
 				}
 				if (minObj) {
 					let color = phong(minObj.color, minIntersection, this.lightPositions, 10, camera.eye);
-					data[4 * (width * y + x) + 0] = color.r * 255;
+					data[4 * (width * y + x)] = color.r * 255;
 					data[4 * (width * y + x) + 1] = color.g * 255;
 					data[4 * (width * y + x) + 2] = color.b * 255;
 					data[4 * (width * y + x) + 3] = color.a * 255;
