@@ -16,6 +16,7 @@ class Camera {
 	 */
 	constructor(eye, center, up, aspect, near, far, fovy) {
 		this.eye = eye;
+		this.center = center;
 		this.up = up;
 		this.aspect = aspect;
 		this.near = near;
