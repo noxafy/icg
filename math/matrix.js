@@ -132,7 +132,7 @@ class Matrix {
 	 * @see https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/gluPerspective.xml
 	 */
 	static perspective(fovy, aspect, near, far) {
-		let f = 1 / Math.tan(Utils.degToRad(fovy) / 2);
+		let f = 1 / Math.tan(fovy * Math.PI / 360);
 		return new Matrix([
 			f / aspect, 0, 0, 0,
 			0, f, 0, 0,

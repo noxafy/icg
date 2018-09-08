@@ -167,6 +167,35 @@ class Vector {
 		return new Vector(this.x / length, this.y / length, this.z / length, this.w);
     }
 
+	/**
+	 * For unit test
+	 * @see Color
+ 	 */
+	get r() {
+		return this.data[0];
+	}
+	set r(val) {
+		this.data[0] = val;
+	}
+	get g() {
+		return this.data[1];
+	}
+	set g(val) {
+		this.data[1] = val;
+	}
+	get b() {
+		return this.data[2];
+	}
+	set b(val) {
+		this.data[2] = val;
+	}
+	get a() {
+		return this.data[3];
+	}
+	set a(val) {
+		this.data[3] = val;
+	}
+
 	static fromArray(arr) {
 		return new Vector(arr[0], arr[1], arr[2], arr[3]);
 	}
