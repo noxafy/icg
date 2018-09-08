@@ -145,6 +145,7 @@ class Vector {
 	/**
 	 * Calculates the angle to the other vector.
 	 * @param {Vector} other
+	 * @return {number} Angle to the other vector in rad
 	 */
 	angleTo(other) {
 		return Math.acos(this.dot(other) / (this.length * other.length));

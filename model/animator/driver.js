@@ -103,6 +103,7 @@ class FreeFlight extends Driver {
 			rotationSpeed = 60;
 		}
 		this.up = up;
+		this.revertedUp = new Vector(0, 1, 0).angleTo(this.up) > Utils.degToRad(90);
 		this.rotationSpeed = Utils.degToRad(rotationSpeed) / 1000;
 	}
 
@@ -114,6 +115,7 @@ class FreeFlight extends Driver {
 		if (this.yaw !== 0) {
 			let rot_y, rot_z;
 			let angle = -this.yaw * this.rotationSpeed * deltaT;
+			if (this.revertedUp) angle = -angle;
 
 			// x axis not required because free flight cannot roll
 			if (this.up.y !== 0) rot_y = Matrix.rotation(this.yAxis, angle * this.up.y);
@@ -134,7 +136,11 @@ class FreeFlight extends Driver {
 			// move right, left, back and forward on own axis'
 			let direction = new Vector(this.moveXAxis, 0, this.moveZAxis);
 			// but up and down on world axis (humans are not used to this movement)
-			if (this.moveYAxis !== 0) direction = direction.add(this.up.mul(this.moveYAxis));
+			if (this.moveYAxis !== 0) {
+				let c = 1;
+				if (this.revertedUp) c = -1;
+				direction = direction.add(this.up.mul(c * this.moveYAxis));
+			}
 			trans = Matrix.translation(direction.normalised().mul(this.speed * deltaT));
 		}
 		return trans.mul(rot);
