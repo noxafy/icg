@@ -9,7 +9,7 @@ class RenderProcess {
 	}
 
 	start() {
-		if (Preferences.useRasterRenderer) {
+		if (Preferences.canvas.useRasterRenderer) {
 			this.startRasterizer();
 		} else {
 			this.startRayTracer();
@@ -19,7 +19,7 @@ class RenderProcess {
 	startRasterizer() {
 		console.log("Raster render process started!");
 
-		const rasterizer = Preferences.canvas_rasterizer;
+		const rasterizer = Preferences.canvas.rasterizer;
 		const gl = rasterizer.getContext("webgl");
 
 		const setupVisitor = new RasterSetupVisitor(gl);
@@ -47,7 +47,7 @@ class RenderProcess {
 	startRayTracer() {
 		console.log("Raytracing render process started!");
 
-		const raytracer = Preferences.canvas_raytracer;
+		const raytracer = Preferences.canvas.raytracer;
 		this.renderer = new RayTracingRenderer(raytracer.getContext("2d"), raytracer.width, raytracer.height);
 		this.lastTimestamp = performance.now();
 		window.requestAnimationFrame(window.run);

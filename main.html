@@ -80,36 +80,22 @@
 		</button>
 		<div id="import-request">Drop a .json file for importing.</div>
 	</div>
-	<canvas id="rasterizer" width="1920" height="1080"></canvas>
-	<canvas class="disabled" id="raytracer" width="960" height="540"></canvas>
+	<canvas id="rasterizer"></canvas>
+	<canvas id="raytracer" class="disabled"></canvas>
 
 	<script src="preferences.js"></script>
 	<script src="specsView.js"></script>
 	<script src="menuView.js"></script>
 	<script>
 		// set up canvas
-		const aspectW = 16;
-		const aspectH = 9;
-		const aspectResolution = 120;
-
-		// init rasterizer canvas
-		let canvas = document.getElementById("rasterizer");
-		canvas.setAttribute("width", aspectW * aspectResolution);
-		canvas.setAttribute("height", aspectH * aspectResolution);
-
-		// init canvas container
-		const container = document.getElementById("canvas-container");
-		window.onresize = function () {
-			let s = Math.min(window.innerWidth / aspectW, window.innerHeight / aspectH);
-			container.style.width = s * aspectW + "px";
-			container.style.height = s * aspectH + "px";
-		}
-		window.onresize();
+		Preferences.canvas.aspectW = 16;
+		Preferences.canvas.aspectH = 9;
+		Preferences.canvas.init(120, 80); // set resolution
 
 		// construct scene graph
 		let camera = new CameraNode(
 			new Position(0, 0.5, 1), // eye
-			aspectW / aspectH,
+			Preferences.canvas.aspectW / Preferences.canvas.aspectH,
 			0.1, 100, 60 // near, far, fovy
 		)
 
@@ -172,7 +158,7 @@
 
 		// add animation nodes
 		window.animationNodes = [
-			// new AnimationNode(gn1, new Rotor(new Vector(0, 0, 1), 30)),
+			// new AnimationNode(gn1, new SimpleRotor(new Vector(0, 0, 1), 30)),
 			new AnimationNode(gn1, new AxisAlignedRotor(60)),
 			new AnimationNode(gn5, new PhysicsJumper(new Vector(0, 3, 0), 1)),
 			new AnimationNode(gn7, new Driver2D(6)),

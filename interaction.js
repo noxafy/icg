@@ -41,7 +41,7 @@ UserInteraction = {
 						Preferences.toggleShowMenu();
 						break;
 					case "r":
-						Preferences.toggleRenderer();
+						Preferences.canvas.toggleRenderer();
 						break;
 				}
 
