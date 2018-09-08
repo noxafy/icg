@@ -28,30 +28,27 @@ function phong(obj, intersection, lights, cameraPosition) {
  * @return {Color}
  */
 function getPhongColor(light, n, p, color, material, cameraPos) {
-	//Ambient
 	let ambient = color.mul(material.ambient).mul(light.ambient);
-
-	// diffuse
-	let dot_d = 0;
-
-	// specular
-	const v = cameraPos.sub(p).normalised(); // direction pointing towards the viewer
-	let dot_s = 0;
-
+	let diffuse;
+	let specular;
 
 	const l = light.m_position.sub(p).normalised(); // direction vector from the point on the surface toward the light source
 	const dot = n.dot(l);
 	if (dot > 0) {
-		dot_d = dot;
+		diffuse = light.color.mul(dot).mul(material.diffuse).mul(light.diffuse);
 		const r = n.mul(2 * l.dot(n)).sub(l).normalised(); // direction that a perfectly reflected ray would take from this point on the surface
+		const v = cameraPos.sub(p).normalised(); // direction pointing towards the viewer
 		const dot2 = r.dot(v);
-		if (dot2 > 0) dot_s = Math.pow(dot2, material.shininess);
+		if (dot2 > 0) {
+			specular = light.color.mul(Math.pow(dot2, material.shininess)).mul(material.specular).mul(light.specular);
+		}
 	}
 
-	let diffuse = light.color.mul(dot_d).mul(material.diffuse).mul(light.diffuse);
-	let specular = light.color.mul(dot_s).mul(material.specular).mul(light.specular);
+	let res = ambient;
+	if (diffuse) res = res.add(diffuse);
+	if (specular) res = res.add(specular);
 
 	const distance = light.position.sub(p).length;
 	const attenuation = light.constant + light.linear * distance + light.quadratic * (distance * distance);
-	return ambient.add(diffuse).add(specular).mul(light.intensity / attenuation);
+	return res.mul(light.intensity / attenuation);
 }
