@@ -28,9 +28,13 @@ class RayTracingDrawTraverser extends DrawTraverser {
 	visitLightableNode(node) {
 		let mat = this.getTopMatrix();
 		if (node instanceof SphereNode) {
-			this.renderer.objects.push(new Sphere(mat.mul(node.center), node.radius, node.color));
+			this.renderer.objects.push(
+				new Sphere(mat.mul(node.center), node.radius, node.color, node.material)
+			);
 		} else if (node instanceof AABoxNode) {
-			this.renderer.objects.push(new AABox(mat.mul(node.minPoint), mat.mul(node.maxPoint), node.color));
+			this.renderer.objects.push(
+				new AABox(mat.mul(node.minPoint), mat.mul(node.maxPoint), node.color, node.material)
+			);
 		} else if (node instanceof PyramidNode) {
 			// TODO
 		} else if (node instanceof ConeNode) {

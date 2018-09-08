@@ -47,7 +47,7 @@ class RayTracingRenderer extends Renderer {
 					}
 				}
 				if (minObj) {
-					let color = phong(minObj.color, minIntersection, this.lights, camera.eye);
+					let color = phong(minObj, minIntersection, this.lights, camera.eye);
 					data[4 * (width * y + x)] = color.r * 255;
 					data[4 * (width * y + x) + 1] = color.g * 255;
 					data[4 * (width * y + x) + 2] = color.b * 255;
@@ -61,6 +61,10 @@ class RayTracingRenderer extends Renderer {
 
 	clear() {
 		this.imageData.data.fill(0);
+		/**
+		 *
+		 * @type {Array.<Shape>}
+		 */
 		this.objects = [];
 	}
 
