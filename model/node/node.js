@@ -101,20 +101,19 @@ class TextureBoxNode extends Node {
 class CameraNode extends Node {
 	/**
 	 * Creates a camera
-	 * @param {Position} eye
 	 * @param {Vector} direction
-	 * @param {Vector} up
 	 * @param {number} aspect
 	 * @param {number} near
 	 * @param {number} far
 	 * @param {number} fovy
 	 */
-	constructor(eye, direction, up, aspect, near = 0.1, far = 100, fovy = 60) {
+	constructor(direction, aspect, near = 0.1, far = 100, fovy = 60) {
 		super();
-		this.eye = eye;
-		this.direction = direction; // for ray tracer
-		this.center = eye.add(direction);
-		let angleTo90 = direction.angleTo(up) - Math.PI / 2;
+		this.direction = direction;
+		this.center = new Position(0, 0, 0); // always 0
+		this.eye = this.center.sub(direction);
+		let up = new Vector(0, 1, 0); // like humans are used to, up vector is always 0,1,0
+		let angleTo90 = this.direction.angleTo(up) - Math.PI / 2;
 		this.up = Matrix.rotation(new Vector(1, 0, 0), angleTo90).mul(up);
 		this.aspect = aspect;
 		this.near = near;

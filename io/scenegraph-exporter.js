@@ -122,9 +122,7 @@ class SceneGraphJsonGenerator extends Visitor {
 	visitCameraNode(node) {
 		this.append({
 			type: "CameraNode",
-			eye: node.eye.data,
-			direction: node.center.sub(node.eye).data,
-			up: node.up.data, // just for simplicity
+			direction: node.direction.data,
 			aspect: node.aspect,
 			near: node.near,
 			far: node.far,

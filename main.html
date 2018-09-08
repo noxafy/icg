@@ -107,9 +107,7 @@
 
 		// construct scene graph
 		let camera = new CameraNode(
-			new Position(-4, 5, 10), // eye
 			new Vector(0, -0.5, -1), // direction
-			new Vector(0, 1, 0, 0), // up
 			aspectW / aspectH,
 			0.1, 100, 60 // near, far, fovy
 		)
@@ -142,7 +140,7 @@
 		const gn3 = new GroupNode(Matrix.identity());
 		const gn2 = new GroupNode(Matrix.translation(new Vector(-4, -1, -2))); // Ts
 		const gn5 = new GroupNode(Matrix.translation(new Vector(-3.5, -2.5, -5.0))); // Tl
-		const gn6 = new GroupNode(Matrix.identity());
+		const gn6 = new GroupNode(Matrix.translation(new Vector(-4, 5, 10)));
 		const gn7 = new GroupNode(Matrix.identity());
 		const gn8 = new GroupNode(Matrix.translation(new Vector(-5, -1, 0)));
 		const gn9 = new GroupNode(Matrix.translation(new Vector(-9, -1, 0)));
