@@ -8,10 +8,10 @@ class RayTracingCameraTraverser extends CameraTraverser {
 		const mat = this.getTopMatrix();
 
 		let eye = mat.mul(node.eye);
-		let center = mat.mul(node.center);
+		let direction = mat.mul(node.direction);
 		let up = mat.mul(node.up);
 
-		this.renderer.camera = new Camera(eye, center, up, node.aspect, node.near, node.far, node.fovy);
+		this.renderer.camera = new Camera(eye, direction, up, node.aspect, node.near, node.far, node.fovy);
 	}
 }
 

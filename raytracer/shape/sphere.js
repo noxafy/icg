@@ -21,7 +21,7 @@ class Sphere {
 	 */
 	intersect(ray) {
 		if (!this.c) {
-			this.emc = ray.origin.sub(this.center);
+			this.emc = ray.origin.sub(this.center); // eye - center
 			this.c = this.emc.dot(this.emc) - this.radius * this.radius; // ray.direction.dot(ray.direction) == 1
 		}
 		const b = ray.direction.dot(this.emc);

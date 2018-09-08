@@ -31,7 +31,7 @@ function phong(objColor, intersection, lightPositions, shininess, cameraPosition
 		const dot = n.dot(l);
 		if (dot > 0) {
 			dot_d += kD * dot;
-			const r = n.mul(2 * l.dot(n)).sub(l).normalised(); // direction that a perfectly reflected ray of light would take from this point on the surface
+			const r = n.mul(2 * dot).sub(l).normalised(); // direction that a perfectly reflected ray would take from this point on the surface
 			const dot2 = r.dot(v);
 			if (dot2 > 0) dot_s += kS * Math.pow(dot2, shininess);
 		}

@@ -28,12 +28,14 @@ class RayTracingRenderer extends Renderer {
 		console.timeEnd("super.render")
 
 		console.time("trace")
+		const rw = (this.imageData.width - 1) / 2;
+		const rh = (this.imageData.height - 1) / 2;
 		const width = this.imageData.width;
 		const height = this.imageData.height;
 		const data = this.imageData.data;
 		for (let x = 0; x < width; x++) {
 			for (let y = 0; y < height; y++) {
-				const ray = Ray.makeRay(width, height, x, y, this.camera);
+				const ray = Ray.makeRay(rw, rh, x, y, this.camera);
 
 				let minIntersection = new Intersection();
 				let minObj = null;
