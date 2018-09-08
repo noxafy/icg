@@ -19,7 +19,7 @@ class AnimationNode {
 	 * Except it's a Driver. It's always on to remain user freedom.
 	 */
 	toggleActive() {
-		if (this.animator instanceof Driver) this.active = true
+		if (this.animator instanceof UserControllable) this.active = true
 		else this.active = !this.active;
 	}
 
