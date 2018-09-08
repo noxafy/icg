@@ -32,7 +32,7 @@ class AnimationNode {
 		// group node to reflect a rotation
 		if (this.active) {
 			let res = this.animator.calc(deltaT, this.groupNode.matrix);
-			if (!res) throw Error("Failed to calculate animation for " + this.groupNode.toString())
+			if (!res) throw Error(this.constructor.name + ": Failed to calculate animation for " + this.groupNode.toString())
 			this.groupNode.matrix = res;
 		}
 	}
