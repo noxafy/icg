@@ -12,8 +12,7 @@ SpecsView = {
 		this.FPS.init();
 		this.specsElem.className = "";
 		this.LightChanger.fetchLights();
-		const specs_width = document.getElementById("lights").offsetWidth + 12 + "px";
-		this.specsElem.style.width = specs_width;
+		this.specsElem.style.width = document.getElementById("lights").offsetWidth + 12 + "px";
 	},
 	init() {
 		if (Preferences.showSpecs) {
@@ -24,20 +23,27 @@ SpecsView = {
 	},
 	FPS: {
 		e: document.getElementById("fps_val"),
-		cnt: 40,
+		cnt: 0,
 		sum: 0,
 		i: 1,
+		showTime: undefined,
 		add(deltaT) {
 			this.sum += deltaT;
-			if (--this.i === 0) {
-				this.e.innerText = Math.round(10000 * this.cnt / this.sum) / 10;
-				this.sum = 0;
-				this.i = this.cnt;
+			this.cnt++;
+			if (!this.showTime) {
+				this.showTime = setTimeout(() => {
+					this.e.innerText = Math.round(10000 * this.cnt / this.sum) / 10;
+					this.sum = 0;
+					this.cnt = 0;
+					this.showTime = undefined;
+				}, 1000);
 			}
 		},
 		init() {
+			if (this.showTime) clearTimeout(this.showTime);
+			this.showTime = undefined;
 			this.sum = 0;
-			this.i = this.cnt;
+			this.cnt = 0;
 			this.e.innerText = "Collecting data...";
 		}
 	},
