@@ -90,7 +90,7 @@
 		// set up canvas
 		Preferences.canvas.aspectW = 16;
 		Preferences.canvas.aspectH = 9;
-		Preferences.canvas.init(120, 60); // set resolution
+		Preferences.canvas.init(120, 40); // set resolution
 
 		// construct scene graph
 		let camera = new CameraNode(
@@ -149,8 +149,8 @@
 		gn7.add(light);
 		gn7.add(lightSphere)
 
-		// sg.add(gn8);
-		// gn8.add(cube);
+		sg.add(gn8);
+		gn8.add(cube);
 
 		sg.add(gn9);
 		// gn9.add(pyramid);

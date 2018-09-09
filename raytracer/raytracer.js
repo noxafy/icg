@@ -4,7 +4,6 @@
  */
 class Raytracer {
 
-
 	/**
 	 * Creates a ray from the camera through the image plane.
 	 * @param  {number} width  - The width of the canvas - 1) / 2
@@ -17,8 +16,8 @@ class Raytracer {
 	static makeRay(width, height, xPos, yPos, camera) {
 		const x = (xPos / width - 1) * camera.hpxya;
 		const y = (yPos / height - 1) * camera.hpxy;
-		const d = camera.dmuln.sub(camera.r.mul(x)).sub(camera.up.mul(y)).normalised();
-		return new Ray(camera.eye, d);
+		const d = new Vector(-camera.r.x * x, -camera.up.y * y, camera.dmuln.z);
+		return new Ray(camera.eye, d.normalised());
 
 		// // alpha (deg) ~ camera.fovy (rad) -> Math.PI / 180
 		// // -> alpha / 2 = camera.fovy * Math.PI / 360

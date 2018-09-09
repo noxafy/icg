@@ -6,22 +6,17 @@ class Camera {
 
 	/**
 	 *
-	 * @param {Position} eye
-	 * @param {Vector} direction
-	 * @param {Vector} up
-	 * @param {number} aspect
-	 * @param {number} near
-	 * @param {number} far
-	 * @param {number} fovy
+	 * @param {CameraNode} camera
 	 */
-	constructor(eye, direction, up, aspect, near, far, fovy) {
-		this.eye = eye;
-		this.direction = direction.normalised();
-		this.up = up;
-		this.aspect = aspect;
-		this.near = near;
-		this.far = far;
-		this.fovy = fovy;
+	constructor(camera) {
+		this.eye = camera.eye;
+		this.direction = camera.direction.normalised();
+		this.up = camera.up;
+		this.aspect = camera.aspect;
+		this.near = camera.near;
+		this.far = camera.far;
+		this.fovy = camera.fovy;
+
 		// pre-calculate for more efficient ray calculation (1920 * 1080 on my mac: 1444ms -> 1132ms (n=33)
 		this.hpxy = this.near * Math.tan(Utils.degToRad(this.fovy) / 2); // half plane xy
 		this.hpxya = this.hpxy * this.aspect;

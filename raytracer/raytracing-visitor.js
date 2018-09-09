@@ -5,20 +5,16 @@
 class RayTracingCameraTraverser extends CameraTraverser {
 
 	visitCameraNode(node) {
-		const mat = this.getTopMatrix();
-
-		let eye = mat.mul(node.eye);
-		let direction = mat.mul(node.direction);
-		let up = mat.mul(node.up);
-
-		this.renderer.camera = new Camera(eye, direction, up, node.aspect, node.near, node.far, node.fovy);
+		this.renderer.lookat = this.getTopMatrix().invert().mul(Matrix.lookat(node.eye, node.center, node.up));
+		this.renderer.camera = new Camera(node);
 	}
 }
 
 class RayTracingLightTraverser extends LightTraverser {
 
 	visitLightNode(node) {
-		node.m_position = this.getTopMatrix().mul(node.position);
+		const vm = this.renderer.lookat.mul(this.getTopMatrix());
+		node.m_position = vm.mul(node.position);
 		this.renderer.lights.push(node);
 	}
 }
@@ -26,14 +22,14 @@ class RayTracingLightTraverser extends LightTraverser {
 class RayTracingDrawTraverser extends DrawTraverser {
 
 	visitLightableNode(node) {
-		let mat = this.getTopMatrix();
+		const vm = this.renderer.lookat.mul(this.getTopMatrix());
 		if (node instanceof SphereNode) {
 			this.renderer.objects.push(
-				new Sphere(mat.mul(node.center), node.radius, node.color, node.material)
+				new Sphere(vm.mul(node.center), node.radius, node.color, node.material)
 			);
 		} else if (node instanceof AABoxNode) {
 			this.renderer.objects.push(
-				new AABox(mat.mul(node.minPoint), mat.mul(node.maxPoint), node.color, node.material)
+				new AABox(vm.mul(node.minPoint), vm.mul(node.maxPoint), node.color, node.material)
 			);
 		} else if (node instanceof PyramidNode) {
 			// TODO
