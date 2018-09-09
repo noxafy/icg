@@ -216,47 +216,52 @@ UserInteraction = {
 		});
 	},
 	initOnClick() {
-		const canvas = Preferences.canvas.raytracer;
-		const renderer = new MouseRayTracingRenderer(canvas);
 		let objColor, objMaterial, objId;
-		canvas.addEventListener('click', function (e) {
-			const rect = canvas.getBoundingClientRect();
-			let mousePos = new Position(0, 0, 0);
-			mousePos.x = (e.clientX - rect.left) * (canvas.width / rect.width);
-			mousePos.y = (e.clientY - rect.top) * (canvas.height / rect.height);
 
-			renderer.findObject(window.sg, mousePos, function (obj) {
-				if (obj && obj.id === objId) return;
-				if (objColor) unlight();
-				if (obj) light();
+		initCanvasOnClick(Preferences.canvas.raytracer);
+		initCanvasOnClick(Preferences.canvas.rasterizer);
 
-				function unlight() {
-					objColor.x = objColor.x * 2 - 1
-					objColor.y = objColor.y * 2 - 1
-					objColor.z = objColor.z * 2 - 1
-					objMaterial.ambient.x = objMaterial.ambient.x * 2 - 1
-					objMaterial.ambient.y = objMaterial.ambient.y * 2 - 1
-					objMaterial.ambient.z = objMaterial.ambient.z * 2 - 1
+		function initCanvasOnClick(canvas) {
+			const renderer = new MouseRayTracingRenderer(canvas);
+			canvas.addEventListener('click', function (e) {
+				const rect = canvas.getBoundingClientRect();
+				let mousePos = new Position(0, 0, 0);
+				mousePos.x = (e.clientX - rect.left) * (canvas.width / rect.width);
+				mousePos.y = (e.clientY - rect.top) * (canvas.height / rect.height);
 
-					objColor = undefined;
-					objMaterial = undefined;
-					objId = undefined;
-				}
-
-				function light() {
-					objColor = obj.color;
-					objMaterial = obj.material;
-					objId = obj.id;
-
-					objColor.x = (objColor.x + 1) / 2
-					objColor.y = (objColor.y + 1) / 2
-					objColor.z = (objColor.z + 1) / 2
-					objMaterial.ambient.x = (objMaterial.ambient.x + 1) / 2
-					objMaterial.ambient.y = (objMaterial.ambient.y + 1) / 2
-					objMaterial.ambient.z = (objMaterial.ambient.z + 1) / 2
-				}
+				renderer.findObject(window.sg, mousePos, function (obj) {
+					if (obj && obj.id === objId) return;
+					if (objColor) unlight();
+					if (obj) light(obj);
+				});
 			});
-		})
+		}
+
+		function unlight() {
+			objColor.x = objColor.x * 2 - 1
+			objColor.y = objColor.y * 2 - 1
+			objColor.z = objColor.z * 2 - 1
+			objMaterial.ambient.x = objMaterial.ambient.x * 2 - 1
+			objMaterial.ambient.y = objMaterial.ambient.y * 2 - 1
+			objMaterial.ambient.z = objMaterial.ambient.z * 2 - 1
+
+			objColor = undefined;
+			objMaterial = undefined;
+			objId = undefined;
+		}
+
+		function light(obj) {
+			objColor = obj.color;
+			objMaterial = obj.material;
+			objId = obj.id;
+
+			objColor.x = (objColor.x + 1) / 2
+			objColor.y = (objColor.y + 1) / 2
+			objColor.z = (objColor.z + 1) / 2
+			objMaterial.ambient.x = (objMaterial.ambient.x + 1) / 2
+			objMaterial.ambient.y = (objMaterial.ambient.y + 1) / 2
+			objMaterial.ambient.z = (objMaterial.ambient.z + 1) / 2
+		}
 	}
 }
 
