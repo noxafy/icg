@@ -24,9 +24,7 @@ class RayTracingDrawTraverser extends DrawTraverser {
 	visitLightableNode(node) {
 		const vm = this.renderer.lookat.mul(this.getTopMatrix());
 		if (node instanceof SphereNode) {
-			this.renderer.objects.push(
-				new Sphere(vm.mul(node.center), node.radius, node.color, node.material)
-			);
+			this.renderer.objects.push(new Sphere(vm.mul(node.center), node.radius, node.color, node.material));
 		} else if (node instanceof AABoxNode) {
 			this.renderer.objects.push(
 				new AABox(vm.mul(node.minPoint), vm.mul(node.maxPoint), node.color, node.material)
@@ -36,7 +34,7 @@ class RayTracingDrawTraverser extends DrawTraverser {
 		} else if (node instanceof ConeNode) {
 			// TODO
 		} else {
-			throw Error("Unknown lightable node type: " + node.toString())
+			throw Error("Unknown lightable node: " + (node.constructor) ? node.constructor.name : node.toString());
 		}
 	}
 
