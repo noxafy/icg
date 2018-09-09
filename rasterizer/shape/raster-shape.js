@@ -7,6 +7,13 @@ class RasterShape {
 		this.gl = gl;
 	}
 
+	init(vertices, indices, normals, colors) {
+		this.makeVertexBuffer(vertices);
+		this.makeIndexBuffer(indices);
+		this.makeNormalBuffer(normals);
+		this.makeColorBuffer(colors);
+	}
+
 	makeVertexBuffer(vertices) {
 		const vertexBuffer = this.gl.createBuffer();
 		this.gl.bindBuffer(this.gl.ARRAY_BUFFER, vertexBuffer);

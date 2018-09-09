@@ -50,11 +50,8 @@ class RasterBox extends RasterShape {
 			-1.0, 1.0, -1.0, // mi.x, ma.y, mi.z, // l,t,f
 			1.0, 1.0, -1.0 // ma.x, ma.y, mi.z  // r,t,f
 		]
-
-		this.makeVertexBuffer(vertices);
-		this.makeIndexBuffer(indices);
-		this.makeNormalBuffer(normals);
-		this.makeColorBuffer(RasterShape.generateColors(vertices.length, color));
+		const colors = RasterSphere.generateColors(vertices.length, color);
+		this.init(vertices, indices, normals, colors)
 	}
 }
 

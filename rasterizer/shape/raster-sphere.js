@@ -56,10 +56,7 @@ class RasterSphere extends RasterShape {
                 indices.push((ring + 1) * ringsize + ring2);
             }
         }
-
-		this.makeVertexBuffer(vertices);
-		this.makeIndexBuffer(indices);
-		this.makeNormalBuffer(normals);
-		this.makeColorBuffer(RasterSphere.generateColors(vertices.length, color));
+		const colors = RasterSphere.generateColors(vertices.length, color)
+		this.init(vertices, indices, normals, colors)
 	}
 }

@@ -44,10 +44,7 @@ class RasterPyramid extends RasterShape {
 			-1.0, -1.0, -1.0, // 3
 			1.0, -1.0, -1.0 // 4
 		]
-
-		this.makeVertexBuffer(vertices);
-		this.makeIndexBuffer(indices);
-		this.makeNormalBuffer(normals);
-		this.makeColorBuffer(RasterPyramid.generateColors(vertices.length, color));
+		const colors = RasterShape.generateColors(vertices.length, color);
+		this.init(vertices, indices, normals, colors)
 	}
 }

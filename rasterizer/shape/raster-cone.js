@@ -15,13 +15,8 @@ class RasterCone extends RasterShape {
 	constructor(gl, radius, top, ringsize, color) {
 		super(gl);
 
-		let vertices = [
-			top.x, top.y, top.z, // 0
-		];
-
-		let normals = [
-			0.0, 1.0, 0.0,  // top
-		]
+		let vertices = [ top.x, top.y, top.z ];
+		let normals = [ 0.0, 1.0, 0.0 ]
 
 		for (let ring = 0; ring < ringsize; ring++) {
 			let theta = ring * Math.PI * 2 / ringsize - 1;
@@ -53,10 +48,7 @@ class RasterCone extends RasterShape {
 			indices.push(ring);
 			indices.push(ring + 1);
 		}
-
-		this.makeVertexBuffer(vertices);
-		this.makeIndexBuffer(indices);
-		this.makeNormalBuffer(normals);
-		this.makeColorBuffer(RasterPyramid.generateColors(vertices.length, color));
+		const colors = RasterSphere.generateColors(vertices.length, color);
+		this.init(vertices, indices, normals, colors);
 	}
 }
