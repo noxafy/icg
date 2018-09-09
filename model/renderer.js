@@ -16,7 +16,7 @@ class Renderer {
 		this.drawTraverser = drawTraverser;
 
 		this.cameraTraverser.setRenderer(this);
-		if (lightTraverser) this.lightTraverser.setRenderer(this);
+		if (this.lightTraverser) this.lightTraverser.setRenderer(this);
 		this.drawTraverser.setRenderer(this);
 	}
 
@@ -32,7 +32,6 @@ class Renderer {
 
 		// light traversal
 		if (this.lightTraverser) {
-			this.lightPositions = [];
 			this.lights = [];
 			rootNode.accept(this.lightTraverser);
 		}
