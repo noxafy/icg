@@ -230,12 +230,20 @@ class Matrix {
 	toString() {
 		let res = "";
 		for (let row = 0; row < 4; row++) {
-			res += this.getVal(row, 0) +
-				"\t" + this.getVal(row, 1) +
-				"\t" + this.getVal(row, 2) +
-				"\t" + this.getVal(row, 3) + "\n"
+			res += this.getRounded(row, 0) +
+				"\t" + this.getRounded(row, 1) +
+				"\t" + this.getRounded(row, 2) +
+				"\t" + this.getRounded(row, 3) + "\n"
 		}
 		return res;
+	}
+
+	getRounded(row, col) {
+		const val = this.getVal(row, col);
+		if (val < 0) {
+			return Math.round(val * 10000) / 10000
+		}
+		return Math.round(val * 100000) / 100000
 	}
 
 	/**

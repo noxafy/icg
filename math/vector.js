@@ -219,7 +219,11 @@ class Vector {
     }
 
 	toString() {
-		return "[" + this.x + "," + this.y + "," + this.z + "," + this.w + "]"
+		return "[" +
+			Utils.round(this.x) + "," +
+			Utils.round(this.y) + "," +
+			Utils.round(this.z) + "," +
+			Utils.round(this.w) + "]"
 	}
 }
 
