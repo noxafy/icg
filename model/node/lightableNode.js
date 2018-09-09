@@ -175,3 +175,33 @@ class ConeNode extends LightableNode {
 			"top: " + this.top.toString() + ")";
 	}
 }
+
+class GenericNode extends LightableNode {
+
+	/**
+	 * Creates a generic shape
+	 * @param {Array.<Number>} vertices
+	 * @param {Array.<Number>} indices
+	 * @param {Array.<Number>} normals
+	 * @param {Color}          color    - The color of the cone
+	 * @param {Material}       material - The material of the cone
+	 */
+	constructor(vertices, indices, normals, color, material) {
+		super(color, material);
+		this.vertices = vertices;
+		this.indices = indices;
+		this.normals = normals;
+	}
+
+	setRasterRenderer(gl) {
+		this.setRasterShape(new GenericRasterShape(gl, this.vertices, this.indices, this.normals, this.color));
+	}
+
+	toString() {
+		return "GenericShape: (" +
+			super.toString() + "; " +
+			"vertices: " + JSON.stringify(this.vertices) + "; " +
+			"indices: " + JSON.stringify(this.indices) + "; " +
+			"normals: " + JSON.stringify(this.normals) + ")";
+	}
+}

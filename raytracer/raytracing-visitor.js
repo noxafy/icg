@@ -30,10 +30,13 @@ class RayTracingDrawTraverser extends DrawTraverser {
 				new AABox(vm.mul(node.minPoint), vm.mul(node.maxPoint), node.color, node.material)
 			);
 		} else if (node instanceof PyramidNode) {
-			// TODO
+			// ignore for now
 		} else if (node instanceof ConeNode) {
-			// TODO
-		} else {
+			// ignore for now
+		} else if (node instanceof GenericNode) {
+			// ignore for now
+		}
+		else {
 			throw Error("Unknown lightable node: " + (node.constructor) ? node.constructor.name : node.toString());
 		}
 	}

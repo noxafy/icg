@@ -48,7 +48,12 @@ SceneGraphImporter = {
 					Color.getFromJson(obj.color), Material.getFromJson(obj.material));
 				break;
 			case "ConeNode":
-				This = new ConeNode(obj.radius, obj.height, Color.getFromJson(obj.color), Material.getFromJson(obj.material));
+				This = new ConeNode(obj.radius, obj.height,
+					Color.getFromJson(obj.color), Material.getFromJson(obj.material), obj.ringsize);
+				break;
+			case "GenericNode":
+				This = new GenericNode(obj.vertices, obj.indices, obj.normals,
+					Color.getFromJson(obj.color), Material.getFromJson(obj.material));
 				break;
 			case "TextureBoxNode":
 				This = new TextureBoxNode(Position.fromArray(obj.minPoint), Position.fromArray(obj.maxPoint), obj.texture);

@@ -79,32 +79,38 @@ class SceneGraphJsonGenerator extends Visitor {
 		let obj;
 		if (node instanceof SphereNode) {
 			obj = {
-				type: "SphereNode",
 				center: node.center.data,
 				radius: node.radius,
 				ringsize: node.ringsize
 			};
 		} else if (node instanceof AABoxNode) {
 			obj = {
-				type: "AABoxNode",
 				minPoint: node.minPoint.data,
 				maxPoint: node.maxPoint.data
 			}
 		} else if (node instanceof PyramidNode) {
 			obj = {
-				type: "PyramidNode",
 				x_extent: node.minPoint.x * 2,
 				z_extent: node.maxPoint.z * 2,
 				height: node.top.y
 			}
 		} else if (node instanceof ConeNode) {
 			obj = {
-				type: "ConeNode",
 				radius: node.radius,
 				height: node.top.y,
 				ringsize: node.ringsize
 			}
+		} else if (node instanceof GenericNode) {
+			obj = {
+				vertices: node.vertices,
+				indices: node.indices,
+				normals: node.normals
+			}
+		} else {
+			throw Error("Unknown node type: " + (node.constructor) ? node.constructor.name : node.toString());
 		}
+
+		obj.type = node.constructor.name;
 		obj.color = node.color.toJsonObj();
 		obj.material = node.material.toJsonObj();
 		this.append(obj)

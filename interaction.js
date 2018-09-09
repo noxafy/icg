@@ -334,6 +334,8 @@ class MouseRayTracingDrawTraverser extends RayTracingDrawTraverser {
 				center.y = project / 2;
 			}
 			obj = new Sphere(vm.mul(center), radius, node.color, node.material);
+		} else if (node instanceof GenericNode) {
+			// ignore for now
 		} else {
 			throw Error("Unknown lightable node: " + (node.constructor) ? node.constructor.name : node.toString());
 		}
