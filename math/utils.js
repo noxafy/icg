@@ -31,6 +31,9 @@ class Utils {
 		else if (abs > 1e-6) {
 			return Math.round(val * 100000000) / 100000000
 		}
+		else if (abs > 1e-7) {
+			return Math.round(val * 1000000000) / 1000000000
+		}
 		else return val;
 	}
 }
