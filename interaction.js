@@ -238,12 +238,12 @@ UserInteraction = {
 		}
 
 		function unlight() {
-			objColor.x = objColor.x * 2 - 1
-			objColor.y = objColor.y * 2 - 1
-			objColor.z = objColor.z * 2 - 1
-			objMaterial.ambient.x = objMaterial.ambient.x * 2 - 1
-			objMaterial.ambient.y = objMaterial.ambient.y * 2 - 1
-			objMaterial.ambient.z = objMaterial.ambient.z * 2 - 1
+			objColor.x = objColor.x * 1.5 - 0.5
+			objColor.y = objColor.y * 1.5 - 0.5
+			objColor.z = objColor.z * 1.5 - 0.5
+			objMaterial.ambient.x = objMaterial.ambient.x * 1.5 - 0.5
+			objMaterial.ambient.y = objMaterial.ambient.y * 1.5 - 0.5
+			objMaterial.ambient.z = objMaterial.ambient.z * 1.5 - 0.5
 
 			objColor = undefined;
 			objMaterial = undefined;
@@ -255,12 +255,12 @@ UserInteraction = {
 			objMaterial = obj.material;
 			objId = obj.id;
 
-			objColor.x = (objColor.x + 1) / 2
-			objColor.y = (objColor.y + 1) / 2
-			objColor.z = (objColor.z + 1) / 2
-			objMaterial.ambient.x = (objMaterial.ambient.x + 1) / 2
-			objMaterial.ambient.y = (objMaterial.ambient.y + 1) / 2
-			objMaterial.ambient.z = (objMaterial.ambient.z + 1) / 2
+			objColor.x = (objColor.x + 0.5) / 1.5
+			objColor.y = (objColor.y + 0.5) / 1.5
+			objColor.z = (objColor.z + 0.5) / 1.5
+			objMaterial.ambient.x = (objMaterial.ambient.x + 0.5) / 1.5
+			objMaterial.ambient.y = (objMaterial.ambient.y + 0.5) / 1.5
+			objMaterial.ambient.z = (objMaterial.ambient.z + 0.5) / 1.5
 		}
 	}
 }
