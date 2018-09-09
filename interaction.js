@@ -238,16 +238,20 @@ UserInteraction = {
 		}
 
 		function unlight() {
-			objColor.x = objColor.x * 1.5 - 0.5
-			objColor.y = objColor.y * 1.5 - 0.5
-			objColor.z = objColor.z * 1.5 - 0.5
-			objMaterial.ambient.x = objMaterial.ambient.x * 1.5 - 0.5
-			objMaterial.ambient.y = objMaterial.ambient.y * 1.5 - 0.5
-			objMaterial.ambient.z = objMaterial.ambient.z * 1.5 - 0.5
+			objColor.x = getUnLighted(objColor.x)
+			objColor.y = getUnLighted(objColor.y)
+			objColor.z = getUnLighted(objColor.z)
+			objMaterial.ambient.x = getUnLighted(objMaterial.ambient.x)
+			objMaterial.ambient.y = getUnLighted(objMaterial.ambient.y)
+			objMaterial.ambient.z = getUnLighted(objMaterial.ambient.z)
 
 			objColor = undefined;
 			objMaterial = undefined;
 			objId = undefined;
+
+			function getUnLighted(val) {
+				return Math.pow(val * 1.2 - 0.2, 2);
+			}
 		}
 
 		function light(obj) {
@@ -255,12 +259,16 @@ UserInteraction = {
 			objMaterial = obj.material;
 			objId = obj.id;
 
-			objColor.x = (objColor.x + 0.5) / 1.5
-			objColor.y = (objColor.y + 0.5) / 1.5
-			objColor.z = (objColor.z + 0.5) / 1.5
-			objMaterial.ambient.x = (objMaterial.ambient.x + 0.5) / 1.5
-			objMaterial.ambient.y = (objMaterial.ambient.y + 0.5) / 1.5
-			objMaterial.ambient.z = (objMaterial.ambient.z + 0.5) / 1.5
+			objColor.x = getLighted(objColor.x)
+			objColor.y = getLighted(objColor.y)
+			objColor.z = getLighted(objColor.z)
+			objMaterial.ambient.x = getLighted(objMaterial.ambient.x)
+			objMaterial.ambient.y = getLighted(objMaterial.ambient.y)
+			objMaterial.ambient.z = getLighted(objMaterial.ambient.z)
+
+			function getLighted(val) {
+				return Math.sqrt((val + 0.2) / 1.2);
+			}
 		}
 	}
 }
@@ -276,11 +284,11 @@ class MouseRayTracingRenderer extends Renderer {
 		const rw = (this.canvas.width - 1) / 2;
 		const rh = (this.canvas.height - 1) / 2;
 		const ray = Raytracer.makeRay(rw, rh, mousePos.x, mousePos.y, this.camera);
-		Raytracer.findMinIntersection(ray, this.objects, cb);
+		Raytracer.findMinIntersection(ray, this.bounding_spheres, cb);
 	}
 
 	clear() {
-		this.objects = [];
+		this.bounding_spheres = [];
 	}
 }
 
@@ -290,8 +298,46 @@ class MouseRayTracingDrawTraverser extends RayTracingDrawTraverser {
 	}
 
 	visitLightableNode(node) {
-		super.visitLightableNode(node);
-		const idx = this.renderer.objects.length - 1;
-		this.renderer.objects[idx].id = idx;
+		const vm = this.renderer.lookat.mul(this.getTopMatrix());
+		let obj;
+		if (node instanceof SphereNode) {
+			obj = new Sphere(vm.mul(node.center), node.radius, node.color, node.material);
+		} else if (node instanceof AABoxNode) {
+			let center = node.minPoint.add(node.maxPoint).div(2);
+			let radius = node.minPoint.sub(center).length;
+			obj = new Sphere(vm.mul(center), radius, node.color, node.material);
+		} else if (node instanceof PyramidNode) {
+			let center = new Position(0, 0, 0);
+			let radius = node.minPoint.add(center).length;
+			let height = node.top.y;
+			if (height > radius) {
+				let project = height - radius;
+				radius += project / 2;
+				center.y = project / 2;
+			} else if (height < -radius) {
+				let project = height + radius;
+				radius -= project / 2;
+				center.y = project / 2;
+			}
+			obj = new Sphere(vm.mul(center), radius, node.color, node.material);
+		} else if (node instanceof ConeNode) {
+			let center = new Position(0, 0, 0);
+			let radius = node.radius;
+			let height = node.top.y;
+			if (height > radius) {
+				let project = height - radius;
+				radius += project / 2;
+				center.y = project / 2;
+			} else if (height < -radius) {
+				let project = height + radius;
+				radius -= project / 2;
+				center.y = project / 2;
+			}
+			obj = new Sphere(vm.mul(center), radius, node.color, node.material);
+		} else {
+			throw Error("Unknown lightable node: " + (node.constructor) ? node.constructor.name : node.toString());
+		}
+		obj.id = this.renderer.bounding_spheres.length - 1;
+		this.renderer.bounding_spheres.push(obj);
 	}
 }
