@@ -10,6 +10,9 @@ class LightableNode extends Node {
 	 * @param {Material} material - The material of the shape
 	 */
 	constructor(color, material) {
+		if (!color) throw Error("Color is " + color);
+		if (!material) throw Error("Material is " + material)
+
 		super();
 		this.color = color;
 		this.material = material;

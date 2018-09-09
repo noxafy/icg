@@ -52,7 +52,7 @@ class Raytracer {
 				minObj = shape;
 			}
 		}
-		if (minObj) cb(minObj, minIntersection);
+		cb(minObj, minIntersection);
 	}
 
 	/**

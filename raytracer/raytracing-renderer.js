@@ -35,11 +35,13 @@ class RayTracingRenderer extends Renderer {
 				const ray = Raytracer.makeRay(rw, rh, x, y, this.camera);
 
 				Raytracer.findMinIntersection(ray, this.objects, (minObj, minIntersection) => {
-					let color = Raytracer.phong(minObj, minIntersection, this.lights, this.camera.eye);
-					data[4 * (width * y + x)] = color.r * 255;
-					data[4 * (width * y + x) + 1] = color.g * 255;
-					data[4 * (width * y + x) + 2] = color.b * 255;
-					data[4 * (width * y + x) + 3] = color.a * 255;
+					if (minObj) {
+						let color = Raytracer.phong(minObj, minIntersection, this.lights, this.camera.eye);
+						data[4 * (width * y + x)] = color.r * 255;
+						data[4 * (width * y + x) + 1] = color.g * 255;
+						data[4 * (width * y + x) + 2] = color.b * 255;
+						data[4 * (width * y + x) + 3] = color.a * 255;
+					}
 				});
 			}
 		}

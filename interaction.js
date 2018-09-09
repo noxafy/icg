@@ -6,15 +6,15 @@
 UserInteraction = {
 	init() {
 		this.KeyEvents.init();
+		this.initOnClick();
 	},
 	KeyEvents: {
 		hitCmd: false, // user wants to make a browser short cut
 		lastKey: undefined,
 		init() {
 			window.addEventListener('keydown', (event) => {
-				if (this.hitCmd
-				)
-					return;
+				if (this.hitCmd) return;
+
 				switch (event.key) {
 					case "Meta":
 						this.hitCmd = true;
@@ -214,5 +214,79 @@ UserInteraction = {
 			cb(file);
 			return false;
 		});
+	},
+	initOnClick() {
+		const canvas = Preferences.canvas.raytracer;
+		const renderer = new MouseRayTracingRenderer(canvas);
+		let objColor, objMaterial, objId;
+		canvas.addEventListener('click', function (e) {
+			const rect = canvas.getBoundingClientRect();
+			let mousePos = new Position(0, 0, 0);
+			mousePos.x = (e.clientX - rect.left) * (canvas.width / rect.width);
+			mousePos.y = (e.clientY - rect.top) * (canvas.height / rect.height);
+
+			renderer.findObject(window.sg, mousePos, function (obj) {
+				if (obj && obj.id === objId) return;
+				if (objColor) unlight();
+				if (obj) light();
+
+				function unlight() {
+					objColor.x = objColor.x * 2 - 1
+					objColor.y = objColor.y * 2 - 1
+					objColor.z = objColor.z * 2 - 1
+					objMaterial.ambient.x = objMaterial.ambient.x * 2 - 1
+					objMaterial.ambient.y = objMaterial.ambient.y * 2 - 1
+					objMaterial.ambient.z = objMaterial.ambient.z * 2 - 1
+
+					objColor = undefined;
+					objMaterial = undefined;
+					objId = undefined;
+				}
+
+				function light() {
+					objColor = obj.color;
+					objMaterial = obj.material;
+					objId = obj.id;
+
+					objColor.x = (objColor.x + 1) / 2
+					objColor.y = (objColor.y + 1) / 2
+					objColor.z = (objColor.z + 1) / 2
+					objMaterial.ambient.x = (objMaterial.ambient.x + 1) / 2
+					objMaterial.ambient.y = (objMaterial.ambient.y + 1) / 2
+					objMaterial.ambient.z = (objMaterial.ambient.z + 1) / 2
+				}
+			});
+		})
+	}
+}
+
+class MouseRayTracingRenderer extends Renderer {
+	constructor(canvas) {
+		super(new RayTracingCameraTraverser(), null, new MouseRayTracingDrawTraverser());
+		this.canvas = canvas;
+	}
+
+	findObject(rootNode, mousePos, cb) {
+		this.render(rootNode);
+		const rw = (this.canvas.width - 1) / 2;
+		const rh = (this.canvas.height - 1) / 2;
+		const ray = Raytracer.makeRay(rw, rh, mousePos.x, mousePos.y, this.camera);
+		Raytracer.findMinIntersection(ray, this.objects, cb);
+	}
+
+	clear() {
+		this.objects = [];
+	}
+}
+
+class MouseRayTracingDrawTraverser extends RayTracingDrawTraverser {
+	constructor() {
+		super();
+	}
+
+	visitLightableNode(node) {
+		super.visitLightableNode(node);
+		const idx = this.renderer.objects.length - 1;
+		this.renderer.objects[idx].id = idx;
 	}
 }
