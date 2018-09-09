@@ -36,7 +36,7 @@ function getPhongColor(light, n, p, color, material, cameraPos) {
 	const dot = n.dot(l);
 	if (dot > 0) {
 		diffuse = light.color.mul(dot).mul(material.diffuse).mul(light.diffuse);
-		const r = n.mul(2 * l.dot(n)).sub(l).normalised(); // direction that a perfectly reflected ray would take from this point on the surface
+		const r = n.mul(2 * dot).sub(l).normalised(); // direction that a perfectly reflected ray would take from this point on the surface
 		const v = cameraPos.sub(p).normalised(); // direction pointing towards the viewer
 		const dot2 = r.dot(v);
 		if (dot2 > 0) {
@@ -48,7 +48,7 @@ function getPhongColor(light, n, p, color, material, cameraPos) {
 	if (diffuse) res = res.add(diffuse);
 	if (specular) res = res.add(specular);
 
-	const distance = light.position.sub(p).length;
+	const distance = light.m_position.sub(p).length;
 	const attenuation = light.constant + light.linear * distance + light.quadratic * (distance * distance);
 	return res.mul(light.intensity / attenuation);
 }

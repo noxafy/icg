@@ -6,7 +6,7 @@ class Sphere extends Shape {
 	 * Creates a new Sphere with center and radius
 	 * @param {Position} center   - The center of the Sphere
 	 * @param {number}   radius   - The radius of the Sphere
-	 * @param {Vector}   color    - The color of the Sphere
+	 * @param {Color}    color    - The color of the Sphere
 	 * @param {Material} material - The material of the Sphere
 	 */
 	constructor(center, radius, color, material) {
@@ -28,7 +28,7 @@ class Sphere extends Shape {
 		const b = ray.direction.dot(this.emc);
 		const underSqrt = b * b - this.c;
 		if (underSqrt < 0) return null;
-		else if (underSqrt === 0) return new Intersection(-b);
+		// else if (underSqrt === 0) return new Intersection(-b);
 
 		const t = -b - Math.sqrt(underSqrt);
 		const point = ray.origin.add(ray.direction.mul(t));
