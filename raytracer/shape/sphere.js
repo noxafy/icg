@@ -31,6 +31,7 @@ class Sphere extends Shape {
 		// else if (underSqrt === 0) return new Intersection(-b);
 
 		const t = -b - Math.sqrt(underSqrt);
+		if (t < 0) return null;
 		const point = ray.origin.add(ray.direction.mul(t));
 		return new Intersection(t, point, point.sub(this.center).normalised());
 	}
