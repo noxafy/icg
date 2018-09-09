@@ -32,24 +32,15 @@ class RayTracingRenderer extends Renderer {
 		const data = this.imageData.data;
 		for (let x = 0; x < width; x++) {
 			for (let y = 0; y < height; y++) {
-				const ray = Ray.makeRay(rw, rh, x, y, this.camera);
+				const ray = Raytracer.makeRay(rw, rh, x, y, this.camera);
 
-				let minIntersection = new Intersection();
-				let minObj = null;
-				for (let shape of this.objects) {
-					const intersection = shape.intersect(ray);
-					if (intersection && intersection.closerThan(minIntersection)) {
-						minIntersection = intersection;
-						minObj = shape;
-					}
-				}
-				if (minObj) {
-					let color = phong(minObj, minIntersection, this.lights, camera.eye);
+				Raytracer.findMinIntersection(ray, this.objects, (minObj, minIntersection) => {
+					let color = Raytracer.phong(minObj, minIntersection, this.lights, this.camera.eye);
 					data[4 * (width * y + x)] = color.r * 255;
 					data[4 * (width * y + x) + 1] = color.g * 255;
 					data[4 * (width * y + x) + 2] = color.b * 255;
 					data[4 * (width * y + x) + 3] = color.a * 255;
-				}
+				});
 			}
 		}
 		this.context.putImageData(this.imageData, 0, 0);
