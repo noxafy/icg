@@ -16,10 +16,33 @@ class Shader {
 		this.gl = gl;
 	}
 
-	async load() {
+	static loadShader(gl, content, type) {
+		const shader = gl.createShader(type);
+		// Send the source to the shader object
+		gl.shaderSource(shader, content);
+		// Compile the shader program
+		gl.compileShader(shader);
+
+		// See if it compiled successfully
+		if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+			console.error("An error occurred compiling the shaders: ", gl.getShaderInfoLog(shader));
+			return null;
+		}
+		return shader;
+	}
+
+	async load(vsContent, fsContent) {
 		let gl = this.gl;
-		const vertexShader = this.getShader(gl, this.vsFilename, gl.VERTEX_SHADER);
-		const fragmentShader = this.getShader(gl, this.fsFilename, gl.FRAGMENT_SHADER);
+		let vertexShader, fragmentShader;
+		if (vsContent) vertexShader = Shader.loadShader(gl, vsContent, gl.VERTEX_SHADER);
+		else {
+			vertexShader = this.getShader(gl, this.vsFilename, gl.VERTEX_SHADER);
+		}
+
+		if (fsContent) fragmentShader = Shader.loadShader(gl, fsContent, gl.FRAGMENT_SHADER);
+		else {
+			fragmentShader = this.getShader(gl, this.fsFilename, gl.FRAGMENT_SHADER);
+		}
 
 		return Promise.all([vertexShader, fragmentShader]).then(shaderParts => {
 			// Create the shader program
@@ -58,27 +81,14 @@ class Shader {
 
 	/**
 	 * Loads a shader part from its script DOM node and compiles it
-	 * @param  {Object} gl - The 3D context
-	 * @param  {string} id - The id of the shader script node
-	 * @return {Object}      The resulting shader part
+	 * @param  {Object} gl       - The 3D context
+	 * @param  {string} filename - The filename of the shader script
+	 * @param  {number} type     - The type of the shader (fragment or vertex)
+	 * @return {Object}          The resulting shader part
 	 */
 	async getShader(gl, filename, type) {
 		const source = fetch(filename).then(response => response.text());
-
-		return source.then(s => {
-			const shader = gl.createShader(type);
-			// Send the source to the shader object
-			gl.shaderSource(shader, s);
-			// Compile the shader program
-			gl.compileShader(shader);
-
-			// See if it compiled successfully
-			if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-				console.error("An error occurred compiling the shaders: ", gl.getShaderInfoLog(shader));
-				return null;
-			}
-			return shader;
-		});
+		return source.then(s => Shader.loadShader(gl, s, type));
 	}
 
 	/**
