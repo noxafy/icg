@@ -4,25 +4,10 @@
  */
 Preferences = {
 	showSpecs: false,
-	toggleShowSpecs() {
-		if (this.showSpecs) {
-			SpecsView.disable();
-		} else {
-			SpecsView.enable();
-		}
-		this.showSpecs = !this.showSpecs;
-	},
 	showMenu: false,
-	toggleShowMenu() {
-		if (this.showMenu) {
-			MenuView.disable();
-		} else {
-			MenuView.enable();
-		}
-		this.showMenu = !this.showMenu;
-	},
+	fullscreenActivated: false,
 	getDefaultSceneGraph: function () {
-		return "";
+		throw Error("niy");
 	},
 	canvas: {
 		useRasterRenderer: true,

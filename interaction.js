@@ -35,10 +35,10 @@ UserInteraction = {
 						UserInteraction.toggleFullScreenMode();
 						break;
 					case "v":
-						Preferences.toggleShowSpecs();
+						UserInteraction.toggleSpecsView();
 						break;
 					case "m":
-						Preferences.toggleShowMenu();
+						UserInteraction.toggleMenuView();
 						break;
 					case "r":
 						Preferences.canvas.toggleRenderer();
@@ -46,8 +46,7 @@ UserInteraction = {
 				}
 
 				this.animationControl(key, true);
-			})
-			;
+			});
 
 			window.addEventListener('keyup', (event) => {
 				switch (event.key) {
@@ -172,9 +171,18 @@ UserInteraction = {
 			}
 		}
 	},
-	fullscreenActivated: false,
+	toggleSpecsView() {
+		if (Preferences.showSpecs) SpecsView.disable();
+		else SpecsView.enable();
+		Preferences.showSpecs = !Preferences.showSpecs;
+	},
+	toggleMenuView() {
+		if (Preferences.showMenu) MenuView.disable();
+		else MenuView.enable();
+		Preferences.showMenu = !Preferences.showMenu;
+	},
 	toggleFullScreenMode() {
-		if (this.fullscreenActivated) {
+		if (Preferences.fullscreenActivated) {
 			if (document.mozCancelFullScreen) document.mozCancelFullScreen();
 			else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
 			else if (document.msExitFullscreen) document.msExitFullscreen();
@@ -183,7 +191,7 @@ UserInteraction = {
 				console.error("Couldn't exit fullscreen mode!");
 				return;
 			}
-			this.fullscreenActivated = false;
+			Preferences.fullscreenActivated = false;
 		} else {
 			let p = canvas.parentNode.parentNode;
 			if (p.mozRequestFullScreen) p.mozRequestFullScreen();
@@ -194,7 +202,7 @@ UserInteraction = {
 				console.error("Fullscreen mode not available!")
 				return;
 			}
-			this.fullscreenActivated = true;
+			Preferences.fullscreenActivated = true;
 		}
 	},
 	onFileDropped(cb) {
