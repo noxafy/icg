@@ -77,10 +77,10 @@ class Color extends Vector {
 	}
 
 	static fromArray(arr) {
-		return new Color(arr[0], arr[1], arr[2], arr[3]);
+		return new Color(arr[0], arr[1], arr[2], arr.length > 3 ? arr[3] : 1);
 	}
 
-	static getFromJson(obj) {
+	static fromJson(obj) {
 		if (typeof obj === "string") {
 			if (Colors[obj]) return Colors[obj];
 			else throw Error("Unknown color: " + obj);

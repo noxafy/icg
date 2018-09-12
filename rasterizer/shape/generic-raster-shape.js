@@ -3,9 +3,8 @@
  * Created: 09.09.18
  */
 class GenericRasterShape extends RasterShape {
-	constructor(gl, vertices, indices, normals, color) {
+	constructor(gl, vertices, indices, normals, colors) {
 		super(gl);
-		const colors = RasterShape.generateColors(color);
-		this.init(this.init(vertices, indices, normals, colors))
+		this.init(vertices, indices, normals, colors);
 	}
 }

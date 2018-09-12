@@ -104,7 +104,9 @@ class SceneGraphJsonGenerator extends Visitor {
 			obj = {
 				vertices: node.vertices,
 				indices: node.indices,
-				normals: node.normals
+				normals: node.normals,
+				colors: node.colors,
+				name: node.name
 			}
 		} else {
 			throw Error("Unknown node type: " + (node.constructor) ? node.constructor.name : node.toString());

@@ -28,7 +28,7 @@ class Material {
 			"shininess: " + this.shininess + ")";
 	}
 
-	static getFromJson(obj) {
+	static fromJson(obj) {
 		if (typeof obj === "string") {
 			if (Materials[obj]) return Materials[obj];
 			else throw Error("Unknown material: " + obj);

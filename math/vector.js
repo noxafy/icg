@@ -201,7 +201,7 @@ class Vector {
 	}
 
 	static fromArray(arr) {
-		return new Vector(arr[0], arr[1], arr[2], arr[3]);
+		return new Vector(arr[0], arr[1], arr[2], arr.length > 3 ? arr[3] : 0);
 	}
 
     /**
@@ -240,6 +240,6 @@ class Position extends Vector {
 	}
 
 	static fromArray(arr) {
-		return new Position(arr[0], arr[1], arr[2], arr[3]);
+		return new Position(arr[0], arr[1], arr[2], arr.length > 3 ? arr[3] : 1);
 	}
 }

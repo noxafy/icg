@@ -37,23 +37,27 @@ SceneGraphImporter = {
 				break;
 			case "SphereNode":
 				This = new SphereNode(Position.fromArray(obj.center), obj.radius,
-					Color.getFromJson(obj.color), Material.getFromJson(obj.material), obj.ringsize);
+					Color.fromJson(obj.color), Material.fromJson(obj.material), obj.ringsize);
 				break;
 			case "AABoxNode":
 				This = new AABoxNode(Position.fromArray(obj.minPoint), Position.fromArray(obj.maxPoint),
-					Color.getFromJson(obj.color), Material.getFromJson(obj.material));
+					Color.fromJson(obj.color), Material.fromJson(obj.material));
 				break;
 			case "PyramidNode":
 				This = new PyramidNode(obj.x_extent, obj.z_extent, obj.height,
-					Color.getFromJson(obj.color), Material.getFromJson(obj.material));
+					Color.fromJson(obj.color), Material.fromJson(obj.material));
 				break;
 			case "ConeNode":
 				This = new ConeNode(obj.radius, obj.height,
-					Color.getFromJson(obj.color), Material.getFromJson(obj.material), obj.ringsize);
+					Color.fromJson(obj.color), Material.fromJson(obj.material), obj.ringsize);
 				break;
 			case "GenericNode":
-				This = new GenericNode(obj.vertices, obj.indices, obj.normals,
-					Color.getFromJson(obj.color), Material.getFromJson(obj.material));
+				let colors = []
+				for (let color of obj.colors) {
+					colors.push(Color.fromJson(color).data);
+				}
+				This = new GenericNode(obj.vertices, obj.indices, obj.normals, obj.colors,
+					Color.fromJson(obj.color), Material.fromJson(obj.material), obj.name);
 				break;
 			case "TextureBoxNode":
 				This = new TextureBoxNode(Position.fromArray(obj.minPoint), Position.fromArray(obj.maxPoint), obj.texture);
@@ -62,7 +66,7 @@ SceneGraphImporter = {
 				This = new CameraNode(Position.fromArray(obj.eye), obj.aspect, obj.near, obj.far, obj.fovy);
 				break;
 			case "LightNode":
-				This = new LightNode(Position.fromArray(obj.position), Color.getFromJson(obj.color),
+				This = new LightNode(Position.fromArray(obj.position), Color.fromJson(obj.color),
 					obj.intensity, obj.constant, obj.linear, obj.quadratic);
 				break;
 			default:

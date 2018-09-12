@@ -183,25 +183,33 @@ class GenericNode extends LightableNode {
 	 * @param {Array.<Number>} vertices
 	 * @param {Array.<Number>} indices
 	 * @param {Array.<Number>} normals
-	 * @param {Color}          color    - The color of the cone
-	 * @param {Material}       material - The material of the cone
+	 * @param {Array.<Number>} colors   - The colors for each vertex of the generic node
+	 * @param {Color}          color    - The color of the generic node, if no colors given
+	 * @param {Material}       material - The material of the generic node
+	 * @param {string}         name     - The name of the generic node
 	 */
-	constructor(vertices, indices, normals, color, material) {
+	constructor(vertices, indices, normals, colors, color, material, name) {
 		super(color, material);
 		this.vertices = vertices;
 		this.indices = indices;
 		this.normals = normals;
+		this.colors = colors;
+		this.name = name;
 	}
 
 	setRasterRenderer(gl) {
-		this.setRasterShape(new GenericRasterShape(gl, this.vertices, this.indices, this.normals, this.color));
+		// generate from color if no colors given
+		if (this.colors.length === 0) this.colors = RasterShape.generateColors(this.vertices.length, this.color);
+		this.setRasterShape(new GenericRasterShape(gl, this.vertices, this.indices, this.normals, this.colors));
 	}
 
 	toString() {
 		return "GenericShape: (" +
-			super.toString() + "; " +
+		super.toString() + "; " +
+		(this.name) ? "name: " + this.name : "" +
 			"vertices: " + JSON.stringify(this.vertices) + "; " +
 			"indices: " + JSON.stringify(this.indices) + "; " +
-			"normals: " + JSON.stringify(this.normals) + ")";
+			"normals: " + JSON.stringify(this.normals) + "; " +
+			"colors: " + JSON.stringify(this.colors) + ")";
 	}
 }
