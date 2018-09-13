@@ -44,26 +44,98 @@
 	<script src="resources/materials.js"></script>
 	<script src="resources/colors.js"></script>
 	<script src="renderProcess.js"></script>
-	<script src="interaction.js"></script>
 	<script src="io/scenegraph-exporter.js"></script>
 	<script src="io/scenegraph-importer.js"></script>
 	<script src="io/model-loader.js"></script>
+	<script src="io/files.js"></script>
 </head>
 
 <body>
 
 <div id="canvas-container">
+	<div class="disabled" id="modelload-form-container">
+		<div id="modelload-form">
+			<div id="modelload-form-pages">
+				<div class="disabled" id="page_getOtherFile">
+					<div id="modelload-form-droparea-obj" class="droparea" ondragover="onDragOver(event, this)"
+						 ondragleave="onDragLeave(event, this)" ondrop="ModelLoadView.onFileDrop(event)">
+						<span>Required: Please drop .obj file here</span>
+					</div>
+					<div id="modelload-form-droparea-mtl" class="droparea" ondragover="onDragOver(event, this)"
+						 ondragleave="onDragLeave(event, this)" ondrop="ModelLoadView.onFileDrop(event)">
+						<span>Optional: Please drop .mtl file here</span>
+					</div>
+				</div>
+				<div class="disabled" id="page_setMatrix">
+					<table>
+						<tr>
+							<td>
+								<div id="modelload-form-translation">
+									<div class="page_matrix_title">Translation:</div>
+									<label for="modelload-form-translation-x">x: </label>
+									<input id="modelload-form-translation-x" type="text" placeholder="0"
+										   onkeydown="testNumberInput(event)"><br/>
+									<label for="modelload-form-translation-y">y: </label>
+									<input id="modelload-form-translation-y" type="text" placeholder="0"
+										   onkeydown="testNumberInput(event)"><br/>
+									<label for="modelload-form-translation-z">z: </label>
+									<input id="modelload-form-translation-z" type="text" placeholder="0"
+										   onkeydown="testNumberInput(event)">
+								</div>
+							</td>
+							<td>
+								<div id="modelload-form-rotation">
+									<div class="page_matrix_title">Rotation:</div>
+									<label for="modelload-form-rotation-x">x: </label>
+									<input id="modelload-form-rotation-x" type="text" placeholder="0°"
+										   onkeydown="testNumberInput(event)"><br/>
+									<label for="modelload-form-rotation-y">y: </label>
+									<input id="modelload-form-rotation-y" type="text" placeholder="0°"
+										   onkeydown="testNumberInput(event)"><br/>
+									<label for="modelload-form-rotation-z">z: </label>
+									<input id="modelload-form-rotation-z" type="text" placeholder="0°"
+										   onkeydown="testNumberInput(event)">
+								</div>
+							</td>
+							<td>
+								<div id="modelload-form-scale">
+									<div class="page_matrix_title">Scale:</div>
+									<label for="modelload-form-scale-x">x: </label>
+									<input id="modelload-form-scale-x" type="text" placeholder="1"
+										   onkeydown="testNumberInput(event)"><br/>
+									<label for="modelload-form-scale-y">y: </label>
+									<input id="modelload-form-scale-y" type="text" placeholder="1"
+										   onkeydown="testNumberInput(event)"><br/>
+									<label for="modelload-form-scale-z">z: </label>
+									<input id="modelload-form-scale-z" type="text" placeholder="1"
+										   onkeydown="testNumberInput(event)">
+								</div>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<div id="modelload-form-bottom">
+				<button disabled class="modelload-form-button" id="modelload-form-button-previous"
+						onclick="ModelLoadView.previous()">< Previous
+				</button>
+				<button disabled class="modelload-form-button" id="modelload-form-button-next"
+						onclick="ModelLoadView.next()">Next >
+				</button>
+				<button class="modelload-form-button" id="modelload-form-button-cancel"
+						onclick="ModelLoadView.cancel()">Cancel
+				</button>
+			</div>
+		</div>
+	</div>
 	<div class="disabled" id="specs-view">
 		<div id="fps">fps: <div id="fps_val"></div></div>
 		<div id="light_props">
 			<div id="light_props_header">
-				<label for="lights" id="light_props_title">Light properties </label>
-				<select id="lights" oninput="(function(val) {
-							if(val === 'default') {
-								SpecsView.LightChanger.disable();
-							} else {
-								SpecsView.LightChanger.enable(window.renderProcess.renderer.lights[val]);
-							}
+				<label for="lights-dropdown" id="light_props_title">Light properties </label>
+				<select id="lights-dropdown" oninput="(function(val) {
+							if (val === 'default') SpecsView.LightChanger.disable();
+							else SpecsView.LightChanger.enable(window.renderProcess.renderer.lights[val]);
 						})(this.value)">
 					<option>Please choose a light...</option>
 				</select>
@@ -84,140 +156,166 @@
 	</div>
 	<canvas id="rasterizer"></canvas>
 	<canvas id="raytracer" class="disabled"></canvas>
+</div>
+<!--need to be after canvas -->
+<script src="preferences.js"></script>
+<script src="mouseRayTracingRenderer.js"></script>
+<script src="interaction.js"></script>
+<script src="specsView.js"></script>
+<script src="menuView.js"></script>
+<script src="model-load-view.js"></script>
+<script>
+	// set up canvas
+	Preferences.canvas.aspectW = 16;
+	Preferences.canvas.aspectH = 9;
+	Preferences.canvas.init(120, 40); // set resolution
 
-	<script src="preferences.js"></script>
-	<script src="specsView.js"></script>
-	<script src="menuView.js"></script>
-	<script>
-		// set up canvas
-		Preferences.canvas.aspectW = 16;
-		Preferences.canvas.aspectH = 9;
-		Preferences.canvas.init(120, 40); // set resolution
+	// construct scene graph
+	let camera = new CameraNode(
+		new Position(0, 0, 1), // eye
+		Preferences.canvas.aspectW / Preferences.canvas.aspectH,
+		0.1, 100, 60 // near, far, fovy
+	)
 
-		// construct scene graph
-		let camera = new CameraNode(
-			new Position(0, 0, 1), // eye
-			Preferences.canvas.aspectW / Preferences.canvas.aspectH,
-			0.1, 100, 60 // near, far, fovy
-		)
+	const sphere = new SphereNode(new Position(0, 0, 0), 0.4, Colors.GOLD, Materials.GOLD);
+	const jumpingSphere = new SphereNode(new Position(0, 0, 0), 0.4, Colors.BLACK, Materials.CHROME);
+	const light = new LightNode(new Position(-5.0, 2.0, -10.0), Colors.WHITE, 1.2, 0.8, 0.02, 0.001);
+	const lightSphere = new SphereNode(light.position, 0.2, Colors.YELLOW, Materials.BLANK);
+	const hci_cube = new TextureBoxNode(
+		new Position(-1, -1, -1),
+		new Position(1, 1, 1),
+		'resources/textures/hci-logo.png'
+	);
+	const cube = new AABoxNode(new Position(-1, -1, -1), new Position(1, 1, 1), Colors.LIMEGREEN, Materials.EMERALD);
+	const pyramid = new PyramidNode(2, 2, 2, Colors.ORANGERED, Materials.BRASS);
+	const cone = new ConeNode(1, 2, Colors.LIGHTGOLDENRODYELLOW, Materials.COPPER);
 
-		const sphere = new SphereNode(new Position(0, 0, 0), 0.4, Colors.GOLD, Materials.GOLD);
-		const jumpingSphere = new SphereNode(new Position(0, 0, 0), 0.4, Colors.BLACK, Materials.CHROME);
-		const light = new LightNode(new Position(-5.0, 2.0, -10.0), Colors.WHITE, 1.2, 0.8, 0.02, 0.001);
-		const lightSphere = new SphereNode(light.position, 0.2, Colors.YELLOW, Materials.BLANK);
-		const hci_cube = new TextureBoxNode(
-			new Position(-1, -1, -1),
-			new Position(1, 1, 1),
-			'resources/textures/hci-logo.png'
-		);
-		const cube = new AABoxNode(new Position(-1, -1, -1), new Position(1, 1, 1), Colors.LIMEGREEN, Materials.EMERALD);
-		const pyramid = new PyramidNode(2, 2, 2, Colors.ORANGERED, Materials.BRASS);
-		const cone = new ConeNode(1, 2, Colors.LIGHTGOLDENRODYELLOW, Materials.COPPER);
+	//      sg
+	//     /  \
+	//  gn1:Tc gn5:Tl - jumpingSphere
+	//   /   \
+	// gn2:Ts gn3
+	//   |      \
+	// gn4:T-c hci_cube
+	//   |
+	// sphere
 
-		//      sg
-		//     /  \
-		//  gn1:Tc gn5:Tl - jumpingSphere
-		//   /   \
-		// gn2:Ts gn3
-		//   |      \
-		// gn4:T-c hci_cube
-		//   |
-		// sphere
+	window.sg = new GroupNode(Matrix.identity())
+	const gn1 = new GroupNode(Matrix.translation(new Vector(-.3, -0.4, .1))); // Tc
+	const gn3 = new GroupNode(Matrix.identity());
+	const gn2 = new GroupNode(Matrix.translation(new Vector(-4, -1, -2))); // Ts
+	const gn5 = new GroupNode(Matrix.translation(new Vector(-3.5, -2.5, -5.0))); // Tl
+	const gn6 = new GroupNode(Matrix.translation(new Vector(-4, 0, 6)));
+	const gn7 = new GroupNode(Matrix.identity());
+	const gn8 = new GroupNode(Matrix.translation(new Vector(-5, -1, 0)));
+	const gn9 = new GroupNode(Matrix.translation(new Vector(-9, -1, 0)));
 
-		window.sg = new GroupNode(Matrix.identity())
-		const gn1 = new GroupNode(Matrix.translation(new Vector(-.3, -0.4, .1))); // Tc
-		const gn3 = new GroupNode(Matrix.identity());
-		const gn2 = new GroupNode(Matrix.translation(new Vector(-4, -1, -2))); // Ts
-		const gn5 = new GroupNode(Matrix.translation(new Vector(-3.5, -2.5, -5.0))); // Tl
-		const gn6 = new GroupNode(Matrix.translation(new Vector(-4, 0, 10)));
-		const gn7 = new GroupNode(Matrix.identity());
-		const gn8 = new GroupNode(Matrix.translation(new Vector(-5, -1, 0)));
-		const gn9 = new GroupNode(Matrix.translation(new Vector(-9, -1, 0)));
+	sg.add(gn1);
 
-		sg.add(gn1);
+	gn1.add(gn3);
+	gn3.add(hci_cube);
+	gn1.add(gn2);
+	gn2.add(sphere);
 
-		gn1.add(gn3);
-		gn3.add(hci_cube);
-		gn1.add(gn2);
-		gn2.add(sphere);
+	sg.add(gn5);
+	gn5.add(jumpingSphere);
 
-		sg.add(gn5);
-		gn5.add(jumpingSphere);
+	sg.add(gn6);
+	gn6.add(camera);
 
-		sg.add(gn6);
-		gn6.add(camera);
+	sg.add(gn7);
+	gn7.add(light);
+	gn7.add(lightSphere)
 
-		sg.add(gn7);
-		gn7.add(light);
-		gn7.add(lightSphere)
+	sg.add(gn8);
+	gn8.add(cube);
 
-		sg.add(gn8);
-		gn8.add(cube);
+	sg.add(gn9);
+	// gn9.add(pyramid);
+	gn9.add(cone);
 
-		sg.add(gn9);
-		// gn9.add(pyramid);
-		gn9.add(cone);
+	// add animation nodes
+	window.animationNodes = [
+		// new AnimationNode(gn1, new SimpleRotor(new Vector(0, 0, 1), 30)),
+		new AnimationNode(gn1, new AxisAlignedRotor(60)),
+		new AnimationNode(gn5, new PhysicsJumper(new Vector(0, 3, 0), 1)),
+		new AnimationNode(gn7, new Driver2D(6)),
+		// new AnimationNode(gn2, new FreeFlight(4)),
+		new AnimationNode(gn6, new FreeFlight(4, camera.up))
+	];
 
-		// add animation nodes
-		window.animationNodes = [
-			// new AnimationNode(gn1, new SimpleRotor(new Vector(0, 0, 1), 30)),
-			new AnimationNode(gn1, new AxisAlignedRotor(60)),
-			new AnimationNode(gn5, new PhysicsJumper(new Vector(0, 3, 0), 1)),
-			new AnimationNode(gn7, new Driver2D(6)),
-			new AnimationNode(gn6, new FreeFlight(4, camera.up))
-		];
+	// start render process
+	window.renderProcess = new RenderProcess();
+	const timeout = 1000 / 2; // not more than 30 fps
+	let t = 0;
+	window.run = function (timestamp) {
+		if (!renderProcess.onStop) {
+			let deltaT = timestamp - window.renderProcess.lastTimestamp;
+			if (Preferences.showSpecs) SpecsView.FPS.add(deltaT + t);
+			simulate(deltaT + t);
+			window.renderProcess.renderer.render(window.sg);
+			t = timeout - deltaT;
+			if (t < 0) t = 0;
+			setTimeout(function () {
+				window.renderProcess.lastTimestamp = timestamp + t;
+				window.requestAnimationFrame(window.run);
+			}, t);
+		} else {
+			window.renderProcess.onStop();
+		}
 
-		// start render process
-		window.renderProcess = new RenderProcess();
-		const timeout = 1000 / 30; // not more than 30 fps
-		let t = 0;
-		window.run = function (timestamp) {
-			if (!renderProcess.onStop) {
-				let deltaT = timestamp - window.renderProcess.lastTimestamp;
-				if (Preferences.showSpecs) SpecsView.FPS.add(deltaT + t);
-				simulate(deltaT + t);
-				window.renderProcess.renderer.render(window.sg);
-				t = timeout - deltaT;
-				if (t < 0) t = 0;
-				setTimeout(function () {
-					window.renderProcess.lastTimestamp = timestamp + t;
-					window.requestAnimationFrame(window.run);
-				}, t);
-			} else {
-				window.renderProcess.onStop();
-			}
-
-			function simulate(deltaT) {
-				for (let animationNode of window.animationNodes) {
-					animationNode.simulate(deltaT);
-				}
+		function simulate(deltaT) {
+			for (let animationNode of window.animationNodes) {
+				animationNode.simulate(deltaT);
 			}
 		}
-		window.renderProcess.start();
-		// Preferences.toggleRenderer();
-		// window.renderProcess.onStop();
+	}
+	window.renderProcess.start();
+	// Preferences.toggleRenderer();
+	// window.renderProcess.onStop();
+	// setTimeout(function () {
+	// 	window.renderProcess.stop();
+	// }, 1000);
 
-		UserInteraction.init();
-		UserInteraction.onFileDropped((file) => {
-			window.renderProcess.stop(() => {
-				// only take account of the first file
-				let reader = new FileReader();
-				reader.onload = function (res) {
-					let result = SceneGraphImporter.load(res.target.result);
-					if (result) {
-						window.sg = result.sg;
-						window.animationNodes = result.animationNodes;
-					} else {
-						console.error("Couldn't load file: " + file.name);
-					}
-					window.renderProcess = new RenderProcess();
-					window.renderProcess.start();
+	UserInteraction.init();
+	UserInteraction.Events.onFileDropped(file => {
+		window.renderProcess.stop(() => {
+			Files.getContent(file, content => {
+				let result = SceneGraphImporter.load(content);
+				if (result) {
+					window.sg = result.sg;
+					window.animationNodes = result.animationNodes;
+				} else {
+					console.error("Couldn't load file: " + file.name);
 				}
-				reader.readAsText(file);
-			});
+				window.renderProcess = new RenderProcess();
+				window.renderProcess.start();
+			})
 		});
-	</script>
-</div>
+	}, file => {
+		window.renderProcess.stop(() => {
+			UserInteraction.View.askForObjAndMtlFiles(file, (objFile, mtlFile, matrix) => {
+				Files.getContent(objFile, obj => {
+					const cb = mtl => {
+						let objects = ModelLoader.load(obj, mtl);
+						let gn = new GroupNode(matrix);
+						for (let obj of objects) {
+							gn.add(obj);
+						}
+						if (gn.children.length > 0) window.sg.add(gn);
+						window.renderProcess = new RenderProcess();
+						window.renderProcess.start();
+					};
+					if (mtlFile) {
+						Files.getContent(mtlFile, cb)
+					} else {
+						cb("");
+					}
+				})
+			});
+		})
+	});
+</script>
 </body>
 
 </html>

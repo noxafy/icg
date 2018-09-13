@@ -12,7 +12,7 @@ SpecsView = {
 		this.FPS.init();
 		this.specsElem.className = "";
 		this.LightChanger.fetchLights();
-		this.specsElem.style.width = document.getElementById("lights").offsetWidth + 12 + "px";
+		this.specsElem.style.width = document.getElementById("lights-dropdown").offsetWidth + 12 + "px";
 	},
 	init() {
 		if (Preferences.showSpecs) {
@@ -49,7 +49,7 @@ SpecsView = {
 	},
 	LightChanger: {
 		sliders: document.getElementById("light_props_sliders"),
-		dropdown: document.getElementById("lights"),
+		dropdown: document.getElementById("lights-dropdown"),
 		current_light: undefined,
 		enable(light) {
 			if (this.current_light === light) return;

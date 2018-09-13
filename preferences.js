@@ -13,17 +13,20 @@ Preferences = {
 		useRasterRenderer: true,
 		rasterizer: document.getElementById("rasterizer"),
 		raytracer: document.getElementById("raytracer"),
+		container: document.getElementById("canvas-container"),
 		aspectW: 16,
 		aspectH: 9,
 		init(rasterResolution, raytracerResolution) {
 			this.setResolution(this.rasterizer, rasterResolution);
 			this.setResolution(this.raytracer, raytracerResolution);
 
-			let container = document.getElementById("canvas-container");
 			window.onresize = () => {
 				let tileSize = Math.min(window.innerWidth / this.aspectW, window.innerHeight / this.aspectH);
-				container.style.width = tileSize * this.aspectW + "px";
-				container.style.height = tileSize * this.aspectH + "px";
+				this.container.style.width = tileSize * this.aspectW + "px";
+				this.container.style.height = tileSize * this.aspectH + "px";
+				if (ModelLoadView.container) {
+					ModelLoadView.container.style.height = this.container.style.height;
+				}
 			};
 			window.onresize();
 		},

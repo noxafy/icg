@@ -173,6 +173,7 @@ class RenderProcess {
 	}
 
 	stop(cb) {
-		this.onStop = cb;
+		this.onStop = cb || function () {
+		};
 	}
 }

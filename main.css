@@ -10,7 +10,9 @@ body {
 	display: flex;
 	justify-content: center;
 	align-items: center;
+
 	font-size: 15px;
+	font-family: Arial, sans-serif;
 }
 
 .disabled {
@@ -59,8 +61,9 @@ body {
 	margin-left: 6px;
 }
 
-#lights {
+#lights-dropdown {
 	margin: 6px 0px 0px 6px;
+	font-size: 13px;
 }
 
 #light_props_sliders {
@@ -83,26 +86,43 @@ body {
 	position: relative;
 	height: 0px;
 	float: right;
-	width: 116px;
+	width: 151px;
 }
 
 #sg-export-btn {
-	cursor: pointer;
 	margin: 6px 6px 3px 0px;
-	padding: 3px;
-	background: none;
-	border: 1px solid black;
-	border-radius: 3px;
-	min-width: 108px;
-	box-shadow: 1px 1px rgba(127, 127, 127, 0.3);
+	min-width: 146px;
 }
 
-#sg-export-btn:active {
+#import-request {
+	margin: 3px;
+}
+
+button {
+	cursor: pointer;
+	padding: 3px 5px;
+	background: none;
+	border-radius: 3px;
+	border: 1px solid black;
+	box-shadow: 1px 1px rgba(127, 127, 127, 0.3);
+	font-size: 15px;
+}
+
+button:hover {
+	background: #EEF;
+}
+
+button:active {
 	box-shadow: unset;
 	position: relative;
 	left: 1px;
 	top: 1px;
 	color: white;
+}
+
+button[disabled] {
+	border-color: grey;
+	color: grey;
 }
 
 .loading-button:after {
@@ -125,12 +145,106 @@ body {
 	}
 }
 
-#sg-export-btn:hover {
-	background: #EEF;
+#modelload-form-container {
+	width: 100%;
+	position: absolute;
+	background: rgba(240, 240, 255, 0.4);
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
-#import-request {
-	margin: 3px;
-	width: 106px;
-	font-size: 13px;
+#modelload-form {
+	width: 55vw;
+	height: 45vh;
+	min-width: 320px;
+	min-height: 180px;
+	position: relative;
+	background: rgba(240, 240, 255, 1);
+}
+
+#modelload-form-pages {
+	height: calc(100% - 40px);
+	min-height: 126px;
+}
+
+#page_getOtherFile {
+	height: 100%;
+	position: relative;
+}
+
+.droparea {
+	position: absolute;
+	top: 10%;
+	height: 80%;
+	width: 40%;
+
+	background: lightgray;
+	border: 3px dotted darkgray;
+	border-radius: 25px;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+}
+
+.droparea > span {
+	color: gray;
+	width: 80%;
+}
+
+#modelload-form-droparea-obj {
+	left: 5%;
+}
+
+#modelload-form-droparea-mtl {
+	right: 5%;
+}
+
+#page_setMatrix {
+	height: 100%;
+}
+
+#page_setMatrix > table {
+	width: 100%;
+	height: 100%;
+	padding: 30px 0px 30px 60px;
+}
+
+.page_matrix_title {
+	font-weight: bold;
+	margin: 0px 0px 10px 0px;
+}
+
+#page_setMatrix label {
+	margin-left: 10px;
+}
+
+#page_setMatrix input {
+	width: 40%;
+	margin: 10px;
+}
+
+#modelload-form-bottom {
+	width: 100%;
+}
+
+.modelload-form-button {
+	margin-top: 5px;
+}
+
+#modelload-form-button-previous {
+	float: left;
+	margin-left: 10px;
+}
+
+#modelload-form-button-cancel {
+	float: right;
+	margin-right: 10px;
+}
+
+#modelload-form-button-next {
+	float: right;
+	margin-right: 10px;
 }
