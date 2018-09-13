@@ -120,7 +120,7 @@ button:active {
 	color: white;
 }
 
-button[disabled] {
+.disabled_btn {
 	border-color: grey;
 	color: grey;
 }
@@ -179,8 +179,8 @@ button[disabled] {
 	height: 80%;
 	width: 40%;
 
-	background: lightgray;
-	border: 3px dotted darkgray;
+	background: #e1e1e1;
+	border: 3px dotted gray;
 	border-radius: 25px;
 
 	display: flex;

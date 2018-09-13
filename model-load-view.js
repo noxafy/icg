@@ -22,7 +22,7 @@ ModelLoadView = {
 		this.mtlFile = mtlFile;
 		this.nextBtn.disabled = true;
 		this.prevBtn.disabled = true;
-		this.clearUploaded(this.objDrop, "Required: Drop .obj file here");
+		this.clearUploaded(this.objDrop, "<strong>Required</strong>: Drop .obj file here");
 		this.clearUploaded(this.mtlDrop, "Optional: Drop .mtl file here")
 		if (this.objFile) {
 			this.nextBtn.disabled = false
@@ -77,8 +77,8 @@ ModelLoadView = {
 		}
 		if (Files.isObj(file)) {
 			this.nextBtn.disabled = false;
-			this.setUploaded(this.objDrop, this.objFile);
 			this.objFile = file;
+			this.setUploaded(this.objDrop, this.objFile);
 		} else if (Files.isMtl(file)) {
 			this.mtlFile = file;
 			this.setUploaded(this.mtlDrop, this.mtlFile);
@@ -89,12 +89,17 @@ ModelLoadView = {
 	},
 	setUploaded(drop, file) {
 		let span = drop.children[0];
-		span.innerText = "Uploaded file: " + file.name;
+		span.innerHTML = "Uploaded file: " + file.name;
 		span.style.color = "black";
+		drop.style.borderStyle = "solid";
+		drop.style.backgroundColor = "lightgray";
 	},
 	clearUploaded(drop, text) {
 		let span = drop.children[0];
-		span.innerText = text;
+		span.style.color = "";
+		span.innerHTML = text;
+		drop.style.borderStyle = "dotted";
+		drop.style.backgroundColor = "";
 	},
 	getMatrixFromPage2() {
 		const tx = document.getElementById("modelload-form-translation-x").value || 0;
@@ -145,7 +150,6 @@ ModelLoadView = {
 		this.resetInputFields();
 		this.container.className = "disabled";
 	}
-
 }
 
 function onDragOver(e, el) {
