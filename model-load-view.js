@@ -125,14 +125,12 @@ ModelLoadView = {
 }
 
 function onDragOver(e, el) {
-	console.log("On drag over!");
 	e.preventDefault();
 	if (el) el.style.borderStyle = 'solid';
 	return false;
 }
 
 function onDragLeave(e, el) {
-	console.log("On drag leave!");
 	e.preventDefault();
 	if (el) el.style.borderStyle = 'dotted';
 	return false;
