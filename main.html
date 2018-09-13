@@ -59,11 +59,11 @@
 				<div class="disabled" id="page_getOtherFile">
 					<div id="modelload-form-droparea-obj" class="droparea" ondragover="onDragOver(event, this)"
 						 ondragleave="onDragLeave(event, this)" ondrop="ModelLoadView.onFileDrop(event)">
-						<span>Required: Please drop .obj file here</span>
+						<span></span>
 					</div>
 					<div id="modelload-form-droparea-mtl" class="droparea" ondragover="onDragOver(event, this)"
 						 ondragleave="onDragLeave(event, this)" ondrop="ModelLoadView.onFileDrop(event)">
-						<span>Optional: Please drop .mtl file here</span>
+						<span></span>
 					</div>
 				</div>
 				<div class="disabled" id="page_setMatrix">
@@ -246,7 +246,7 @@
 
 	// start render process
 	window.renderProcess = new RenderProcess();
-	const timeout = 1000 / 2; // not more than 30 fps
+	const timeout = 1000 / 20; // not more than 30 fps
 	let t = 0;
 	window.run = function (timestamp) {
 		if (!renderProcess.onStop) {
@@ -295,14 +295,24 @@
 	}, file => {
 		window.renderProcess.stop(() => {
 			UserInteraction.View.askForObjAndMtlFiles(file, (objFile, mtlFile, matrix) => {
+				if (!objFile) {
+					window.renderProcess = new RenderProcess();
+					window.renderProcess.start();
+					return;
+				}
 				Files.getContent(objFile, obj => {
 					const cb = mtl => {
-						let objects = ModelLoader.load(obj, mtl);
-						let gn = new GroupNode(matrix);
-						for (let obj of objects) {
-							gn.add(obj);
+						try {
+							let objects = ModelLoader.load(obj, mtl);
+							let gn = new GroupNode(matrix);
+							for (let obj of objects) {
+								gn.add(obj);
+							}
+							if (gn.children.length > 0) window.sg.add(gn);
+						} catch (e) {
+							console.error(e.stack);
+							console.error(e.message);
 						}
-						if (gn.children.length > 0) window.sg.add(gn);
 						window.renderProcess = new RenderProcess();
 						window.renderProcess.start();
 					};

@@ -53,7 +53,7 @@ ModelLoader = {
 							if (current_mat && this.isValid(current_mat)) {
 								materials.push(current_mat);
 							}
-							current_mat = new Material(null, null, null, null, args[1]);
+							current_mat = new Material(null, null, null, null, args[0]);
 							break;
 						case "Ka":
 							current_mat.ambient = this.parseColor(args);
@@ -197,7 +197,10 @@ ModelLoader = {
 							break;
 						case "vn":
 							if (args.length < 3) throw Error("Wrong number of arguments: " + args.length);
-							normals.push(Vector.fromArray(args));
+							const x = Number.parseFloat(args[0]);
+							const y = Number.parseFloat(args[1]);
+							const z = Number.parseFloat(args[2]);
+							normals.push(new Vector(x, y, z));
 							break;
 						case "c":
 							if (args.length < 1) throw Error("Please give color values with keyword \"c\"!");
@@ -206,10 +209,14 @@ ModelLoader = {
 							current_object.color = ModelLoader.Mtl.parseColor(args);
 							break;
 						case "f":
-							if (args.length !== 3) throw Error("There must be given exactly three arguments to specify a face, but was: " + args.length)
-							faces.push(args[0]);
-							faces.push(args[1]);
-							faces.push(args[2]);
+							// if (args.length !== 3) console.error("Warning: Face with " + args.length + " components found at line " + i + ": " + line);
+							for (let j = 1; j < args.length - 1; j++) {
+								faces.push(args[0]);
+								faces.push(args[j]);
+								faces.push(args[j + 1])
+							}
+							break;
+							// if (args.length !== 3) throw Error("There must be given exactly three arguments to specify a face, but was: " + args.length)
 							break;
 						case "usemtl":
 							if (args.length < 1) throw Error("Please give a name of a material with keyword \"usemtl\"!")
@@ -244,33 +251,52 @@ ModelLoader = {
 		 * @param {Array.<String>} faces
 		 */
 		processFaces(node, vertices, normals, faces) {
-			let res_normals = new Array(vertices.length);
-			for (let face of faces) {
+			let normals_store = new Array(vertices.length);
+			loop: for (let face of faces) {
 				let idxs = face.split("/");
 				if (idxs.length !== 3)
 					throw Error("Face vertex specification must have three reference numbers, but was: " + face);
 
 				const idx1 = Number.parseInt(idxs[0]) - 1; // one-based to zero-based
-				if (idx1 > vertices.length) throw Error("Face vertex specification cannot " +
-					"in first part reference to an index higher than the count of given vertices, but was: " + face);
+				if (idx1 >= vertices.length) throw Error("Face vertex specification cannot " +
+					"in first part reference to an index higher than the count of given vertices (" + vertices.length + "), but was: " + face);
 				node.indices.push(idx1);
 
 				// ignore idxs[1]
 
 				const idx3 = Number.parseInt(idxs[2]) - 1; // one-based to zero-based
-				if (idx3 > normals.length) throw Error("Face vertex specification cannot " +
-					"in third part reference to an index higher than the count of given normals, but was: " + face);
+				if (idx3 >= normals.length) throw Error("Face vertex specification cannot " +
+					"in third part reference to an index higher than the count of given normals (" + normals.length + "), but was: " + face);
 
-				const normal = normals[idx3];
-				if (res_normals[idx1]) res_normals[idx1] = res_normals[idx1].add(normal);
-				else res_normals[idx1] = Vector.fromArray(normal.data);
+				const store_array = normals_store[idx1];
+				if (store_array) {
+					for (let idx of store_array) {
+						if (idx === idx3) continue loop;
+					}
+					store_array.push(idx3);
+				}
+				else {
+					normals_store[idx1] = [idx3];
+				}
 			}
 
-			for (let i = 0; i < res_normals.length; i++) {
+			for (let i = 0; i < normals_store.length; i++) {
 				const v = vertices[i];
 				node.vertices.push(v.x, v.y, v.z);
-				const n = res_normals[i].normalised();
-				node.normals.push(n.x, n.y, n.z);
+				// if (!normals_store[i]) throw Error("No normal defined for vertex " + i);
+				if (normals_store[i]) {
+					let normal = new Vector(0, 0, 0);
+					for (let idx of normals_store[i]) {
+						if (idx < normals.length) {
+							const vec = normals[idx];
+							normal = normal.add(vec);
+						}
+					}
+					const n = normal.normalised();
+					node.normals.push(n.x, n.y, n.z);
+				} else {
+					node.normals.push(1, 1, 1);
+				}
 			}
 		},
 

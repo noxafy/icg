@@ -22,6 +22,8 @@ ModelLoadView = {
 		this.mtlFile = mtlFile;
 		this.nextBtn.disabled = true;
 		this.prevBtn.disabled = true;
+		this.clearUploaded(this.objDrop, "Required: Drop .obj file here");
+		this.clearUploaded(this.mtlDrop, "Optional: Drop .mtl file here")
 		if (this.objFile) {
 			this.nextBtn.disabled = false
 			this.setUploaded(this.objDrop, this.objFile);
@@ -29,7 +31,8 @@ ModelLoadView = {
 		if (this.mtlFile) {
 			this.setUploaded(this.mtlDrop, this.mtlFile);
 		}
-	}, next() {
+	},
+	next() {
 		switch (this.state) {
 			case 0:
 				this.container.className = "";
@@ -45,10 +48,8 @@ ModelLoadView = {
 				this.state = 2;
 				break;
 			case 2:
-				this.nextBtn.disabled = true;
-				this.page2.className = "disabled";
-				let matrix = this.getMatrixFromPage2();
 				this.close();
+				let matrix = this.getMatrixFromPage2();
 				this.ready(this.objFile, this.mtlFile, matrix);
 				this.state = 0;
 				break;
@@ -75,7 +76,7 @@ ModelLoadView = {
 			return false;
 		}
 		if (Files.isObj(file)) {
-			this.nextBtn.disabled = true;
+			this.nextBtn.disabled = false;
 			this.setUploaded(this.objDrop, this.objFile);
 			this.objFile = file;
 		} else if (Files.isMtl(file)) {
@@ -91,34 +92,57 @@ ModelLoadView = {
 		span.innerText = "Uploaded file: " + file.name;
 		span.style.color = "black";
 	},
+	clearUploaded(drop, text) {
+		let span = drop.children[0];
+		span.innerText = text;
+	},
 	getMatrixFromPage2() {
 		const tx = document.getElementById("modelload-form-translation-x").value || 0;
 		const ty = document.getElementById("modelload-form-translation-y").value || 0;
 		const tz = document.getElementById("modelload-form-translation-z").value || 0;
 		const t = Matrix.translation(new Vector(tx, ty, tz));
 
-		const rax = document.getElementById("modelload-form-translation-x").value || 0;
+		const rax = document.getElementById("modelload-form-rotation-x").value || 0;
 		const rx = Matrix.rotation(new Vector(1, 0, 0), rax);
-		const ray = document.getElementById("modelload-form-translation-y").value || 0;
+		const ray = document.getElementById("modelload-form-rotation-y").value || 0;
 		const ry = Matrix.rotation(new Vector(0, 1, 0), ray);
-		const raz = document.getElementById("modelload-form-translation-z").value || 0;
+		const raz = document.getElementById("modelload-form-rotation-z").value || 0;
 		const rz = Matrix.rotation(new Vector(0, 0, 1), raz);
 		const r = rx.mul(ry).mul(rz);
 
-		const sx = document.getElementById("modelload-form-translation-x").value || 1;
-		const sy = document.getElementById("modelload-form-translation-y").value || 1;
-		const sz = document.getElementById("modelload-form-translation-z").value || 1;
+		const sx = document.getElementById("modelload-form-scale-x").value || 1;
+		const sy = document.getElementById("modelload-form-scale-y").value || 1;
+		const sz = document.getElementById("modelload-form-scale-z").value || 1;
 		const s = Matrix.scaling(new Vector(sx, sy, sz));
 
 		return s.mul(r).mul(t);
+	},
+	resetInputFields() {
+		document.getElementById("modelload-form-translation-x").value = "";
+		document.getElementById("modelload-form-translation-y").value = "";
+		document.getElementById("modelload-form-translation-z").value = "";
+
+		document.getElementById("modelload-form-rotation-x").value = "";
+		document.getElementById("modelload-form-rotation-y").value = "";
+		document.getElementById("modelload-form-rotation-z").value = "";
+
+		document.getElementById("modelload-form-scale-x").value = "";
+		document.getElementById("modelload-form-scale-y").value = "";
+		document.getElementById("modelload-form-scale-z").value = "";
 	},
 	onReady(cb) {
 		this.ready = cb;
 	},
 	cancel() {
 		this.close();
+		this.ready(false);
 	},
 	close() {
+		this.nextBtn.disabled = true;
+		this.page2.className = "disabled";
+		UserInteraction.Events.Key.enable();
+		this.nextBtn.innerText = "Next >";
+		this.resetInputFields();
 		this.container.className = "disabled";
 	}
 
@@ -153,6 +177,9 @@ function testNumberInput(e) {
 		case "-":
 		case "Delete":
 		case "Backspace":
+		case "ArrowRight":
+		case "ArrowLeft":
+		case "Tab":
 			// allow
 			break;
 		case "a":
