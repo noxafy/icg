@@ -48,8 +48,8 @@ ModelLoadView = {
 				this.state = 2;
 				break;
 			case 2:
-				this.close();
 				let matrix = this.getMatrixFromPage2();
+				this.close();
 				this.ready(this.objFile, this.mtlFile, matrix);
 				this.state = 0;
 				break;
@@ -118,9 +118,9 @@ ModelLoadView = {
 		const sx = document.getElementById("modelload-form-scale-x").value || 1;
 		const sy = document.getElementById("modelload-form-scale-y").value || 1;
 		const sz = document.getElementById("modelload-form-scale-z").value || 1;
-		const s = Matrix.scaling(new Vector(sx, sy, sz));
+		const s = Matrix.scaling(new Vector(Number.parseFloat(sx), Number.parseFloat(sy), Number.parseFloat(sz)));
 
-		return s.mul(r).mul(t);
+		return r.mul(t).mul(s);
 	},
 	resetInputFields() {
 		document.getElementById("modelload-form-translation-x").value = "";

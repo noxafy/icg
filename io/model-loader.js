@@ -88,7 +88,7 @@ ModelLoader = {
 			if (!mat.ambient) missing.push("Ka");
 			if (!mat.diffuse) missing.push("Kd");
 			if (!mat.specular) missing.push("Ks");
-			if (!mat.shininess) missing.push("Ns");
+			if (mat.shininess === undefined) missing.push("Ns");
 			if (missing.length > 0)
 				throw Error("Missing properties for material " + mat.name + ": " + missing);
 			return true;

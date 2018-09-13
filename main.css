@@ -192,6 +192,7 @@ button:active {
 .droparea > span {
 	color: gray;
 	width: 80%;
+	word-break: break-all;
 }
 
 #modelload-form-droparea-obj {
