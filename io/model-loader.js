@@ -5,14 +5,11 @@
 ModelLoader = {
 
 	/**
-	 * Loads a model using the .obj format for geometry and the .mtl for material properties.
-	 * Takes the files as string and returns an Array of {@link GenericNode}s.
+	 * Loads a model using the .obj format for geometry and the .mtl for material properties. Takes the files as string and returns an Array of {@link GenericNode}s.
 	 *
-	 * Parses the vertices, indices and normals of a polygonal geometry from the .obj format as specified in
-	 * {@link http://www.martinreddy.net/gfx/3d/OBJ.spec}, but ignores all other data owing to not being supported by application.
+	 * Parses the vertices, indices and normals of a polygonal geometry from the .obj format as specified in {@link http://www.martinreddy.net/gfx/3d/OBJ.spec}, but ignores all other data owing to not being supported by application.
 	 *
-	 * Parses the ambient, diffuse, specular and shininess parameters as specifies in
-	 * {@link http://paulbourke.net/dataformats/mtl/}, but ignores all other data owing to not being supported by application.
+	 * Parses the ambient, diffuse, specular and shininess parameters as specifies in {@link http://paulbourke.net/dataformats/mtl/}, but ignores all other data owing to not being supported by application.
 	 *
 	 * @param {string} obj - Object geometry data as specified in the standard
 	 * @param {string} mtl - Material properties data as specified in the standard
@@ -31,8 +28,7 @@ ModelLoader = {
 		 *  - {@link Material.specular} (Ks) and
 		 *  - {@link Material.shininess} (Ns)
 		 *
-		 * parameters as specified in the .mtl standard {@link http://paulbourke.net/dataformats/mtl/},
-		 * but ignores all other data owing to not being supported by this implementation.
+		 * parameters as specified in the .mtl standard {@link http://paulbourke.net/dataformats/mtl/}, but ignores all other data owing to not being supported by this implementation.
 		 * @param {string} mtl
 		 * @return {Array.<Material>}
 		 */
@@ -154,7 +150,7 @@ ModelLoader = {
 		 * Parses keyword "v" to {@link GenericNode.vertices} and "vn" to {@link GenericNode.normals}. After each "v" or "vn" keyword there must be three arguments, containing the x, y and z coordinate of the vertex/normal. Synchronized order is not necessary, but specified through face elements.
 		 *
 		 * <b>Face elements</b>
-		 * Only triangles are supported and are specified as face elements with keyword "f" and parsed to  {@link GenericNode.indices}. Therefore there must be exactly three arguments after each "f" keyword. A value between the the two slashes (/) will be ignored. The third value will be used to calculate the normal for the vertex as required by this application.
+		 * Only triangles are supported and are specified as face elements with keyword "f" and parsed to  {@link GenericNode.indices}. Therefore there should be three arguments after each "f" keyword. A value between the the two slashes (/) will be ignored. The third value will be used to calculate the normal for the vertex as required by this application.
 		 *
 		 * <b>Color</b>
 		 * Contrary to standard specification there can be given an own color for each vertex by giving the r g b value directly appending to the vertex coordinates. Alternatively you can give one color for the whole object by specifying a line starting with the keyword "c" followed by the r g b values.

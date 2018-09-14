@@ -60,7 +60,8 @@ SceneGraphImporter = {
 					Color.fromJson(obj.color), Material.fromJson(obj.material), obj.name);
 				break;
 			case "TextureBoxNode":
-				This = new TextureBoxNode(Position.fromArray(obj.minPoint), Position.fromArray(obj.maxPoint), obj.texture);
+				This = new TextureBoxNode(Position.fromArray(obj.minPoint), Position.fromArray(obj.maxPoint),
+					obj.diffuseTexture, obj.normalTexture, Material.fromJson(obj.material));
 				break;
 			case "CameraNode":
 				This = new CameraNode(Position.fromArray(obj.eye), obj.aspect, obj.near, obj.far, obj.fovy);

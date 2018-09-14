@@ -75,6 +75,8 @@ class Shader {
 		const attr = this.gl.getAttribLocation(this.shaderProgram, name);
 		if (attr != -1) {
 			this.gl.enableVertexAttribArray(attr);
+		} else {
+			console.error("Unknown attribute for " + this.vsFilename + ": " + name);
 		}
 		return attr;
 	}

@@ -20,7 +20,7 @@ class Node {
 class GroupNode extends Node {
 	/**
 	 * Constructor
-	 * @param  {Matrix} mat - A matrix describing the node's transformation
+	 * @param {Matrix} mat - A matrix describing the node's transformation
 	 */
 	constructor(mat) {
 		super();
@@ -30,7 +30,7 @@ class GroupNode extends Node {
 
 	/**
 	 * Accepts a visitor according to the visitor pattern
-	 * @param  {Visitor} visitor - The visitor
+	 * @param {Visitor} visitor - The visitor
 	 */
 	accept(visitor) {
 		visitor.visitGroupNode(this);
@@ -62,35 +62,41 @@ class GroupNode extends Node {
  */
 class TextureBoxNode extends Node {
 	/**
-	 * Creates an axis aligned box textured box
-	 * @param  {Position} minPoint - The minimum Point
-	 * @param  {Position} maxPoint - The maximum Point
-	 * @param  {string} texture  - The image filename for the texture
+	 * Creates an axis aligned textured box
+	 * @param {Position} minPoint - The minimum Point
+	 * @param {Position} maxPoint - The maximum Point
+	 * @param {string} diffuseTexture - The image filename for the diffuseTexture
+	 * @param {string} normalTexture - The image filename for the normal map
+	 * @param {Material} material - The material of the box
 	 */
-	constructor(minPoint, maxPoint, texture) {
+	constructor(minPoint, maxPoint, diffuseTexture, normalTexture, material) {
 		super();
 		this.minPoint = minPoint;
 		this.maxPoint = maxPoint;
-		this.texture = texture;
+		this.diffuseTexture = diffuseTexture;
+		this.normalTexture = normalTexture;
+		this.material = material;
 	}
 
 	/**
 	 * Accepts a visitor according to the visitor pattern
-	 * @param  {Visitor} visitor - The visitor
+	 * @param {Visitor} visitor - The visitor
 	 */
 	accept(visitor) {
 		visitor.visitTextureBoxNode(this);
 	}
 
 	setRasterRenderer(gl) {
-		this.raster = new RasterTextureBox(gl, this.minPoint, this.maxPoint, this.texture);
+		this.raster = new RasterTextureBox(gl, this.minPoint, this.maxPoint,
+			this.diffuseTexture, this.normalTexture, this.material);
 	}
 
 	toString() {
 		return "TextureBox: " +
 			"(minPoint: " + this.minPoint.toString() + "; " +
-			"maxpoint: " + this.maxPoint.toString() + "; " +
-			"texture: " + this.texture + ")";
+			"maxPoint: " + this.maxPoint.toString() + "; " +
+			"diffuseTexture: " + this.diffuseTexture + "; " +
+			"normalTexture: " + this.normalTexture + ")";
 	}
 }
 

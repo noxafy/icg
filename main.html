@@ -184,7 +184,9 @@
 	const hci_cube = new TextureBoxNode(
 		new Position(-1, -1, -1),
 		new Position(1, 1, 1),
-		'resources/textures/hci-logo.png'
+		'resources/textures/parquet.png',
+		'resources/normalMaps/normal2.jpg',
+		Materials.DEFAULT
 	);
 	const cube = new AABoxNode(new Position(-1, -1, -1), new Position(1, 1, 1), Colors.LIMEGREEN, Materials.EMERALD);
 	const pyramid = new PyramidNode(2, 2, 2, Colors.ORANGERED, Materials.BRASS);
@@ -246,7 +248,7 @@
 
 	// start render process
 	window.renderProcess = new RenderProcess();
-	const timeout = 1000 / 20; // not more than 30 fps
+	const timeout = 1000 / 5; // not more than 30 fps
 	let t = 0;
 	window.run = function (timestamp) {
 		if (!renderProcess.onStop) {

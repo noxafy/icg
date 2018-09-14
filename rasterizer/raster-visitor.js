@@ -41,6 +41,9 @@ class RasterDrawTraverser extends DrawTraverser {
 		textureShader.use();
 
 		let mat = this.setupPVM(textureShader);
+		this.setupN(textureShader, mat);
+		this.setupLightProperties(textureShader);
+		this.setupMaterialProperties(textureShader, node.material)
 
 		node.raster.render(textureShader);
 	}

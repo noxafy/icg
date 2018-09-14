@@ -123,7 +123,9 @@ class SceneGraphJsonGenerator extends Visitor {
 			type: "TextureBoxNode",
 			minPoint: node.minPoint.data,
 			maxPoint: node.maxPoint.data,
-			texture: node.texture
+			diffuseTexture: node.diffuseTexture,
+			normalTexture: node.normalTexture,
+			material: node.material.toJsonObj()
 		})
 	}
 

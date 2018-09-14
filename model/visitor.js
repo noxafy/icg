@@ -20,9 +20,9 @@ class Visitor {
 	}
 
 	/**
-	 * Visits a textured box node. Loads the texture
+	 * Visits a textured box node. Loads the diffuseTexture
 	 * and creates a uv coordinate buffer
-	 * @param {TextureBoxNode} node - The texture box node to visit
+	 * @param {TextureBoxNode} node - The diffuseTexture box node to visit
 	 */
 	visitTextureBoxNode(node) {
 	}

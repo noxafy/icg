@@ -19,7 +19,6 @@ class RasterBox extends RasterShape {
 	 */
 	constructor(gl, minPoint, maxPoint, color) {
 		super(gl);
-
 		const mi = minPoint;
         const ma = maxPoint;
         let vertices = [
