@@ -16,8 +16,8 @@
 **a**&emsp;Move left<br>
 **s**&emsp;Move backward<br>
 **d**&emsp;Move right<Br>
-**Space**&emsp;Up<br>
-**Shift**&emsp;Down
+**Space**&emsp;Move up<br>
+**Shift**&emsp;Move down
 
 #### 2D Driver
 **i**&emsp;Move forward<br>
@@ -31,7 +31,8 @@
 **z**&emsp;Rotate around z axis (roll)
 
 #### Misc
-**p**&emsp;Pause all animations, except Drivers<br>
-**f**&emsp;Toggle fullscreen mode<br>
-**v**&emsp;Toggle specs view<br>
-**m**&emsp;Toggle menu view
+**r**&emsp;Toggle renderer between rasterizer (default) and raytracer<br>
+**p**&emsp;Pause all animations, except UserControllables (Drivers and controllable rotors)<br>
+**v**&emsp;Toggle specs view (default:off)<br>
+**m**&emsp;Toggle menu view (default:off)<br>
+**f**&emsp;Toggle fullscreen mode (default:off)
