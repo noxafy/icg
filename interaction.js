@@ -217,16 +217,18 @@ UserInteraction = {
 
 					renderer.findObject(window.sg, mousePos, function (obj) {
 						if (obj && obj.id === objId) return;
-						if (objColor) unlight();
+						if (objId !== undefined) unlight();
 						if (obj) light(obj);
 					});
 				});
 			}
 
 			function unlight() {
-				objColor.x = getUnLighted(objColor.x)
-				objColor.y = getUnLighted(objColor.y)
-				objColor.z = getUnLighted(objColor.z)
+				if (objColor) {
+					objColor.x = getUnLighted(objColor.x)
+					objColor.y = getUnLighted(objColor.y)
+					objColor.z = getUnLighted(objColor.z)
+				}
 				objMaterial.ambient.x = getUnLighted(objMaterial.ambient.x)
 				objMaterial.ambient.y = getUnLighted(objMaterial.ambient.y)
 				objMaterial.ambient.z = getUnLighted(objMaterial.ambient.z)
@@ -241,13 +243,15 @@ UserInteraction = {
 			}
 
 			function light(obj) {
-				objColor = obj.color;
+				if (obj.color) objColor = obj.color;
 				objMaterial = obj.material;
 				objId = obj.id;
 
-				objColor.x = getLighted(objColor.x)
-				objColor.y = getLighted(objColor.y)
-				objColor.z = getLighted(objColor.z)
+				if (objColor) {
+					objColor.x = getLighted(objColor.x)
+					objColor.y = getLighted(objColor.y)
+					objColor.z = getLighted(objColor.z)
+				}
 				objMaterial.ambient.x = getLighted(objMaterial.ambient.x)
 				objMaterial.ambient.y = getLighted(objMaterial.ambient.y)
 				objMaterial.ambient.z = getLighted(objMaterial.ambient.z)

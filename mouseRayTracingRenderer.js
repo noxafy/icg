@@ -72,4 +72,13 @@ class MouseRayTracingDrawTraverser extends RayTracingDrawTraverser {
 		obj.id = this.renderer.bounding_spheres.length - 1;
 		this.renderer.bounding_spheres.push(obj);
 	}
+
+	visitTextureBoxNode(node) {
+		const vm = this.renderer.lookat.mul(this.getTopMatrix());
+		let center = node.minPoint.add(node.maxPoint).div(2);
+		let radius = node.minPoint.sub(center).length;
+		let obj = new Sphere(vm.mul(center), radius, node.color, node.material);
+		obj.id = this.renderer.bounding_spheres.length - 1;
+		this.renderer.bounding_spheres.push(obj);
+	}
 }
