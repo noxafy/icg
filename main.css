@@ -117,7 +117,7 @@ button:active {
 	position: relative;
 	left: 1px;
 	top: 1px;
-	color: white;
+	/*color: white;*/
 }
 
 .disabled_btn {
