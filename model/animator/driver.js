@@ -137,8 +137,7 @@ class FreeFlight extends Driver {
 			let direction = new Vector(this.moveXAxis, 0, this.moveZAxis);
 			// but up and down on world axis (humans are not used to this movement)
 			if (this.moveYAxis !== 0) {
-				let c = 1;
-				if (this.revertedUp) c = -1;
+				let c = (this.revertedUp) ? -1 : 1;
 				direction = direction.add(this.up.mul(c * this.moveYAxis));
 			}
 			trans = Matrix.translation(direction.normalised().mul(this.speed * deltaT));
