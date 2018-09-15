@@ -273,7 +273,47 @@
 	gn_browser_cube.add(gn_browsers);
 
 	// ***** left: mail *****
+	const gn_mail = new GroupNode(Matrix.translation(new Vector(-3, 0.3, 0)));
+	const mailColor = Colors.BLACK;
+	const mailMaterial = Materials.CHROME;
+	const mailThickness = 0.2;
+	const mailWidth = 1;
+	const mailHeight = 0.6;
+	// top
+	const gn_pyr_top = new GroupNode(
+		Matrix.rotation(new Vector(0, 1, 0), Utils.degToRad(90))
+			.mul(Matrix.translation(new Vector(0, mailHeight / 2, 0)))
+	);
+	const pyr_top = new PyramidNode(mailWidth, mailThickness, -mailHeight / 2, mailColor, mailMaterial);
+	gn_pyr_top.add(pyr_top);
 
+	const gn_pyr_bottom = new GroupNode(
+		Matrix.rotation(new Vector(0, 1, 0), Utils.degToRad(90))
+			.mul(Matrix.translation(new Vector(0, -mailHeight / 2, 0)))
+	);
+	const pyr_bottom = new PyramidNode(mailWidth, mailThickness, mailHeight / 2, mailColor, mailMaterial);
+	gn_pyr_bottom.add(pyr_bottom);
+
+	const gn_pyr_left = new GroupNode(
+		Matrix.rotation(new Vector(0, 1, 0), Utils.degToRad(90))
+			.mul(Matrix.rotation(new Vector(0, 0, 1), Utils.degToRad(-90)))
+			.mul(Matrix.translation(new Vector(0, mailWidth / 2, 0)))
+	);
+	const pyr_left = new PyramidNode(mailHeight, mailThickness, -mailWidth / 2, mailColor, mailMaterial);
+	gn_pyr_left.add(pyr_left);
+
+	const gn_pyr_right = new GroupNode(
+		Matrix.rotation(new Vector(0, 1, 0), Utils.degToRad(90))
+			.mul(Matrix.rotation(new Vector(0, 0, 1), Utils.degToRad(90)))
+			.mul(Matrix.translation(new Vector(0, mailWidth / 2, 0)))
+	);
+	const pyr_right = new PyramidNode(mailHeight, mailThickness, -mailWidth / 2, mailColor, mailMaterial);
+	gn_pyr_right.add(pyr_right);
+
+	gn_mail.add(gn_pyr_top);
+	gn_mail.add(gn_pyr_bottom);
+	gn_mail.add(gn_pyr_left);
+	gn_mail.add(gn_pyr_right);
 
 	// ***** right: file manager *****
 
@@ -290,6 +330,8 @@
 	// assign all objects placed "on" the main cube to main
 	gn_main.add(gn_main_cube);
 	gn_main.add(gn_browser_cube);
+	gn_main.add(gn_mail);
+
 	gn_main.add(gn_deskTOP);
 	sg.add(gn_main);
 
