@@ -12,11 +12,15 @@ UserInteraction = {
 		Key: {
 			hitCmd: false, // user wants to make a browser short cut
 			lastKey: undefined,
+			// keys specified at https://www.w3.org/TR/uievents-key/#key-attribute-value
 			keyDownListener: (event) => {
 				if (UserInteraction.Events.Key.hitCmd || window.renderProcess.onStop) return;
 
+				// console.log("Keydown: " + event.key + " (" + event.code + ")");
 				switch (event.key) {
 					case "Meta":
+					case "Control":
+					case "Fn":
 						UserInteraction.Events.Key.hitCmd = true;
 						return;
 				}
@@ -24,8 +28,7 @@ UserInteraction = {
 				event.preventDefault();
 				if (event.key === UserInteraction.Events.Key.lastKey || event.repeat) return;
 				UserInteraction.Events.Key.lastKey = event.key;
-				let key = event.key.toLowerCase();
-				switch (key) {
+				switch (event.key.toLowerCase()) {
 					case "p":
 						for (let animationNode of animationNodes) {
 							animationNode.toggleActive();
@@ -45,18 +48,20 @@ UserInteraction = {
 						break;
 				}
 
-				UserInteraction.Events.Key.animationControl(key, true);
+				UserInteraction.Events.Key.animationControl(event, true);
 			},
 			keyUpListener: (event) => {
 				switch (event.key) {
 					case "Meta":
+					case "Control":
+					case "Fn":
 						UserInteraction.Events.Key.hitCmd = false;
 				}
 				if (UserInteraction.Events.Key.hitCmd || window.renderProcess.onStop) return;
 
 				event.preventDefault();
 				UserInteraction.Events.Key.lastKey = undefined;
-				UserInteraction.Events.Key.animationControl(event.key.toLowerCase(), false);
+				UserInteraction.Events.Key.animationControl(event, false);
 			},
 			enable() {
 				window.addEventListener('keydown', this.keyDownListener);
@@ -67,8 +72,8 @@ UserInteraction = {
 				window.removeEventListener('keyup', this.keyUpListener);
 			},
 			w_downtime: undefined,
-			animationControl(key, set) {
-				switch (key) {
+			animationControl(event, set) {
+				switch (event.key.toLowerCase()) {
 					// 2D driver
 					case "i":
 						this.ControlHelper.set2DDriver("moveForward", set);
@@ -129,15 +134,21 @@ UserInteraction = {
 					case "arrowdown":
 						this.ControlHelper.setFreeFlight("pitchDownward", set);
 						break;
+				}
+
+				switch (event.code.toLowerCase()) {
 					// Free rotor
-					case "x":
-						this.ControlHelper.setRotor("pitchUpward", set);
+					case "keyz":
+						if (event.altKey) this.ControlHelper.setRotor("rollLeftward", set);
+						else this.ControlHelper.setRotor("rollRightward", set);
 						break;
-					case "y":
-						this.ControlHelper.setRotor("yawRightward", set);
+					case "keyx":
+						if (event.altKey) this.ControlHelper.setRotor("pitchDownward", set);
+						else this.ControlHelper.setRotor("pitchUpward", set);
 						break;
-					case "z":
-						this.ControlHelper.setRotor("rollRightward", set);
+					case "keyc":
+						if (event.altKey) this.ControlHelper.setRotor("yawLeftward", set);
+						else this.ControlHelper.setRotor("yawRightward", set);
 						break;
 				}
 			},

@@ -25,10 +25,13 @@
 **k**&emsp;Move backward<br>
 **l**&emsp;Move right
 
-### FreeRotor
+### FreeRotor/AxisAlignedRotor
 **x**&emsp;Rotate around x axis (pitch)<br>
+**alt+x**&emsp;Rotate negative around x axis (-pitch)<br>
 **y**&emsp;Rotate around y axis (yaw)<br>
-**z**&emsp;Rotate around z axis (roll)
+**alt+y**&emsp;Rotate negative around y axis (-yaw)<br>
+**c**&emsp;Rotate around z axis (roll)<br>
+**alt+c**&emsp;Rotate negative around z axis (-roll)
 
 #### Misc
 **r**&emsp;Toggle renderer between rasterizer (default) and raytracer<br>
