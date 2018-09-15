@@ -6,9 +6,6 @@ Preferences = {
 	showSpecs: false,
 	showMenu: false,
 	fullscreenActivated: false,
-	getDefaultSceneGraph: function () {
-		throw Error("niy");
-	},
 	canvas: {
 		useRasterRenderer: true,
 		rasterizer: document.getElementById("rasterizer"),
