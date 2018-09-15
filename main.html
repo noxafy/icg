@@ -316,8 +316,38 @@
 	gn_mail.add(gn_pyr_right);
 
 	// ***** right: file manager *****
+	const gn_folder = new GroupNode(Matrix.translation(new Vector(3, 0.1, 0)));
+	const gn_folder_base = new GroupNode(Matrix.scaling(new Vector(0.3, 0.6, 0.9)));
+	const folder_base = new AABoxNode(new Position(-1, -1, -1), new Position(1, 1, 1), Colors.GOLD, Materials.BRASS);
+	gn_folder_base.add(folder_base);
+	const gn_folder_tab = new GroupNode(Matrix.translation(new Vector(-0.15, 0.7, .5)).mul(Matrix.scaling(new Vector(0.15, 0.1, 0.4))));
+	const folder_tab = new AABoxNode(new Position(-1, -1, -1), new Position(1, 1, 1), Colors.GOLD, Materials.BRASS);
+	gn_folder_tab.add(folder_tab);
+	gn_folder.add(gn_folder_base);
+	gn_folder.add(gn_folder_tab);
 
 	// ***** back:  *****
+	const gn_git = new GroupNode(
+		Matrix.rotation(new Vector(0, 0, 1), Utils.degToRad(45))
+			.mul(Matrix.translation(new Vector(0, 0, -3)))
+			.mul(Matrix.scaling(new Vector(0.4, 0.4, 0.2)))
+	);
+	// colors from https://gitforwindows.org/img/gwindows_logo.png
+	const gn_git_top = getGitBox(new Vector(1, 1, 0), new Color(1, 128 / 255, 128 / 255));
+	const gn_git_left = getGitBox(new Vector(1, -1, 0), new Color(128 / 255, 179 / 255, 1));
+	const gn_git_right = getGitBox(new Vector(-1, 1, 0), new Color(141 / 255, 211 / 255, 95 / 255));
+	const gn_git_bottom = getGitBox(new Vector(-1, -1, 0), new Color(1, 230 / 255, 128 / 255));
+	gn_git.add(gn_git_top);
+	gn_git.add(gn_git_left);
+	gn_git.add(gn_git_right);
+	gn_git.add(gn_git_bottom);
+
+	function getGitBox(position, color) {
+		const gn = new GroupNode(Matrix.translation(position));
+		const box = new AABoxNode(new Position(-1, -1, -1), new Position(1, 1, 1), color, Materials.getUni(0.5, 0.2, 0.1, 16));
+		gn.add(box);
+		return gn;
+	}
 
 	// ***** top: something that means "desktop"? *****
 	const gn_deskTOP = new GroupNode(Matrix.translation(new Vector(0, 3, 0)).mul(Matrix.scaling(new Vector(0.5, 0.5, 0.5))));
@@ -330,11 +360,18 @@
 	const bottom_cone = new ConeNode(2, -3, Colors.GOLD, Materials.BRONZE);
 	gn_bottom.add(bottom_cone);
 
+	// just another element
+	const gn_sphere = new GroupNode(Matrix.identity());
+	const sphere = new SphereNode(new Position(0, -1.8, 0), 0.2, Colors.GREY, Materials.CHROME);
+	gn_sphere.add(sphere);
+	sg.add(gn_sphere);
+
 	// assign all objects placed "on" the main cube to main
 	gn_main.add(gn_main_cube);
 	gn_main.add(gn_browser_cube);
 	gn_main.add(gn_mail);
-
+	gn_main.add(gn_folder);
+	gn_main.add(gn_git);
 	gn_main.add(gn_deskTOP);
 	sg.add(gn_bottom);
 	sg.add(gn_main);
@@ -359,6 +396,7 @@
 		new AnimationNode(browser_opera.children[1], new SimpleRotor(new Vector(0, 1, 0), -180)),
 		// Jumper
 		new AnimationNode(gn_rotatingLight, new SinusJumper(new Vector(0, 2, 0), 10)),
+		new AnimationNode(gn_sphere, new PhysicsJumper(new Vector(0, 2.5, 0), 0.4))
 	];
 
 	// start render process
