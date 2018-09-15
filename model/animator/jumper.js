@@ -64,7 +64,7 @@ class LinearJumper extends Jumper {
 	}
 }
 
-class SinJumper extends Jumper {
+class SinusJumper extends Jumper {
 	/**
 	 * Creates a new sinus jumper animation
 	 * @param {Vector} axis - The axis to rotate around
@@ -81,7 +81,7 @@ class SinJumper extends Jumper {
 
 	toJsonObj() {
 		return super.toJsonObj({
-			type: "SinJumper",
+			type: "SinusJumper",
 			jpm: 60000 / this.timePerJump
 		});
 	}

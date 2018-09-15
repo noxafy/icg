@@ -94,8 +94,8 @@ SceneGraphImporter = {
 				case "LinearJumper":
 					animator = new LinearJumper(Vector.fromArray(n.animator.axis), n.animator.jpm);
 					break;
-				case "SinJumper":
-					animator = new SinJumper(Vector.fromArray(n.animator.axis), n.animator.jpm);
+				case "SinusJumper":
+					animator = new SinusJumper(Vector.fromArray(n.animator.axis), n.animator.jpm);
 					break;
 				case "PhysicsJumper":
 					animator = new PhysicsJumper(Vector.fromArray(n.animator.axis), n.animator.g_scale);
