@@ -84,10 +84,10 @@ class Color extends Vector {
 		if (typeof obj === "string") {
 			if (Colors[obj]) return Colors[obj];
 			else throw Error("Unknown color: " + obj);
-		} else if (Array.isArray(obj)) {
+		} else if (Array.isArray(obj) && obj.length >= 3) {
 			return Color.fromArray(obj);
 		}
-		throw Error("Invalid data type for color: " + typeof obj);
+		throw Error("Invalid data type for color: " + JSON.stringify(obj));
 	}
 
 	toString() {

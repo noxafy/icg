@@ -32,11 +32,11 @@ class Material {
 		if (typeof obj === "string") {
 			if (Materials[obj]) return Materials[obj];
 			else throw Error("Unknown material: " + obj);
-		} else if (!obj && obj.ambient && obj.diffuse && obj.specular && obj.shininess) {
+		} else if (obj && obj.ambient && obj.diffuse && obj.specular && obj.shininess) {
 			return new Material(Vector.fromArray(obj.ambient), Vector.fromArray(obj.diffuse),
 				Vector.fromArray(obj.specular), obj.shininess, obj.name);
 		}
-		throw Error("Invalid material specification: " + typeof obj);
+		throw Error("Invalid material specification: " + JSON.stringify(obj));
 	}
 
 	toJsonObj() {
