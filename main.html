@@ -200,27 +200,35 @@
 	sg.add(gn_topLight);
 
 	// rotating lights
-	const leftLight = new LightNode(new Position(0, 0, 0), Colors.WHITE, 2, 0.1, 0.4, 0.1);
-	const leftLightS = new SphereNode(leftLight.position, 0.1, Colors.BLACK, Materials.BLANK);
-	const gn_leftLight = new GroupNode(Matrix.translation(new Vector(-6, -1, 0)));
-	gn_leftLight.add(leftLight);
-	gn_leftLight.add(leftLightS);
-	const rightLight = new LightNode(new Position(0, 0, 0), Colors.WHITE, 2, 0.1, 0.4, 0.1);
-	const rightLightS = new SphereNode(rightLight.position, 0.1, Colors.BLACK, Materials.BLANK);
-	const gn_rightLight = new GroupNode(Matrix.translation(new Vector(6, -1, 0)));
-	gn_rightLight.add(rightLight);
-	gn_rightLight.add(rightLightS);
+	const gn_leftLight = getSatelliteLight(new Vector(-6, -1, 0));
+	const gn_rightLight = getSatelliteLight(new Vector(6, -1, 0));
+	const gn_nearLight = getSatelliteLight(new Vector(0, -1, 6));
+	const gn_farLight = getSatelliteLight(new Vector(0, -1, -6));
+
 	const gn_rotatingLight = new GroupNode(Matrix.identity());
-	gn_rotatingLight.add(gn_rightLight);
 	gn_rotatingLight.add(gn_leftLight);
+	gn_rotatingLight.add(gn_rightLight);
+	gn_rotatingLight.add(gn_nearLight);
+	gn_rotatingLight.add(gn_farLight);
 	sg.add(gn_rotatingLight);
+
+	function getSatelliteLight(position) {
+		const light = new LightNode(new Position(0, 0, 0), Colors.WHITE, 2, 0.1, 0.4, 0.1);
+		const lightSphere = new SphereNode(light.position, 0.1, Colors.BLACK, Materials.BLANK);
+		const gn = new GroupNode(Matrix.translation(position));
+		gn.add(light);
+		gn.add(lightSphere);
+		return gn;
+	}
 
 	// ********** OBJECTS **********
 	const gn_main = new GroupNode(Matrix.identity());
+
 	// *****  main cube *****
 	const main_cube = new AABoxNode(new Position(-1, -1, -1), new Position(1, 1, 1), Colors.ORANGERED, Materials.getUni(0.5, 0.4, 0.6, 64));
 	const gn_main_cube = new GroupNode(Matrix.scaling(new Vector(2, 2, 2)));
 	gn_main_cube.add(main_cube);
+
 	// ***** front: browser *****
 	const browser_cube = new TextureBoxNode(new Position(-1, -1, -1), new Position(1, 1, 1),
 		"resources/textures/browser_icon.png", "resources/normalMaps/normal.jpg", Materials.DEFAULT);
@@ -258,6 +266,7 @@
 	gn_browser_cube.add(gn_browsers);
 
 	// ***** left: mail *****
+
 
 	// ***** right: file manager *****
 
