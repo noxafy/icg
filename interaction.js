@@ -344,7 +344,7 @@ UserInteraction = {
 				}
 				Preferences.fullscreenActivated = false;
 			} else {
-				let p = canvas.parentNode.parentNode;
+				let p = Preferences.canvas.container.parentNode;
 				if (p.mozRequestFullScreen) p.mozRequestFullScreen();
 				else if (p.webkitRequestFullScreen) p.webkitRequestFullScreen();
 				else if (p.msRequestFullscreen) p.msRequestFullscreen();
