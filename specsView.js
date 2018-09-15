@@ -52,6 +52,7 @@ SpecsView = {
 		dropdown: document.getElementById("lights-dropdown"),
 		current_light: undefined,
 		enable(light) {
+			this.disable();
 			if (this.current_light === light) return;
 			this.current_light = light;
 
