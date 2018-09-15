@@ -57,5 +57,12 @@ Materials = {
 	BLANK: new Material(new Vector(0, 0, 0), new Vector(0, 0, 0), new Vector(0, 0, 0), 1, 'blank'),
 	DEFAULT: new Material(new Vector(0.5, 0.5, 0.5), new Vector(0.4, 0.4, 0.4), new Vector(0.3, 0.3, 0.3), 32, 'default'),
 	MAX: new Material(new Vector(1, 1, 1), new Vector(1, 1, 1), new Vector(1, 1, 1), 32, 'default'),
-	CUSTOM_ORANGE_RED: new Material(Colors.ORANGERED.mul(0.2), Colors.ORANGERED.mul(0.4), Colors.ORANGERED.mul(0.6), 64, 'custom orange red')
+	getUni(ambient, diffuse, specular, shininess) {
+		return new Material(
+			new Vector(ambient, ambient, ambient),
+			new Vector(diffuse, diffuse, diffuse),
+			new Vector(specular, specular, specular),
+			shininess
+		)
+	}
 }

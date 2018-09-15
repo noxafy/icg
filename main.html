@@ -185,13 +185,13 @@
 		Preferences.canvas.aspectW / Preferences.canvas.aspectH,
 		0.1, 100, 60 // near, far, fovy
 	)
-	const gnc = new GroupNode(Matrix.translation(new Vector(0, 2, 14)));
+	const gnc = new GroupNode(Matrix.translation(new Vector(0, 2, 10)));
 	gnc.add(camera);
 	sg.add(gnc);
 
 	// ********** LIGHTS **********
 	// top light
-	const topLight = new LightNode(new Position(0, 0, 0), Colors.WHITE, 1.5, 0.8, 0.01, 0);
+	const topLight = new LightNode(new Position(0, 0, 0), Colors.WHITE, 0.4, 0.2, 0.01, 0);
 	const gn_topLight = new GroupNode(Matrix.translation(new Vector(0, 15, 0)));
 	gn_topLight.add(topLight);
 	sg.add(gn_topLight);
@@ -214,27 +214,80 @@
 
 	// ********** OBJECTS **********
 	const gn_main = new GroupNode(Matrix.identity());
-	// main cube
-	const main_cube = new AABoxNode(new Position(-1, -1, -1), new Position(1, 1, 1), Colors.ORANGERED, Materials.CUSTOM_ORANGE_RED);
+	// *****  main cube *****
+	const main_cube = new AABoxNode(new Position(-1, -1, -1), new Position(1, 1, 1), Colors.ORANGERED, Materials.getUni(0.5, 0.4, 0.6, 64));
 	const gn_main_cube = new GroupNode(Matrix.scaling(new Vector(2, 2, 2)));
 	gn_main_cube.add(main_cube);
-	// front
+	// ***** front: browser *****
 	const browser_cube = new TextureBoxNode(new Position(-1, -1, -1), new Position(1, 1, 1),
 		"resources/textures/browser_icon.png", "resources/normalMaps/normal.jpg", Materials.DEFAULT);
 	const gn_browser_cube = new GroupNode(Matrix.translation(new Vector(0, 0, 3)).mul(Matrix.scaling(new Vector(0.75, 0.75, 0.75))));
 	gn_browser_cube.add(browser_cube);
+	const browser_edge = getBrowserNode(new Color(50 / 255, 119 / 255, 288 / 255), new Position(-1.8, 0, 0))
+	const browser_firefox = getBrowserNode(new Color(1, 100 / 255, 20 / 255), new Position(0, 1.8, 0));
+	const browser_chrome = getBrowserNode(new Color(204 / 255, 192 / 255, 182 / 255), new Position(1.8, 0, 0));
+	const browser_opera = getBrowserNode(new Color(1, 25 / 255, 45 / 255), new Position(0, -1.8, 0));
 
-	// assign all objects placed 'on' main cube to main
+	function getBrowserNode(color, position) {
+		const gn = new GroupNode(Matrix.translation(position));
+		const material = new Material(color.mul(0.2), color.mul(0.6), color.mul(0.4), 32);
+		const main = new SphereNode(new Position(0, 0, 0), 0.3, color, material);
+		gn.add(main);
+		const satellites = new GroupNode(Matrix.translation(new Vector(0, 0.3, 0)));
+		satellites.add(satelliteSphere(new Position(-0.3, 0, 0)));
+		satellites.add(satelliteSphere(new Position(0, 0, 0.3)));
+		satellites.add(satelliteSphere(new Position(0.3, 0, 0)));
+		satellites.add(satelliteSphere(new Position(0, 0, -0.3)));
+		gn.add(satellites);
+
+		return gn;
+
+		function satelliteSphere(position) {
+			return new SphereNode(position, 0.1, Color.fromArray(color.data), material);
+		}
+	}
+
+	const gn_browsers = new GroupNode(Matrix.identity());
+	gn_browsers.add(browser_edge);
+	gn_browsers.add(browser_firefox);
+	gn_browsers.add(browser_chrome);
+	gn_browsers.add(browser_opera);
+	gn_browser_cube.add(gn_browsers);
+
+	// ***** left: mail *****
+
+	// ***** right: file manager *****
+
+	// ***** back:  *****
+
+	// ***** top: something that means "desktop"? *****
+
+	// ***** bottom: a cone *****
+
+	// assign all objects placed "on" the main cube to main
 	gn_main.add(gn_main_cube);
 	gn_main.add(gn_browser_cube);
 	sg.add(gn_main);
 
-	// add animation nodes
+	// ********** ANIMATION **********
 	window.animationNodes = [
+		// User Controllable
 		new AnimationNode(gnc, new FreeFlight(4, camera.up)),
+		new AnimationNode(gn_main, new AxisAlignedRotor(60)),
+		// Rotors
 		new AnimationNode(gn_rotatingLight, new SimpleRotor(new Vector(0, 1, 0), 40)),
+		new AnimationNode(gn_browsers, new SimpleRotor(new Vector(0, 0, 1), -120)),
+		new AnimationNode(gn_browser_cube, new SimpleRotor(new Vector(0, 0, 1), 60)),
+		new AnimationNode(browser_edge, new SimpleRotor(new Vector(0, 0, 1), 60)),
+		new AnimationNode(browser_firefox, new SimpleRotor(new Vector(0, 0, 1), 60)),
+		new AnimationNode(browser_chrome, new SimpleRotor(new Vector(0, 0, 1), 60)),
+		new AnimationNode(browser_opera, new SimpleRotor(new Vector(0, 0, 1), 60)),
+		new AnimationNode(browser_edge.children[1], new SimpleRotor(new Vector(0, 1, 0), 180)),
+		new AnimationNode(browser_firefox.children[1], new SimpleRotor(new Vector(0, 1, 0), -180)),
+		new AnimationNode(browser_chrome.children[1], new SimpleRotor(new Vector(0, 1, 0), 180)),
+		new AnimationNode(browser_opera.children[1], new SimpleRotor(new Vector(0, 1, 0), -180)),
+		// Jumper
 		new AnimationNode(gn_rotatingLight, new SinusJumper(new Vector(0, 2, 0), 10)),
-		new AnimationNode(gn_main, new AxisAlignedRotor(60))
 	];
 
 	// start render process

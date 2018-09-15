@@ -11,7 +11,7 @@ class Material {
 	 * @param {number} shininess - The shininess effect of the material
 	 * @param {string} name      - The name of the material
 	 */
-	constructor(ambient, diffuse, specular, shininess, name) {
+	constructor(ambient, diffuse, specular, shininess, name = undefined) {
 		this.ambient = ambient;
 		this.diffuse = diffuse;
 		this.specular = specular;
