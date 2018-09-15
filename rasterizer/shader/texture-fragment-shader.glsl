@@ -21,7 +21,7 @@ struct PointLight {
   float quadratic;
 };
 
-#define NR_LIGHTS 3
+#define NR_LIGHTS 10
 uniform PointLight lights[NR_LIGHTS];
 
 uniform vec3 kA;
@@ -40,6 +40,7 @@ void main( void ) {
   vec3 res = vec3(0.0, 0.0, 0.0);
   for(int i = 0; i < NR_LIGHTS; i++) {
     PointLight light = lights[i];
+    if (light.intensity == 0.0) continue;
     res += getPhongColor(light, n, vertPos);
   }
   gl_FragColor = vec4(res, 1.0);
