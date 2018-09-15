@@ -362,7 +362,7 @@
 
 	// just another element
 	const gn_sphere = new GroupNode(Matrix.identity());
-	const sphere = new SphereNode(new Position(0, -1.8, 0), 0.2, Colors.GREY, Materials.CHROME);
+	const sphere = new SphereNode(new Position(0, -1, 0), 0.2, Colors.GREY, Materials.CHROME);
 	gn_sphere.add(sphere);
 	sg.add(gn_sphere);
 
@@ -396,7 +396,7 @@
 		new AnimationNode(browser_opera.children[1], new SimpleRotor(new Vector(0, 1, 0), -180)),
 		// Jumper
 		new AnimationNode(gn_rotatingLight, new SinusJumper(new Vector(0, 2, 0), 10)),
-		new AnimationNode(gn_sphere, new PhysicsJumper(new Vector(0, 2.5, 0), 0.4))
+		new AnimationNode(gn_sphere, new PhysicsJumper(new Vector(0, 1.5, 0), 0.4))
 	];
 
 	// start render process
