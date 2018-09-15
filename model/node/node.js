@@ -75,7 +75,7 @@ class TextureBoxNode extends Node {
 		this.maxPoint = maxPoint;
 		this.diffuseTexture = diffuseTexture;
 		this.normalTexture = normalTexture;
-		this.material = material;
+		this.material = material.clone();
 	}
 
 	/**

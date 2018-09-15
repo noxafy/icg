@@ -225,6 +225,10 @@ class Vector {
 			Utils.round(this.z) + "," +
 			Utils.round(this.w) + "]"
 	}
+
+	clone() {
+		return new this.constructor(this.x, this.y, this.z, this.w);
+	}
 }
 
 class Position extends Vector {

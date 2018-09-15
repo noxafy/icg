@@ -14,8 +14,8 @@ class LightableNode extends Node {
 		if (!material) throw Error("Material is " + material)
 
 		super();
-		this.color = color;
-		this.material = material;
+		this.color = color.clone();
+		this.material = material.clone();
 	}
 
 	/**

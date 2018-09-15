@@ -99,4 +99,10 @@ class Color extends Vector {
 		if (this.name) return this.name.toUpperCase();
 		else return this.data;
 	}
+
+	clone() {
+		let clone = super.clone();
+		clone.name = this.name;
+		return clone;
+	}
 }

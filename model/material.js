@@ -49,4 +49,8 @@ class Material {
 			name: (this.name) ? this.name : null
 		}
 	}
+
+	clone() {
+		return new Material(this.ambient.clone(), this.diffuse.clone(), this.specular.clone(), this.shininess, this.name);
+	}
 }
