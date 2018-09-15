@@ -273,12 +273,17 @@
 	// ***** back:  *****
 
 	// ***** top: something that means "desktop"? *****
+	const gn_deskTOP = new GroupNode(Matrix.translation(new Vector(0, 3, 0)).mul(Matrix.scaling(new Vector(0.5, 0.5, 0.5))));
+	const deskTop_cube = new TextureBoxNode(new Position(-1, -1, -1), new Position(1, 1, 1),
+		"resources/textures/desktop.png", "resources/normalMaps/normal2.jpg", Materials.DEFAULT);
+	gn_deskTOP.add(deskTop_cube);
 
 	// ***** bottom: a cone *****
 
 	// assign all objects placed "on" the main cube to main
 	gn_main.add(gn_main_cube);
 	gn_main.add(gn_browser_cube);
+	gn_main.add(gn_deskTOP);
 	sg.add(gn_main);
 
 	// ********** ANIMATION **********
