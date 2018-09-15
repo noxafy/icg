@@ -31,7 +31,7 @@ class Matrix {
 	/**
 	 * Returns a matrix that represents a rotation. The rotation axis is either the x, y or z axis (either x, y, z is 1).
 	 * @param  {Vector} axis  - The axis to rotate around
-	 * @param  {number} angle - The angle to rotate
+	 * @param  {number} angle - The angle to rotate in rad
 	 * @return {Matrix}         The resulting rotation matrix
 	 */
 	static rotation(axis, angle) {
