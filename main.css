@@ -120,7 +120,7 @@ button:active {
 	/*color: white;*/
 }
 
-.disabled_btn {
+button[disabled] {
 	border-color: grey;
 	color: grey;
 }
