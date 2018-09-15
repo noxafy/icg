@@ -19,7 +19,7 @@ struct PointLight {
   float quadratic;
 };
 
-#define NR_LIGHTS 1
+#define NR_LIGHTS 3
 uniform PointLight lights[NR_LIGHTS];
 
 uniform vec3 kA;

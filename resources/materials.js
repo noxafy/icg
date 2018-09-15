@@ -52,7 +52,10 @@ Materials = {
 	RED_RUBBER: new Material(new Vector(0.05, 0, 0), new Vector(0.5, 0.4, 0.4), new Vector(0.7, 0.04, 0.04), 10, 'red rubber'),
 	WHITE_RUBBER: new Material(new Vector(0.05, 0.05, 0.05), new Vector(0.5, 0.5, 0.5), new Vector(0.7, 0.7, 0.7), 10, 'white rubber'),
 	YELLOW_RUBBER: new Material(new Vector(0.05, 0.05, 0), new Vector(0.5, 0.5, 0.4), new Vector(0.7, 0.7, 0.04), 10, 'yellow rubber'),
+
+	// custom
 	BLANK: new Material(new Vector(0, 0, 0), new Vector(0, 0, 0), new Vector(0, 0, 0), 1, 'blank'),
 	DEFAULT: new Material(new Vector(0.5, 0.5, 0.5), new Vector(0.4, 0.4, 0.4), new Vector(0.3, 0.3, 0.3), 32, 'default'),
-	MAX: new Material(new Vector(1, 1, 1), new Vector(1, 1, 1), new Vector(1, 1, 1), 32, 'default')
+	MAX: new Material(new Vector(1, 1, 1), new Vector(1, 1, 1), new Vector(1, 1, 1), 32, 'default'),
+	CUSTOM_ORANGE_RED: new Material(Colors.ORANGERED.mul(0.2), Colors.ORANGERED.mul(0.4), Colors.ORANGERED.mul(0.6), 64, 'custom orange red')
 }

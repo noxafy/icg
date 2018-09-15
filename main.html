@@ -41,8 +41,8 @@
 	<script src="raytracer/raytracer.js"></script>
 	<script src="raytracer/raytracing-renderer.js"></script>
 	<script src="raytracer/raytracing-visitor.js"></script>
-	<script src="resources/materials.js"></script>
 	<script src="resources/colors.js"></script>
+	<script src="resources/materials.js"></script>
 	<script src="renderProcess.js"></script>
 	<script src="io/scenegraph-exporter.js"></script>
 	<script src="io/scenegraph-importer.js"></script>
@@ -178,84 +178,68 @@
 	// window.animationNodes = result.animationNodes;
 
 	// construct scene graph
-	let camera = new CameraNode(
-		new Position(0, 0, 1), // eye
+	window.sg = new GroupNode(Matrix.identity())
+	// ********** CAMERA **********
+	const camera = new CameraNode(
+		new Position(0, 0.2, 1), // eye
 		Preferences.canvas.aspectW / Preferences.canvas.aspectH,
 		0.1, 100, 60 // near, far, fovy
 	)
+	const gnc = new GroupNode(Matrix.translation(new Vector(0, 2, 14)));
+	gnc.add(camera);
+	sg.add(gnc);
 
-	const sphere = new SphereNode(new Position(0, 0, 0), 0.4, Colors.GOLD, Materials.GOLD);
-	const jumpingSphere = new SphereNode(new Position(0, 0, 0), 0.4, Colors.BLACK, Materials.CHROME);
-	const light = new LightNode(new Position(-5.0, 2.0, -10.0), Colors.WHITE, 1.2, 0.8, 0.02, 0.001);
-	const lightSphere = new SphereNode(light.position, 0.2, Colors.YELLOW, Materials.BLANK);
-	const hci_cube = new TextureBoxNode(
-		new Position(-1, -1, -1),
-		new Position(1, 1, 1),
-		'resources/textures/parquet.png',
-		'resources/normalMaps/normal2.jpg',
-		Materials.DEFAULT
-	);
-	const cube = new AABoxNode(new Position(-1, -1, -1), new Position(1, 1, 1), Colors.LIMEGREEN, Materials.EMERALD);
-	const pyramid = new PyramidNode(2, 2, 2, Colors.ORANGERED, Materials.BRASS);
-	const cone = new ConeNode(1, 2, Colors.LIGHTGOLDENRODYELLOW, Materials.COPPER);
+	// ********** LIGHTS **********
+	// top light
+	const topLight = new LightNode(new Position(0, 0, 0), Colors.WHITE, 1.5, 0.8, 0.01, 0);
+	const gn_topLight = new GroupNode(Matrix.translation(new Vector(0, 15, 0)));
+	gn_topLight.add(topLight);
+	sg.add(gn_topLight);
 
-	//      sg
-	//     /  \
-	//  gn1:Tc gn5:Tl - jumpingSphere
-	//   /   \
-	// gn2:Ts gn3
-	//   |      \
-	// gn4:T-c hci_cube
-	//   |
-	// sphere
+	// rotating lights
+	const leftLight = new LightNode(new Position(0, 0, 0), Colors.WHITE, 2, 0.1, 0.4, 0.1);
+	const leftLightS = new SphereNode(leftLight.position, 0.1, Colors.BLACK, Materials.BLANK);
+	const gn_leftLight = new GroupNode(Matrix.translation(new Vector(-6, -1, 0)));
+	gn_leftLight.add(leftLight);
+	gn_leftLight.add(leftLightS);
+	const rightLight = new LightNode(new Position(0, 0, 0), Colors.WHITE, 2, 0.1, 0.4, 0.1);
+	const rightLightS = new SphereNode(rightLight.position, 0.1, Colors.BLACK, Materials.BLANK);
+	const gn_rightLight = new GroupNode(Matrix.translation(new Vector(6, -1, 0)));
+	gn_rightLight.add(rightLight);
+	gn_rightLight.add(rightLightS);
+	const gn_rotatingLight = new GroupNode(Matrix.identity());
+	gn_rotatingLight.add(gn_rightLight);
+	gn_rotatingLight.add(gn_leftLight);
+	sg.add(gn_rotatingLight);
 
-	window.sg = new GroupNode(Matrix.identity())
-	const gn1 = new GroupNode(Matrix.translation(new Vector(-.3, -0.4, .1))); // Tc
-	const gn3 = new GroupNode(Matrix.identity());
-	const gn2 = new GroupNode(Matrix.translation(new Vector(-4, -1, -2))); // Ts
-	const gn5 = new GroupNode(Matrix.translation(new Vector(-3.5, -2.5, -5.0))); // Tl
-	const gn6 = new GroupNode(Matrix.translation(new Vector(-4, 0, 6)));
-	const gn7 = new GroupNode(Matrix.identity());
-	const gn8 = new GroupNode(Matrix.translation(new Vector(-5, -1, 0)));
-	const gn9 = new GroupNode(Matrix.translation(new Vector(-9, -1, 0)));
+	// ********** OBJECTS **********
+	const gn_main = new GroupNode(Matrix.identity());
+	// main cube
+	const main_cube = new AABoxNode(new Position(-1, -1, -1), new Position(1, 1, 1), Colors.ORANGERED, Materials.CUSTOM_ORANGE_RED);
+	const gn_main_cube = new GroupNode(Matrix.scaling(new Vector(2, 2, 2)));
+	gn_main_cube.add(main_cube);
+	// front
+	const browser_cube = new TextureBoxNode(new Position(-1, -1, -1), new Position(1, 1, 1),
+		"resources/textures/browser_icon.png", "resources/normalMaps/normal.jpg", Materials.DEFAULT);
+	const gn_browser_cube = new GroupNode(Matrix.translation(new Vector(0, 0, 3)).mul(Matrix.scaling(new Vector(0.75, 0.75, 0.75))));
+	gn_browser_cube.add(browser_cube);
 
-	sg.add(gn1);
-
-	gn1.add(gn3);
-	gn3.add(hci_cube);
-	gn1.add(gn2);
-	gn2.add(sphere);
-
-	sg.add(gn5);
-	gn5.add(jumpingSphere);
-
-	sg.add(gn6);
-	gn6.add(camera);
-
-	sg.add(gn7);
-	gn7.add(light);
-	gn7.add(lightSphere)
-
-	sg.add(gn8);
-	gn8.add(cube);
-
-	sg.add(gn9);
-	// gn9.add(pyramid);
-	gn9.add(cone);
+	// assign all objects placed 'on' main cube to main
+	gn_main.add(gn_main_cube);
+	gn_main.add(gn_browser_cube);
+	sg.add(gn_main);
 
 	// add animation nodes
 	window.animationNodes = [
-		// new AnimationNode(gn1, new SimpleRotor(new Vector(0, 0, 1), 30)),
-		new AnimationNode(gn1, new AxisAlignedRotor(60)),
-		new AnimationNode(gn5, new PhysicsJumper(new Vector(0, 3, 0), 1)),
-		new AnimationNode(gn7, new Driver2D(6)),
-		// new AnimationNode(gn2, new FreeFlight(4)),
-		new AnimationNode(gn6, new FreeFlight(4, camera.up))
+		new AnimationNode(gnc, new FreeFlight(4, camera.up)),
+		new AnimationNode(gn_rotatingLight, new SimpleRotor(new Vector(0, 1, 0), 40)),
+		new AnimationNode(gn_rotatingLight, new SinusJumper(new Vector(0, 2, 0), 10)),
+		new AnimationNode(gn_main, new AxisAlignedRotor(60))
 	];
 
 	// start render process
 	window.renderProcess = new RenderProcess();
-	const timeout = 1000 / 5; // not more than 30 fps
+	const timeout = 1000 / 30; // not more than 30 fps
 	let t = 0;
 	window.run = function (timestamp) {
 		if (!renderProcess.onStop) {
