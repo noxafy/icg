@@ -6,6 +6,7 @@ UserInteraction = {
 	init() {
 		this.Events.Key.enable();
 		this.Events.initOnClick();
+		this.Events.FileDropped.init();
 	},
 	Events: {
 		Key: {
@@ -176,30 +177,77 @@ UserInteraction = {
 				}
 			}
 		},
-		onFileDropped(jsonCb, objMtlCb) {
-			document.body.addEventListener("dragover", function (e) {
-				e.preventDefault();
-			});
-			document.body.addEventListener("dragleave", function (e) {
-				e.preventDefault();
-			});
-			document.body.addEventListener("drop", function (e) {
-				e.preventDefault();
-				// only take account of the first file
-				const file = e.dataTransfer.files[0];
-				if (!FileReader) {
-					window.alert("Sorry, file dropping not available!")
+		FileDropped: {
+			init() {
+				document.body.addEventListener("dragover", function (e) {
+					e.preventDefault();
+				});
+				document.body.addEventListener("dragleave", function (e) {
+					e.preventDefault();
+				});
+				document.body.addEventListener("drop", (e) => {
+					e.preventDefault();
+					// only take account of the first file
+					const file = e.dataTransfer.files[0];
+					if (!FileReader) {
+						window.alert("Sorry, file dropping not available!")
+						return false;
+					}
+					if (Files.isJson(file)) {
+						this.onJson(file);
+					} else if (Files.isObj(file) || Files.isMtl(file)) {
+						this.onObjOrMtl(file);
+					} else {
+						console.error("Unsupported file type: " + file.type);
+					}
 					return false;
-				}
-				if (Files.isJson(file)) {
-					jsonCb(file);
-				} else if (Files.isObj(file) || Files.isMtl(file)) {
-					objMtlCb(file);
-				} else {
-					console.error("Unsupported file type: " + file.type);
-				}
-				return false;
-			});
+				});
+			},
+			onJson(file) {
+				window.renderProcess.stop(() => {
+					Files.getContent(file, content => {
+						let result = SceneGraphImporter.load(content);
+						if (result) {
+							window.sg = result.sg;
+							window.animationNodes = result.animationNodes;
+						} else {
+							console.error("Couldn't load file: " + file.name);
+						}
+						window.renderProcess = new RenderProcess();
+						window.renderProcess.start();
+					});
+				});
+			},
+			onObjOrMtl(file) {
+				window.renderProcess.stop(() => {
+					UserInteraction.View.askForObjAndMtlFiles(file, (objFile, mtlFile, matrix) => {
+						if (!objFile) {
+							window.renderProcess = new RenderProcess();
+							window.renderProcess.start();
+							return;
+						}
+						Files.getContent(objFile, obj => {
+							const cb = mtl => {
+								try {
+									let objects = ModelLoader.load(obj, mtl);
+									let gn = new GroupNode(matrix);
+									for (let obj of objects) {
+										gn.add(obj);
+									}
+									if (gn.children.length > 0) window.sg.add(gn);
+								} catch (e) {
+									console.error(e.stack);
+									console.error(e.message);
+								}
+								window.renderProcess = new RenderProcess();
+								window.renderProcess.start();
+							};
+							if (mtlFile) Files.getContent(mtlFile, cb);
+							else cb("");
+						});
+					});
+				});
+			},
 		},
 		initOnClick() {
 			let objColor, objMaterial, objId;

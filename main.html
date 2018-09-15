@@ -169,6 +169,13 @@
 	Preferences.canvas.aspectW = 16;
 	Preferences.canvas.aspectH = 9;
 	Preferences.canvas.init(120, 40); // set resolution
+	// and events
+	UserInteraction.init();
+
+	// get default scene graph
+	// let result = SceneGraphImporter.load(Preferences.getDefaultSceneGraph());
+	// window.sg = result.sg;
+	// window.animationNodes = result.animationNodes;
 
 	// construct scene graph
 	let camera = new CameraNode(
@@ -273,60 +280,6 @@
 		}
 	}
 	window.renderProcess.start();
-	// Preferences.toggleRenderer();
-	// window.renderProcess.onStop();
-	// setTimeout(function () {
-	// 	window.renderProcess.stop();
-	// }, 1000);
-
-	UserInteraction.init();
-	UserInteraction.Events.onFileDropped(file => {
-		window.renderProcess.stop(() => {
-			Files.getContent(file, content => {
-				let result = SceneGraphImporter.load(content);
-				if (result) {
-					window.sg = result.sg;
-					window.animationNodes = result.animationNodes;
-				} else {
-					console.error("Couldn't load file: " + file.name);
-				}
-				window.renderProcess = new RenderProcess();
-				window.renderProcess.start();
-			})
-		});
-	}, file => {
-		window.renderProcess.stop(() => {
-			UserInteraction.View.askForObjAndMtlFiles(file, (objFile, mtlFile, matrix) => {
-				if (!objFile) {
-					window.renderProcess = new RenderProcess();
-					window.renderProcess.start();
-					return;
-				}
-				Files.getContent(objFile, obj => {
-					const cb = mtl => {
-						try {
-							let objects = ModelLoader.load(obj, mtl);
-							let gn = new GroupNode(matrix);
-							for (let obj of objects) {
-								gn.add(obj);
-							}
-							if (gn.children.length > 0) window.sg.add(gn);
-						} catch (e) {
-							console.error(e.stack);
-							console.error(e.message);
-						}
-						window.renderProcess = new RenderProcess();
-						window.renderProcess.start();
-					};
-					if (mtlFile) {
-						Files.getContent(mtlFile, cb)
-					} else {
-						cb("");
-					}
-				})
-			});
-		})
-	});
 </script>
 </body>
 
