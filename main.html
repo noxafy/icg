@@ -279,7 +279,7 @@
 	const mailThickness = 0.2;
 	const mailWidth = 1;
 	const mailHeight = 0.6;
-	// top
+
 	const gn_pyr_top = new GroupNode(
 		Matrix.rotation(new Vector(0, 1, 0), Utils.degToRad(90))
 			.mul(Matrix.translation(new Vector(0, mailHeight / 2, 0)))
@@ -326,6 +326,9 @@
 	gn_deskTOP.add(deskTop_cube);
 
 	// ***** bottom: a cone *****
+	const gn_bottom = new GroupNode(Matrix.translation(new Vector(0, -4, 0)));
+	const bottom_cone = new ConeNode(2, -3, Colors.GOLD, Materials.BRONZE);
+	gn_bottom.add(bottom_cone);
 
 	// assign all objects placed "on" the main cube to main
 	gn_main.add(gn_main_cube);
@@ -333,6 +336,7 @@
 	gn_main.add(gn_mail);
 
 	gn_main.add(gn_deskTOP);
+	sg.add(gn_bottom);
 	sg.add(gn_main);
 
 	// ********** ANIMATION **********
