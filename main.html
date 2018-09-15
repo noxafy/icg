@@ -221,6 +221,13 @@
 		return gn;
 	}
 
+	const gn_driver_light = new GroupNode(Matrix.translation(new Vector(-5, 2, 0)));
+	const driver_light = new LightNode(new Position(0, 0, 0), Colors.WHITE, 3, 0.01, 0.6, 0.3);
+	const driver_light_sphere = new SphereNode(driver_light.position, 0.1, Colors.BLACK, Materials.BLANK);
+	gn_driver_light.add(driver_light);
+	gn_driver_light.add(driver_light_sphere);
+	sg.add(gn_driver_light);
+
 	// ********** OBJECTS **********
 	const gn_main = new GroupNode(Matrix.identity());
 
@@ -291,6 +298,7 @@
 		// User Controllable
 		new AnimationNode(gnc, new FreeFlight(4, camera.up)),
 		new AnimationNode(gn_main, new AxisAlignedRotor(60)),
+		new AnimationNode(gn_driver_light, new Driver2D(4)),
 		// Rotors
 		new AnimationNode(gn_rotatingLight, new SimpleRotor(new Vector(0, 1, 0), 40)),
 		new AnimationNode(gn_browsers, new SimpleRotor(new Vector(0, 0, 1), -120)),
