@@ -1,4 +1,4 @@
-###Key bindings
+### Key bindings
 #### Free Flight
 **w**&emsp;Move forward (Press two times quickly for doubled speed)<br>
 **a**&emsp;Move left<br>
