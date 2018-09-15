@@ -37,12 +37,14 @@ class RasterPyramid extends RasterShape {
 			0, 2, 3, // right
 			4, 3, 2, 2, 1, 4 // bottom
 		];
+		let topy = top.y > 0 ? 1.0 : -1.0;
+		let ally = top.y > 0 ? -1.0 : 1.0;
 		let normals = [
-			0.0, 1.0, 0.0,  // 0
-			1.0, -1.0, 1.0, // 1
-			-1.0, -1.0, 1.0,  // 2
-			-1.0, -1.0, -1.0, // 3
-			1.0, -1.0, -1.0 // 4
+			0.0, topy, 0.0,  // 0
+			1.0, ally, 1.0, // 1
+			-1.0, ally, 1.0,  // 2
+			-1.0, ally, -1.0, // 3
+			1.0, ally, -1.0 // 4
 		]
 		const colors = RasterShape.generateColors(vertices.length, color);
 		this.init(vertices, indices, normals, colors)

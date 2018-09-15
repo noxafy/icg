@@ -16,7 +16,10 @@ class RasterCone extends RasterShape {
 		super(gl);
 
 		let vertices = [ top.x, top.y, top.z ];
-		let normals = [ 0.0, 1.0, 0.0 ]
+
+		let topy = top.y > 0 ? 1.0 : -1.0;
+		let ally = top.y > 0 ? -1.0 : 1.0;
+		let normals = [0.0, topy, 0.0];
 
 		for (let ring = 0; ring < ringsize; ring++) {
 			let theta = ring * Math.PI * 2 / ringsize - 1;
@@ -27,7 +30,7 @@ class RasterCone extends RasterShape {
 			vertices.push(y);
 			vertices.push(z);
 
-			let normal = new Vector(x, -1, z).normalised();
+			let normal = new Vector(x, ally, z).normalised();
 			normals.push(normal.x);
 			normals.push(normal.y);
 			normals.push(normal.z);
