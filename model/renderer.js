@@ -1,11 +1,13 @@
 /**
+ * Abstract renderer class using threefold visitor pattern for camera traversing, light travering and draw traversing.
+ *
  * Author: noxafy
  * Created: 03.09.18
  */
 class Renderer {
 
 	/**
-	 * Create a new renderer taking the three traversers as arguments
+	 * Create a new abstract renderer taking the three traversers as arguments
 	 * @param {CameraTraverser} cameraTraverser
 	 * @param {LightTraverser}  lightTraverser
 	 * @param {DrawTraverser}   drawTraverser

@@ -76,10 +76,20 @@ class Color extends Vector {
 		this.data[3] = val;
 	}
 
+	/**
+	 * Create a color object from a given array
+	 * @param {Array.<number>} arr
+	 * @return {Color}
+	 */
 	static fromArray(arr) {
 		return new Color(arr[0], arr[1], arr[2], arr.length > 3 ? arr[3] : 1);
 	}
 
+	/**
+	 * Create a color object from a json object
+	 * @param {string|Array} obj
+	 * @return {Color}
+	 */
 	static fromJson(obj) {
 		if (typeof obj === "string") {
 			if (Colors[obj]) return Colors[obj];
@@ -95,11 +105,19 @@ class Color extends Vector {
 		else return "Color: " + super.toString();
 	}
 
+	/**
+	 * Convert this color to a json object
+	 * @return {Object}
+	 */
 	toJsonObj() {
 		if (this.name) return this.name.toUpperCase();
 		else return this.data;
 	}
 
+	/**
+	 * Return a copy of this object
+	 * @return {Color}
+	 */
 	clone() {
 		let clone = super.clone();
 		clone.name = this.name;

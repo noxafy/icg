@@ -28,9 +28,8 @@ class AnimationNode {
 	 * @param {number} deltaT - The time difference, the animation is advanced by
 	 */
 	simulate(deltaT) {
-		// change the matrix of the attached
-		// group node to reflect a rotation
 		if (this.active) {
+			// change the matrix of the attached group node to reflect a rotation
 			let res = this.animator.calc(deltaT, this.groupNode.matrix);
 			if (!res) throw Error(this.constructor.name + ": Failed to calculate animation for " + this.groupNode.toString())
 			this.groupNode.matrix = res;

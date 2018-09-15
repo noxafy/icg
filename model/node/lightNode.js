@@ -3,7 +3,7 @@
  */
 class LightNode extends Node {
 	/**
-	 * Creates a new light with position and light color
+	 * Creates a new light with position, color and attenuation properties
 	 * @param {Position} position  - The position of the light
 	 * @param {Vector}   color     - The color of the light
 	 * @param {number}   intensity - The intensity of the light

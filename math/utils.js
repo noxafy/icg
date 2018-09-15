@@ -1,16 +1,33 @@
 /**
+ * Helper objects for processing math related problems.
+ *
  * Author: noxafy
  * Created: 12.08.18
  */
 class Utils {
+	/**
+	 * Convert angle in deg to rad
+	 * @param {number} angle
+	 * @return {number}
+	 */
 	static degToRad(angle) {
 		return angle * Math.PI / 180;
 	}
 
+	/**
+	 * Convert angle in rad to deg
+	 * @param {number} rad
+	 * @return {number}
+	 */
 	static radToDeg(rad) {
 		return rad * 180 / Math.PI;
 	}
 
+	/**
+	 * Shorten a value as usually sensible for toString output.
+	 * @param {number} val
+	 * @return {*}
+	 */
 	static round(val) {
 		let abs = Math.abs(val);
 		if (abs > 1e-1) {

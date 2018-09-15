@@ -28,6 +28,11 @@ class Material {
 			"shininess: " + this.shininess + ")";
 	}
 
+	/**
+	 * Create a material from json object
+	 * @param {string|Object} obj
+	 * @return {Material}
+	 */
 	static fromJson(obj) {
 		if (typeof obj === "string") {
 			if (Materials[obj]) return Materials[obj];
@@ -39,6 +44,10 @@ class Material {
 		throw Error("Invalid material specification: " + JSON.stringify(obj));
 	}
 
+	/**
+	 * Creates the corresponding json oject to this object.
+	 * @return {Object}
+	 */
 	toJsonObj() {
 		if (this.name) return this.name.toUpperCase();
 		else return {
@@ -50,6 +59,10 @@ class Material {
 		}
 	}
 
+	/**
+	 * Return a copy of this material
+	 * @return {Material}
+	 */
 	clone() {
 		return new Material(this.ambient.clone(), this.diffuse.clone(), this.specular.clone(), this.shininess, this.name);
 	}

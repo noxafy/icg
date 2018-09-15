@@ -1,4 +1,6 @@
 /**
+ * Import a scene graph and animation nodes from json in the output style of {@link SceneGraphExporter}.
+ *
  * Author: noxafy
  * Created: 02.09.18
  */
@@ -24,6 +26,12 @@ SceneGraphImporter = {
 		}
 	},
 
+	/**
+	 * Generate applications objects by matching json's parameters.
+	 * Recursive traversing is an alternative approach to visitor pattern, but simpler here.
+	 * @param obj
+	 * @return {GroupNode|SphereNode|AABoxNode|PyramidNode|ConeNode|GenericNode|TextureBoxNode|CameraNode|LightNode}
+	 */
 	traverse(obj) {
 		let This;
 		switch (obj.type) {
@@ -76,6 +84,11 @@ SceneGraphImporter = {
 		return This;
 	},
 
+	/**
+	 * Generate animation node objects from json objects.
+	 * @param {Array} nodes
+	 * @return {Array}
+	 */
 	createAnimationNodes: function (nodes) {
 		let animationNodes = [];
 		for (let k in nodes) {

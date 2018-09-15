@@ -1,4 +1,6 @@
 /**
+ * Exports the current scene graph as needed to recreate into a json file.
+ *
  * Author: noxafy
  * Created: 03.09.18
  */
@@ -42,6 +44,9 @@ SceneGraphExporter = {
 	}
 }
 
+/**
+ * Visit all nodes in the scene graph and create the belonging json
+ */
 class SceneGraphJsonGenerator extends Visitor {
 
 	constructor() {
@@ -158,6 +163,9 @@ class SceneGraphJsonGenerator extends Visitor {
 	}
 }
 
+/**
+ * Create the json part for the animation nodes since they are not part for the actual scene graph.
+ */
 class AnimationNodeJsonGenerator extends Visitor {
 
 	constructor() {
@@ -165,7 +173,7 @@ class AnimationNodeJsonGenerator extends Visitor {
 	}
 
 	/**
-	 *
+	 * Search through the scene graph the corresponding group node to the animation node and generate the json for the animation node.
 	 * @param {GroupNode} rootNode
 	 * @param {AnimationNode} animationNode
 	 */

@@ -231,13 +231,16 @@ class Vector {
 	}
 }
 
+/**
+ * Class representing a position. The fourth (w) value has 1 as default here.
+ */
 class Position extends Vector {
 	/**
 	 * Create a position
-	 * @param x
-	 * @param y
-	 * @param z
-	 * @param w
+	 * @param {number} x
+	 * @param {number} y
+	 * @param {number} z
+	 * @param {number} w
 	 */
 	constructor(x, y, z, w = 1) {
 		super(x, y, z, w);

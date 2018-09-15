@@ -4,7 +4,7 @@
  */
 class CameraNode extends Node {
 	/**
-	 * Creates a camera
+	 * Creates the camera
 	 * @param {Position} eye
 	 * @param {number} aspect
 	 * @param {number} near

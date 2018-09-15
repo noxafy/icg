@@ -57,7 +57,7 @@ class SimpleRotor extends Rotor {
 class FreeRotor extends UserControllable {
 
 	/**
-	 * Creates a user controllable rotor animation
+	 * Creates a user controllable rotor animation. Axis' are bound to object space.
 	 * @param {number} speed - Speed of rotation in angle per second
 	 */
 	constructor(speed) {
@@ -97,7 +97,7 @@ class FreeRotor extends UserControllable {
 class AxisAlignedRotor extends UserControllable {
 
 	/**
-	 * Creates a user controllable rotor animation
+	 * Creates a user controllable rotor animation. Axis' are bound to world space.
 	 * @param {number} speed - Speed of rotation in angle per second
 	 */
 	constructor(speed) {

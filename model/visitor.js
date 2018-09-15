@@ -43,6 +43,10 @@ class Visitor {
 }
 
 class StackingVisitor extends Visitor {
+
+	/**
+	 * Visitor with matrix stack.
+	 */
 	constructor() {
 		super();
 		this.modelMatrices = [];
@@ -76,11 +80,20 @@ class StackingVisitor extends Visitor {
 	}
 }
 
+/**
+ * Abstract camera traverser for rendering
+ */
 class CameraTraverser extends StackingVisitor {
 }
 
+/**
+ * Abstract light traverser for rendering
+ */
 class LightTraverser extends StackingVisitor {
 }
 
+/**
+ * Abstract draw traverser for rendering
+ */
 class DrawTraverser extends StackingVisitor {
 }

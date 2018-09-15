@@ -1,4 +1,6 @@
 /**
+ * Class responsible for calculating an animation.
+ *
  * Author: noxafy
  * Created: 12.08.18
  */
@@ -105,6 +107,14 @@ class UserControllable extends Animator {
 		this.set(set, "rollLeft", false, "roll", "rollRight")
 	}
 
+	/**
+	 * Generic method to set or unset a specific property. Set opposite value are neutralized.
+	 * @param {boolean} set
+	 * @param {string} This
+	 * @param {boolean} isPositiveDirection
+	 * @param {string} axis
+	 * @param {string} opposite
+	 */
 	set(set, This, isPositiveDirection, axis, opposite) {
 		if (set) {
 			if (this[opposite]) {

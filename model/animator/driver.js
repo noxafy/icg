@@ -1,4 +1,6 @@
 /**
+ * Create a class for move (and rotate) an object controlled by user input
+ *
  * Author: noxafy
  * Created: 14.08.18
  */
@@ -153,5 +155,3 @@ class FreeFlight extends Driver {
 		});
 	}
 }
-
-// TODO: "slow starting" driver 1/x

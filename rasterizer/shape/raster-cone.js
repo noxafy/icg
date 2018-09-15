@@ -1,4 +1,6 @@
 /**
+ * Creates all buffer for a cone necessary for rendering with webgl
+ *
  * Author: noxafy
  * Created: 28.08.18
  */

@@ -1,4 +1,5 @@
 /**
+ * Calls all necessary webgl function for setting up a generic node for webgl
  * Author: noxafy
  * Created: 09.09.18
  */

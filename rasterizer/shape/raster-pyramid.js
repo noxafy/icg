@@ -1,5 +1,5 @@
 /**
- * A class creating buffers for an axis aligned box to render it with WebGL
+ * A class creating buffers for a pyramid to render it with WebGL
  */
 class RasterPyramid extends RasterShape {
 	/**

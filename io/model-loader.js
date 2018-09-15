@@ -1,4 +1,6 @@
 /**
+ * Loader for importing polygonal geometry into the scene graph.
+ *
  * Author: noxafy
  * Created: 09.09.18
  */
@@ -296,6 +298,12 @@ ModelLoader = {
 			}
 		},
 
+		/**
+		 * Search for given material in given materials from .mtl file and the application's materials
+		 * @param {Array.<Material>} materials - given materials from .mtl file
+		 * @param {string} material_name
+		 * @return {Material}
+		 */
 		findMaterial: function (materials, material_name) {
 			// search through given material from .mtl file
 			for (let material of materials) {
@@ -311,7 +319,7 @@ ModelLoader = {
 		},
 
 		/**
-		 * Tests, if a generic node is completed.
+		 * Tests, if a generic node is complete.
 		 * @param {GenericNode} obj
 		 */
 		isValid: function (obj) {

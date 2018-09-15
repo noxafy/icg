@@ -180,13 +180,13 @@ class GenericNode extends LightableNode {
 
 	/**
 	 * Creates a generic shape
-	 * @param {Array.<Number>} vertices
-	 * @param {Array.<Number>} indices
-	 * @param {Array.<Number>} normals
-	 * @param {Array.<Number>} colors   - The colors for each vertex of the generic node
-	 * @param {Color}          color    - The color of the generic node, if no colors given
-	 * @param {Material}       material - The material of the generic node
-	 * @param {string}         name     - The name of the generic node
+	 * @param {Array.<Number>} vertices  - The vertices of the generic node
+	 * @param {Array.<Number>} indices   - The indices to specify the faces of the generic nodes
+	 * @param {Array.<Number>} normals   - The normals for each vertex
+	 * @param {Array.<Number>} colors    - The colors for each vertex of the generic node
+	 * @param {Color}          color     - The color of the generic node, if no colors given
+	 * @param {Material}       material  - The material of the generic node
+	 * @param {string}         name      - The name of the generic node
 	 */
 	constructor(vertices, indices, normals, colors, color, material, name) {
 		super(color, material);

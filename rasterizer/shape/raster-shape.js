@@ -1,4 +1,6 @@
 /**
+ * Abstract raster shape class providing often used functions
+ *
  * Author: noxafy
  * Created: 28.08.18
  */
