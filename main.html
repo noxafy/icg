@@ -194,16 +194,16 @@
 
 	// ********** LIGHTS **********
 	// top light
-	const topLight = new LightNode(new Position(0, 0, 0), Colors.WHITE, 0.4, 0.2, 0.01, 0);
+	const topLight = new LightNode(new Position(0, 0, 0), Colors.WHITE, 2, 0.2, 0.06, 0.003);
 	const gn_topLight = new GroupNode(Matrix.translation(new Vector(0, 15, 0)));
 	gn_topLight.add(topLight);
 	sg.add(gn_topLight);
 
 	// rotating lights
-	const gn_leftLight = getSatelliteLight(new Vector(-6, -1, 0));
-	const gn_rightLight = getSatelliteLight(new Vector(6, -1, 0));
-	const gn_nearLight = getSatelliteLight(new Vector(0, -1, 6));
-	const gn_farLight = getSatelliteLight(new Vector(0, -1, -6));
+	const gn_leftLight = getSatelliteLight(new Vector(-5, -1, 0));
+	const gn_rightLight = getSatelliteLight(new Vector(5, -1, 0));
+	const gn_nearLight = getSatelliteLight(new Vector(0, -1, 5));
+	const gn_farLight = getSatelliteLight(new Vector(0, -1, -5));
 
 	const gn_rotatingLight = new GroupNode(Matrix.identity());
 	gn_rotatingLight.add(gn_leftLight);
@@ -213,11 +213,11 @@
 	sg.add(gn_rotatingLight);
 
 	function getSatelliteLight(position) {
-		const light = new LightNode(new Position(0, 0, 0), Colors.WHITE, 2, 0.1, 0.4, 0.1);
-		const lightSphere = new SphereNode(light.position, 0.1, Colors.BLACK, Materials.BLANK);
+		const light = new LightNode(new Position(0, 0, 0), Colors.WHITE, 3, 0.01, 0.6, 0.3);
+		// const lightSphere = new SphereNode(light.position, 0.1, Colors.BLACK, Materials.BLANK);
 		const gn = new GroupNode(Matrix.translation(position));
 		gn.add(light);
-		gn.add(lightSphere);
+		// gn.add(lightSphere);
 		return gn;
 	}
 
