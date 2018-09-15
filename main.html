@@ -129,7 +129,7 @@
 		</div>
 	</div>
 	<div class="disabled" id="specs-view">
-		<div id="fps">fps: <div id="fps_val"></div></div>
+		<div id="fps">FPS: <div id="fps_val"></div></div>
 		<div id="light_props">
 			<div id="light_props_header">
 				<label for="lights-dropdown" id="light_props_title">Light properties </label>
@@ -295,20 +295,14 @@
 
 	// start render process
 	window.renderProcess = new RenderProcess();
-	const timeout = 1000 / 30; // not more than 30 fps
-	let t = 0;
 	window.run = function (timestamp) {
 		if (!renderProcess.onStop) {
 			let deltaT = timestamp - window.renderProcess.lastTimestamp;
-			if (Preferences.showSpecs) SpecsView.FPS.add(deltaT + t);
-			simulate(deltaT + t);
+			if (Preferences.showSpecs) SpecsView.FPS.add(deltaT);
+			simulate(deltaT);
 			window.renderProcess.renderer.render(window.sg);
-			t = timeout - deltaT;
-			if (t < 0) t = 0;
-			setTimeout(function () {
-				window.renderProcess.lastTimestamp = timestamp + t;
-				window.requestAnimationFrame(window.run);
-			}, t);
+			window.renderProcess.lastTimestamp = timestamp;
+			window.requestAnimationFrame(window.run);
 		} else {
 			window.renderProcess.onStop();
 		}
