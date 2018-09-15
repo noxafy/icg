@@ -36,6 +36,6 @@ class LightNode extends Node {
 
 	toString() {
 		return "Light: (" + this.color.toString() + "; " +
-			"Position: " + this.position.toString() + ")";
+			"Position: " + this.m_position.toString() + ")";
 	}
 }

@@ -17,6 +17,7 @@ class RasterLightTraverser extends LightTraverser {
 
 	visitLightNode(node) {
 		let pos = this.getTopMatrix().mul(node.position);
+		node.m_position = pos;
 		// P * V * M (so we don't have to do that in vertex shader and can pass it directly to fragment shader)
 		node.p_v_m_position = this.renderer.perspective.mul(this.renderer.lookat).mul(pos);
 		this.renderer.lights.push(node);
