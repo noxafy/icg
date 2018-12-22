@@ -88,7 +88,7 @@ class Raytracer {
 		let diffuse;
 		let specular;
 
-		const l = light.m_position.sub(p).normalised(); // direction vector from the point on the surface toward the light source
+		const l = light.vm_position.sub(p).normalised(); // direction vector from the point on the surface toward the light source
 		const dot = n.dot(l);
 		if (dot > 0) {
 			diffuse = light.color.mul(dot).mul(material.diffuse).mul(light.diffuse);
