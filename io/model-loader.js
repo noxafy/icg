@@ -116,16 +116,20 @@ ModelLoader = {
 			 */
 			function parseColor0(args) {
 				let r = Number.parseFloat(args[0]),
-					g, b;
+					g, b, a = 1;
 				if (args.length === 1) {
 					g = b = r;
 				} else if (args.length === 3) {
 					g = Number.parseFloat(args[1]);
 					b = Number.parseFloat(args[2]);
+				} else if (args.length === 4) {
+					g = Number.parseFloat(args[1]);
+					b = Number.parseFloat(args[2]);
+					a = Number.parseFloat(args[3]);
 				} else {
 					throw Error("Wrong number of arguments: " + args.length);
 				}
-				return new Color(r, g, b);
+				return new Color(r, g, b, a);
 			}
 		},
 
