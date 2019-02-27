@@ -413,6 +413,7 @@
 					window.requestAnimationFrame(window.run);
 				}, t);
 			} else {
+				window.renderProcess.lastTimestamp = timestamp;
 				window.requestAnimationFrame(window.run);
 			}
 		} else {
