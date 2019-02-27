@@ -218,15 +218,13 @@ ModelLoader = {
 								faces.push(args[j + 1])
 							}
 							break;
-							// if (args.length !== 3) throw Error("There must be given exactly three arguments to specify a face, but was: " + args.length)
-							break;
 						case "usemtl":
 							if (args.length < 1) throw Error("Please give a name of a material with keyword \"usemtl\"!")
-							current_object.material = this.findMaterial(materials, args[0], current_object);
+							current_object.material = this.findMaterial(materials, args[0]);
 							break;
 						default:
 						// mtllib is asserted to be the given mtl file
-						// ignore vt, vp,  and all others
+						// ignore vt, vp, and all others
 					}
 				} catch (e) {
 					e.message = "Parse Error in .obj file: line " + (i + 1) + ": " + e.message;
